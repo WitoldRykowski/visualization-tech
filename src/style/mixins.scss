@@ -1,0 +1,12 @@
+@mixin flex-row($justify: start, $align: start, $wrap: nowrap) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-wrap: $wrap;
+}
+
+@mixin uniform-size($width: 100%, $height: 100%) {
+  width: $width !important;
+  height: $height !important;
+}
+
