@@ -1,5 +1,3 @@
-export type Algorithm = {
-  name: string
-}
+export const ALGORITHMS_LIST = ['BinarySearch', 'BubbleSort', 'QuickSort'] as const
 
-export const algorithms: Algorithm[] = []
+export type AlgorithmsList = (typeof ALGORITHMS_LIST)[number]

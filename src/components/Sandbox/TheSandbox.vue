@@ -1,9 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <Teleport to="#toolbar-tools">
-    <slot />
-  </Teleport>
+  <div>123</div>
 </template>
 
 <style scoped lang="scss"></style>

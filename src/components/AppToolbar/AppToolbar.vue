@@ -1,6 +1,18 @@
 <script setup lang="ts">
 import Toolbar from 'primevue/toolbar'
+import Button from 'primevue/button'
+import InputText from 'primevue/inputtext'
 import { computed } from 'vue'
+import { useMainStore } from '@/stores/main'
+import { useVariant } from '@/composable/useVariant'
+
+const mainStore = useMainStore()
+const { variant, setVariant } = useVariant()
+
+const search = computed({
+  get: () => mainStore.state.search,
+  set: mainStore.setSearch
+})
 
 const toolbarStyle = computed(() => ({
   root: { style: { background: '#34495e', color: 'white', height: '90px' } }
@@ -14,16 +26,12 @@ const toolbarStyle = computed(() => ({
     </template>
 
     <template #end>
-      <div id="toolbar-tools"></div>
+      <InputText v-show="!variant" v-model="search" placeholder="Search" />
+      <Button v-show="variant" @click="setVariant(undefined)"></Button>
     </template>
   </Toolbar>
 </template>
 
 <style scoped lang="scss">
 @import 'src/style/tools';
-
-#toolbar-tools {
-  @include flex-row(end, center);
-  gap: 0.5rem;
-}
 </style>

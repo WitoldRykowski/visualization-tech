@@ -1,3 +1,3 @@
-import { type AppRoute, stack } from '@/router/routes'
+export const DATA_STRUCTURES_LIST = ['Stack', 'Queue']
 
-export const dataStructures: AppRoute[] = [stack]
+export type DataStructuresList = (typeof DATA_STRUCTURES_LIST)[number]
