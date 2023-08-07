@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Toolbar from 'primevue/toolbar'
-import Button from 'primevue/button'
+import { AppButton } from '@/components'
 import InputText from 'primevue/inputtext'
 import { computed } from 'vue'
 import { useMainStore } from '@/stores/main'
@@ -27,7 +27,7 @@ const toolbarStyle = computed(() => ({
 
     <template #end>
       <InputText v-show="!variant" v-model="search" placeholder="Search" />
-      <Button v-show="variant" @click="setVariant(undefined)"></Button>
+      <AppButton v-show="variant" @click="setVariant(undefined)" />
     </template>
   </Toolbar>
 </template>

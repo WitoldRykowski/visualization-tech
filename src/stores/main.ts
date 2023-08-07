@@ -1,9 +1,8 @@
 import { reactive, readonly } from 'vue'
 import { defineStore } from 'pinia'
-import { type AlgorithmsList } from '@/services/algorithms.service'
-import { type DataStructuresList } from '@/services/data-structures.service'
+import type { ContentVariant } from '@/types'
 
-export type SandboxVariant = AlgorithmsList | DataStructuresList | undefined
+export type SandboxVariant = ContentVariant
 
 export type MainState = {
   contentVariant: SandboxVariant
