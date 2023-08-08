@@ -1,37 +1,24 @@
 <script setup lang="ts">
-import Toolbar from 'primevue/toolbar'
+import { QToolbar, QToolbarTitle } from 'quasar'
 import { AppButton } from '@/components'
-import InputText from 'primevue/inputtext'
-import { computed } from 'vue'
-import { useMainStore } from '@/stores/main'
 import { useVariant } from '@/composable/useVariant'
+import SearchField from '@/components/AppToolbar/SearchField.vue'
 
-const mainStore = useMainStore()
 const { variant, setVariant } = useVariant()
-
-const search = computed({
-  get: () => mainStore.state.search,
-  set: mainStore.setSearch
-})
-
-const toolbarStyle = computed(() => ({
-  root: { style: { background: '#34495e', color: 'white', height: '90px' } }
-}))
 </script>
 
 <template>
-  <Toolbar :pt="toolbarStyle">
-    <template #start>
-      <span class="toolbar-title">Visualize Tech</span>
-    </template>
+  <QToolbar class="app-toolbar">
+    <QToolbarTitle>Visualize Tech</QToolbarTitle>
 
-    <template #end>
-      <InputText v-show="!variant" v-model="search" placeholder="Search" />
-      <AppButton v-show="variant" @click="setVariant(undefined)" />
-    </template>
-  </Toolbar>
+    <AppButton v-show="variant" @click="setVariant(undefined)" />
+    <SearchField />
+  </QToolbar>
 </template>
 
 <style scoped lang="scss">
-@import 'src/style/tools';
+.app-toolbar {
+  background: white;
+  color: black;
+}
 </style>

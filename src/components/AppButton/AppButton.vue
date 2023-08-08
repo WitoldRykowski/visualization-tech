@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import Button from 'primevue/button'
+import { QBtn } from 'quasar'
 </script>
 
 <template>
-  <Button class="app-button" outlined size="small" />
+  <QBtn outline />
 </template>
 
-<style scoped lang="scss">
-.app-button {
-}
-</style>
+<style scoped lang="scss"></style>

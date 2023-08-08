@@ -11,14 +11,24 @@ const { setVariant } = useVariant()
 </script>
 
 <template>
-  <AppCard class="app-list-card">
+  <AppCard class="app-list-card" @click="setVariant(variant)">
     {{ variant }}
-    <AppButton @click="setVariant(variant)"></AppButton>
   </AppCard>
 </template>
 
 <style scoped lang="scss">
 .app-list-card {
-  width: 100%;
+  width: clamp(250px, 250px, 10%);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+:deep(.q-card__section) {
+  @include flex-row(center, center);
+}
+
+.app-list-card:hover {
+  background: $primary;
+  color: white;
 }
 </style>

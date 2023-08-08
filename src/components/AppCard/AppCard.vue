@@ -1,20 +1,17 @@
 <script setup lang="ts">
-import Card from 'primevue/card'
+import { QCard, QCardSection } from 'quasar'
 </script>
 
 <template>
-  <Card class="app-card">
-    <template #title>
-      <slot name="title" />
-    </template>
-    <template #content>
+  <QCard class="app-card">
+    <QCardSection>
       <slot />
-    </template>
-  </Card>
+    </QCardSection>
+  </QCard>
 </template>
 
 <style scoped lang="scss">
-.app-card {
-  width: 100%;
+:deep(.q-card__section) {
+  @include flex-row(space-between, center);
 }
 </style>
