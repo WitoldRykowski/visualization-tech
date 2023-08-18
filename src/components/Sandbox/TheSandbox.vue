@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { useVariant } from '@/composable/useVariant'
-import { BinarySearch, BubbleSort, QuickSort, TheQueue, TheStack } from '@/components'
+import { defineAsyncComponent } from 'vue'
 
 const VariantComponentMap = {
-  BinarySearch,
-  BubbleSort,
-  QuickSort,
-  Stack: TheStack,
-  Queue: TheQueue
+  BinarySearch: defineAsyncComponent(() => import('@/components/BinarySearch/BinarySearch.vue')),
+  BubbleSort: defineAsyncComponent(() => import('@/components/BubbleSort/BubbleSort.vue')),
+  QuickSort: defineAsyncComponent(() => import('@/components/BubbleSort/QuickSort.vue')),
+  Stack: defineAsyncComponent(() => import('@/components/BubbleSort/TheStack.vue')),
+  Queue: defineAsyncComponent(() => import('@/components/BubbleSort/TheQueue.vue'))
 }
 
 const { variant } = useVariant()
