@@ -1,32 +1,48 @@
 import { generateSortedArray } from '@/utils'
-import { type Component, defineAsyncComponent, reactive } from 'vue'
-import { generatePlaygroundSettings } from '@/services/SandboxService/sandbox.service'
-import type { PlaygroundSettings } from '@/services/SandboxService/types'
+import { reactive } from 'vue'
+import { BinarySearch } from '@/components'
+import type { BasePlayground } from '@/services/SandboxService/types'
 
-export interface BinarySearchPlayground {
-  algorithmState: {
-    values: number[]
-    target: number
-    min: number
-    max: number
-    guess: number
-  }
-  component: Component
-  settings: PlaygroundSettings
+interface BinarySearchState {
+  values: number[]
+  target: number
+  min: number
+  max: number
+  guess: number
 }
+
+export type BinarySearchPlayground = BasePlayground<BinarySearchState, [200, 500, 1000]>
 
 export const getBinarySearchPlayground = (): BinarySearchPlayground => {
   const values = generateSortedArray()
 
-  return {
-    algorithmState: reactive({
-      values,
-      target: 0,
-      min: 0,
-      max: values.length - 1,
-      guess: 0
-    }),
-    component: defineAsyncComponent(() => import('@/components/BinarySearch')),
-    settings: generatePlaygroundSettings()
+  const state = reactive<BinarySearchState>({
+    values,
+    target: 0,
+    min: 0,
+    max: values.length - 1,
+    guess: 0
+  })
+
+  return { state, delays: [200, 500, 1000], component: BinarySearch, visualize, getState }
+
+  function visualize(delay: number) {
+    console.log(delay)
+    while (state.max >= state.min) {
+      state.guess = Math.floor((state.max + state.min) / 2)
+
+      if (values[state.guess] > state.target) {
+        state.max = state.guess - 1
+      } else if (values[state.guess] < state.target) {
+        state.min = state.guess + 1
+      } else {
+        state.min = state.max = state.guess
+        return
+      }
+    }
+  }
+
+  function getState() {
+    return state
   }
 }

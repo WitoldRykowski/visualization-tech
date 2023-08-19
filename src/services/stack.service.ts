@@ -1,18 +1,26 @@
-import type { Component } from 'vue'
-import type { PlaygroundSettings } from '@/services/SandboxService/types'
-import { defineAsyncComponent, reactive } from 'vue'
-import { generatePlaygroundSettings } from '@/services/SandboxService/sandbox.service'
+import { reactive } from 'vue'
+import { TheStack } from '@/components'
+import type { BasePlayground } from '@/services/SandboxService/types'
 
-export interface StackPlayground {
-  structureState: {}
-  component: Component
-  settings: PlaygroundSettings
-}
+interface StackState {}
 
-export const getStackPlayground = () => {
+export type StackPlayground = BasePlayground<StackState, [200, 500, 1000]>
+export const getStackPlayground = (): StackPlayground => {
+  const state = reactive<StackState>({})
+
   return {
-    structureState: reactive({}),
-    component: defineAsyncComponent(() => import('@/components/Stack')),
-    settings: generatePlaygroundSettings()
+    state,
+    component: TheStack,
+    delays: [200, 500, 1000],
+    visualize,
+    getState
+  }
+
+  function visualize() {
+    //
+  }
+
+  function getState() {
+    return state
   }
 }

@@ -1,18 +1,27 @@
-import type { Component } from 'vue'
-import type { PlaygroundSettings } from '@/services/SandboxService/types'
-import { defineAsyncComponent, reactive } from 'vue'
-import { generatePlaygroundSettings } from '@/services/SandboxService/sandbox.service'
+import { reactive } from 'vue'
+import { BubbleSort } from '@/components'
+import type { BasePlayground } from '@/services/SandboxService/types'
 
-export interface BubbleSortPlayground {
-  algorithmState: {}
-  component: Component
-  settings: PlaygroundSettings
-}
+interface BubbleSortState {}
 
-export const getBubbleSortPlayground = () => {
+export type BubbleSortPlayground = BasePlayground<BubbleSortState, [200, 500, 1000]>
+
+export const getBubbleSortPlayground = (): BubbleSortPlayground => {
+  const state = reactive<BubbleSortState>({})
+
   return {
-    algorithmState: reactive({}),
-    component: defineAsyncComponent(() => import('@/components/BubbleSort')),
-    settings: generatePlaygroundSettings()
+    state,
+    component: BubbleSort,
+    delays: [200, 500, 1000],
+    visualize,
+    getState
+  }
+
+  function visualize() {
+    //
+  }
+
+  function getState() {
+    return state
   }
 }

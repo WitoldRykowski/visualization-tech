@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { TheSandbox, VariantsList, AppToolbar } from '@/components'
-import { useVariant } from '@/composable/useVariant'
-import { QPageContainer, QPage, QToolbar, QToolbarTitle, QHeader, QLayout } from 'quasar'
+import { QPageContainer, QPage, QHeader, QLayout } from 'quasar'
+import { Sandbox } from '@/services/SandboxService/sandbox.service'
+import { computed } from 'vue'
 
-const { variant } = useVariant()
+const variant = computed(() => Sandbox.state.variant.value)
 </script>
 
 <template>

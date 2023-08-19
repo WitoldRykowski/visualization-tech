@@ -5,6 +5,7 @@ import { getBubbleSortPlayground } from '@/services/bubble-sort.service'
 import { getQuickSortPlayground } from '@/services/quick-sort.service'
 import { getStackPlayground } from '@/services/stack.service'
 import { getQueuePlayground } from '@/services/queue.service'
+import type { Playground } from './types'
 
 export const ALGORITHMS_LIST = ['BinarySearch', 'BubbleSort', 'QuickSort'] as const
 export const DATA_STRUCTURES_LIST = ['Stack', 'Queue'] as const
@@ -17,32 +18,52 @@ const PLAYGROUND_GENERATORS: SandboxTypes.PlaygroundGenerators = {
   Queue: getQueuePlayground
 }
 
-export const Sandbox = () => {
+export const Sandbox = (() => {
   const state: SandboxTypes.Sandbox = {
-    variant: undefined,
-    playground: undefined
+    variant: ref(undefined),
+    delay: ref(0),
+    isRunning: ref(false),
+    playground: undefined,
+    visualize: () => {}
   }
 
   return {
     state: state as Readonly<typeof state>,
-    createPlaygroundByVariant
+    createPlaygroundByVariant,
+    setDelay
+  }
+
+  function setDelay(delay: number) {
+    state.delay.value = delay
   }
 
   function createPlaygroundByVariant(variant: SandboxTypes.Variant) {
-    state.variant = variant
+    setDefaultState()
 
-    if (!variant) return
+    if (variant) {
+      const playground = PLAYGROUND_GENERATORS[variant]()
 
-    return PLAYGROUND_GENERATORS[variant]
+      setState(playground)
+    }
+
+    function setDefaultState() {
+      state.variant.value = variant
+      state.delay.value = 0
+      state.isRunning.value = false
+      state.playground = undefined
+    }
+
+    function setState(playground: Playground) {
+      const { state: playgroundState, delays, component, visualize, getState } = playground
+
+      state.playground = {
+        state: playgroundState,
+        delays,
+        component,
+        getState
+      }
+
+      state.visualize = () => visualize(state.delay.value)
+    }
   }
-}
-
-export function generatePlaygroundSettings(): SandboxTypes.PlaygroundSettings {
-  const delays = [200, 500, 1000]
-
-  return {
-    delays,
-    currentDelay: ref(delays[0]),
-    isRunning: ref(false)
-  }
-}
+})()

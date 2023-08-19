@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import VariantsListCard from './VariantsListCard.vue'
-import { ALGORITHMS_LIST } from '@/services/algorithms.service'
-import { DATA_STRUCTURES_LIST } from '@/services/data-structures.service'
-import { useVariant } from '@/composable/useVariant'
+import {
+  ALGORITHMS_LIST,
+  DATA_STRUCTURES_LIST,
+  Sandbox
+} from '@/services/SandboxService/sandbox.service'
+import { computed } from 'vue'
 
-const { variant } = useVariant()
+const variant = computed(() => Sandbox.state.variant.value)
 </script>
 
 <template>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ArrayPlayground } from '@/components'
+import { Sandbox } from '@/services/SandboxService/sandbox.service'
 </script>
 
 <template>

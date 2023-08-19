@@ -1,18 +1,27 @@
-import type { Component } from 'vue'
-import type { PlaygroundSettings } from '@/services/SandboxService/types'
-import { defineAsyncComponent, reactive } from 'vue'
-import { generatePlaygroundSettings } from '@/services/SandboxService/sandbox.service'
+import { reactive } from 'vue'
+import { QuickSort } from '@/components'
+import type { BasePlayground } from '@/services/SandboxService/types'
 
-export interface QuickSortPlayground {
-  algorithmState: {}
-  component: Component
-  settings: PlaygroundSettings
-}
+interface QuickSortState {}
 
-export const getQuickSortPlayground = () => {
+export type QuickSortPlayground = BasePlayground<QuickSortState, [200, 500, 1000]>
+
+export const getQuickSortPlayground = (): QuickSortPlayground => {
+  const state = reactive<QuickSortState>({})
+
   return {
-    algorithmState: reactive({}),
-    component: defineAsyncComponent(() => import('@/components/QuickSort')),
-    settings: generatePlaygroundSettings()
+    state,
+    component: QuickSort,
+    delays: [200, 500, 1000],
+    visualize,
+    getState
+  }
+
+  function visualize() {
+    //
+  }
+
+  function getState() {
+    return state
   }
 }

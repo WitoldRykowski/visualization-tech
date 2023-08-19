@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import { AppCard, AppButton } from '@/components'
-import { useVariant } from '@/composable/useVariant'
-import type { ContentVariant } from '@/types'
+import { AppCard } from '@/components'
+import { Sandbox } from '@/services/SandboxService/sandbox.service'
+import type { Variant } from '@/services/SandboxService/types'
 
 defineProps<{
-  variant: ContentVariant
+  variant: Variant
 }>()
-
-const { setVariant } = useVariant()
 </script>
 
 <template>
-  <AppCard class="app-list-card" @click="setVariant(variant)">
+  <AppCard class="app-list-card" @click="Sandbox.createPlaygroundByVariant(variant)">
     {{ variant }}
   </AppCard>
 </template>
