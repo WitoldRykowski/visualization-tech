@@ -6,6 +6,7 @@ import { getQuickSortPlayground } from '@/services/quick-sort.service'
 import { getStackPlayground } from '@/services/stack.service'
 import { getQueuePlayground } from '@/services/queue.service'
 import type { Playground } from './types'
+import { noop } from '@/utils'
 
 export const ALGORITHMS_LIST = ['BinarySearch', 'BubbleSort', 'QuickSort'] as const
 export const DATA_STRUCTURES_LIST = ['Stack', 'Queue'] as const
@@ -51,16 +52,14 @@ export const Sandbox = (() => {
       state.delay.value = 0
       state.isRunning.value = false
       state.playground = undefined
+      state.visualize = noop
     }
 
-    function setState(playground: Playground) {
-      const { state: playgroundState, delays, component, visualize, getState } = playground
-
+    function setState({ state: playgroundState, delays, component, visualize }: Playground) {
       state.playground = {
         state: playgroundState,
         delays,
-        component,
-        getState
+        component
       }
 
       state.visualize = () => visualize(state.delay.value)

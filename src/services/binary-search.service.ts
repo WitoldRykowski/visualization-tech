@@ -24,10 +24,10 @@ export const getBinarySearchPlayground = (): BinarySearchPlayground => {
     guess: 0
   })
 
-  return { state, delays: [200, 500, 1000], component: BinarySearch, visualize, getState }
+  return { state, delays: [200, 500, 1000], component: BinarySearch, visualize }
 
   function visualize(delay: number) {
-    console.log(delay)
+    console.log(delay) // TODO for visualize delay
     while (state.max >= state.min) {
       state.guess = Math.floor((state.max + state.min) / 2)
 
@@ -40,9 +40,5 @@ export const getBinarySearchPlayground = (): BinarySearchPlayground => {
         return
       }
     }
-  }
-
-  function getState() {
-    return state
   }
 }

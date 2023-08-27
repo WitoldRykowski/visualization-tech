@@ -16,7 +16,6 @@ export type BasePlayground<T, K> = {
   delays: K
   component: Component
   visualize: (delay: number) => void
-  getState: () => T
 }
 
 type FinalPlayground<T> = Omit<T, 'visualize'>

@@ -1,9 +1,18 @@
 <script setup lang="ts">
 import ArrayBar from './ArrayBar.vue'
+import { BAR_HEIGHT_MULTIPLIER } from '@/utils'
 
-defineProps<{
+const props = defineProps<{
   values: number[]
 }>()
+
+const calculateArrayPlaygroundHeight = (values: number[]) => {
+  const theGreatestValue = Math.max(...values)
+
+  return `${theGreatestValue * BAR_HEIGHT_MULTIPLIER}px`
+}
+
+const arrayPlaygroundHeight = calculateArrayPlaygroundHeight(props.values)
 </script>
 
 <template>
@@ -15,5 +24,6 @@ defineProps<{
 <style scoped lang="scss">
 .array-playground {
   @include flex-row(start, end);
+  height: v-bind(arrayPlaygroundHeight);
 }
 </style>

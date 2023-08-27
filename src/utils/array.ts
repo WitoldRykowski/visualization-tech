@@ -1,4 +1,6 @@
-const DEFAULT_ARRAY_SIZE = 100
+const DEFAULT_ARRAY_SIZE = 150
+export const BAR_HEIGHT_MULTIPLIER = 4
+export const BAR_GROWTH_DELAY = 100
 
 export const generateSortedArray = (size = DEFAULT_ARRAY_SIZE) => {
   const sortedArray: number[] = []
