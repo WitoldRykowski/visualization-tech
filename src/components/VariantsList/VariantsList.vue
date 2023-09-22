@@ -1,17 +1,10 @@
 <script setup lang="ts">
 import VariantsListCard from './VariantsListCard.vue'
-import {
-  ALGORITHMS_LIST,
-  DATA_STRUCTURES_LIST,
-  Sandbox
-} from '@/services/SandboxService/sandbox.service'
-import { computed } from 'vue'
-
-const variant = computed(() => Sandbox.state.variant.value)
+import { ALGORITHMS_LIST, DATA_STRUCTURES_LIST } from '@/services/sandbox.service'
 </script>
 
 <template>
-  <div v-show="!variant">
+  <div>
     <div class="main-list__algorithms">
       <VariantsListCard
         v-for="algorithm in ALGORITHMS_LIST"

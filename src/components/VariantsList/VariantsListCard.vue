@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { AppCard } from '@/components'
-import { Sandbox } from '@/services/SandboxService/sandbox.service'
-import type { Variant } from '@/services/SandboxService/types'
+import { useMainStore } from '@/stores/main'
+import type { Variant } from '@/services/sandbox.service'
+
+const store = useMainStore()
 
 defineProps<{
   variant: Variant
@@ -9,7 +11,7 @@ defineProps<{
 </script>
 
 <template>
-  <AppCard class="app-list-card" @click="Sandbox.createPlaygroundByVariant(variant)">
+  <AppCard class="app-list-card" @click="store.setVariant(variant)">
     {{ variant }}
   </AppCard>
 </template>

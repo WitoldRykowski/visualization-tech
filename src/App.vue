@@ -1,10 +1,18 @@
 <script setup lang="ts">
-import { TheSandbox, VariantsList, AppToolbar } from '@/components'
+import { VariantsList, AppToolbar, TheSandbox } from '@/components'
 import { QPageContainer, QPage, QHeader, QLayout } from 'quasar'
-import { Sandbox } from '@/services/SandboxService/sandbox.service'
-import { computed } from 'vue'
+import { useMainStore } from '@/stores/main'
 
-const variant = computed(() => Sandbox.state.variant.value)
+import { computed, onMounted, provide } from 'vue'
+import { initSandbox, VariantInjectionKey } from '@/services/sandbox.service'
+
+const store = useMainStore()
+
+const variant = computed(() => store.state.variant)
+
+provide(VariantInjectionKey, variant)
+
+onMounted(initSandbox)
 </script>
 
 <template>
@@ -17,7 +25,7 @@ const variant = computed(() => Sandbox.state.variant.value)
       <QPage padding>
         <TheSandbox v-show="variant" />
 
-        <VariantsList />
+        <VariantsList v-show="!variant" />
       </QPage>
     </QPageContainer>
   </QLayout>
