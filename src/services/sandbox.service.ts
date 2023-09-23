@@ -1,5 +1,48 @@
 import type { ComputedRef, InjectionKey } from 'vue'
-import { initBubbleSort } from './bubble-sort.service'
+import { initBubbleSort, visualizeBubbleSort } from './bubble-sort.service'
+import type { Noop } from '@/types'
+
+let _animationFrameId = -1
+
+export const initSandbox = () => {
+  const canvas = getCanvas()
+  const CANVAS_SIZE_SCALE = 0.85
+
+  canvas.width = calculateWidth()
+  canvas.height = window.innerHeight * CANVAS_SIZE_SCALE
+
+  function calculateWidth() {
+    const result = window.innerWidth * CANVAS_SIZE_SCALE
+    const MIN_WIDTH = 1000
+
+    if (result < MIN_WIDTH) return MIN_WIDTH
+
+    return result
+  }
+}
+
+export const getCanvas = () => {
+  return document.getElementById('sandbox') as HTMLCanvasElement
+}
+
+export const getContext = () => {
+  const canvas = getCanvas()
+  return canvas.getContext('2d')!
+}
+
+export const animate = (callback: Noop) => {
+  const canvas = getCanvas()
+  const context = getContext()
+  context.clearRect(0, 0, canvas.width, canvas.height)
+
+  callback()
+
+  _animationFrameId = requestAnimationFrame(() => animate(callback))
+}
+
+export const stopAnimation = () => {
+  cancelAnimationFrame(_animationFrameId)
+}
 
 export const ALGORITHMS_LIST = [
   // 'BinarySearch',
@@ -18,32 +61,12 @@ export type Variant =
 
 export const VariantInjectionKey = Symbol() as InjectionKey<ComputedRef<Variant>>
 
-export const VariantInitFunctions: Record<NonNullable<Variant>, () => void> = {
-  BubbleSort: initBubbleSort
+export type VariantActions = { init: () => void; visualize: () => void }
+
+export const VariantInitFunctions: Record<NonNullable<Variant>, VariantActions> = {
+  BubbleSort: { init: initBubbleSort, visualize: visualizeBubbleSort }
 }
 
-export const getCanvas = () => {
-  return document.getElementById('sandbox') as HTMLCanvasElement
-}
-
-export const getContext = () => {
-  const canvas = getCanvas()
-  return canvas.getContext('2d')!
-}
-
-const CANVAS_SIZE_SCALE = 0.85
-
-export const initSandbox = () => {
-  const canvas = getCanvas()
-  canvas.width = calculateWidth()
-  canvas.height = window.innerHeight * CANVAS_SIZE_SCALE
-
-  function calculateWidth() {
-    const result = window.innerWidth * CANVAS_SIZE_SCALE
-    const MIN_WIDTH = 1000
-
-    if (result < MIN_WIDTH) return MIN_WIDTH
-
-    return result
-  }
+export const VariantFrameCounts: Record<NonNullable<Variant>, number> = {
+  BubbleSort: 10
 }

@@ -1,13 +1,30 @@
-import { generateNonSortedArray, renderArray } from './array.service'
-import { getCanvas, getContext } from '@/services/sandbox.service'
+import { generateNonSortedArray, renderArray } from './ArrayService/array.service'
+import type { Column } from '@/services/ArrayService/Column'
+import { animate, stopAnimation } from './sandbox.service'
 
 type Move = {
   indexes: [number, number]
   swap: boolean
 }
 
-const bubbleSort = (values: number[]) => {
-  const moves: Move[] = []
+let moves: Move[] = []
+let values: number[] = []
+let columns: Column[] = []
+
+export const initBubbleSort = () => {
+  values = generateNonSortedArray()
+  columns = renderArray(values)
+  moves = []
+
+  stopAnimation()
+  animate(animateBubbleSort)
+}
+
+export const visualizeBubbleSort = () => {
+  moves = bubbleSort(values)
+}
+
+function bubbleSort(values: number[]) {
   let isSwapped = false
 
   do {
@@ -36,40 +53,25 @@ const bubbleSort = (values: number[]) => {
   return moves
 }
 
-export const initBubbleSort = () => {
-  const context = getContext()
-  const canvas = getCanvas()
-  const values = generateNonSortedArray()
+function animateBubbleSort() {
+  let isChanged = false
 
-  const columns = renderArray(values)
-  const moves = bubbleSort(values)
+  for (let i = 0; i < columns.length; i++) {
+    isChanged = columns[i].draw() || isChanged
+  }
 
-  return () => {
-    animate()
+  if (!isChanged && moves.length > 0) {
+    const move = moves.shift()!
 
-    function animate() {
-      context.clearRect(0, 0, canvas.width, canvas.height)
-      let isChanged = false
+    const [i, j] = move.indexes
 
-      for (let i = 0; i < columns.length; i++) {
-        isChanged = columns[i].draw() || isChanged
-      }
-
-      if (!isChanged && moves.length > 0) {
-        const move = moves.shift()!
-
-        const [i, j] = move.indexes
-
-        if (move.swap) {
-          columns[i].moveTo(columns[j])
-          columns[j].moveTo(columns[i], -1)
-          ;[columns[i], columns[j]] = [columns[j], columns[i]]
-        } else {
-          // TODO
-        }
-      }
-
-      requestAnimationFrame(animate)
+    if (move.swap) {
+      columns[i].moveTo(columns[j])
+      columns[j].moveTo(columns[i], -1)
+      ;[columns[i], columns[j]] = [columns[j], columns[i]]
+    } else {
+      columns[i].jump()
+      columns[j].jump()
     }
   }
 }

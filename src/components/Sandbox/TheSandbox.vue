@@ -1,16 +1,21 @@
 <script setup lang="ts">
 import { VariantInjectionKey } from '@/services/sandbox.service'
-import { inject, watch } from 'vue'
+import { inject, reactive, watch } from 'vue'
 import { VariantInitFunctions } from '@/services/sandbox.service'
+import { noop } from '@/utils'
+import { VariantActionsForRef } from './types'
 
 const variant = inject(VariantInjectionKey)
 
-let visualize = undefined
+const actions = reactive<VariantActionsForRef>({ init: noop, visualize: noop })
 
 watch(
   () => variant?.value,
   (current) => {
-    visualize = VariantInitFunctions[current]()
+    actions.init = VariantInitFunctions[current].init
+    actions.visualize = VariantInitFunctions[current].visualize
+
+    actions.init()
   }
 )
 </script>
@@ -19,7 +24,8 @@ watch(
   <div class="sandbox-container">
     <canvas id="sandbox" />
 
-    <button @click="visualize">Run</button>
+    <button @click="actions.visualize">Run</button>
+    <button @click="actions.init">init</button>
   </div>
 </template>
 
