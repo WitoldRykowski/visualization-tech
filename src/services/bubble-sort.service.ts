@@ -1,10 +1,10 @@
 import { generateNonSortedArray, renderArray } from './ArrayService/array.service'
-import type { Column } from '@/services/ArrayService/Column'
+import type { Column, MoveAnimation } from '@/services/ArrayService/Column'
 import { animate, stopAnimation } from './sandbox.service'
 
 type Move = {
   indexes: [number, number]
-  swap: boolean
+  animation: MoveAnimation
 }
 
 let moves: Move[] = []
@@ -26,11 +26,12 @@ export const visualizeBubbleSort = () => {
 
 function bubbleSort(values: number[]) {
   let isSwapped = false
+  let sortedCount = 0
 
   do {
     isSwapped = false
 
-    for (let i = 1; i < values.length; i++) {
+    for (let i = 1; i < values.length - sortedCount; i++) {
       const previousIndex = i - 1
 
       if (values[previousIndex] > values[i]) {
@@ -39,15 +40,17 @@ function bubbleSort(values: number[]) {
 
         moves.push({
           indexes: [previousIndex, i],
-          swap: true
+          animation: 'swap'
         })
       } else {
         moves.push({
           indexes: [previousIndex, i],
-          swap: false
+          animation: 'jump'
         })
       }
     }
+
+    sortedCount++
   } while (isSwapped)
 
   return moves
@@ -65,7 +68,7 @@ function animateBubbleSort() {
 
     const [i, j] = move.indexes
 
-    if (move.swap) {
+    if (move.animation === 'swap') {
       columns[i].moveTo(columns[j])
       columns[j].moveTo(columns[i], -1)
       ;[columns[i], columns[j]] = [columns[j], columns[i]]

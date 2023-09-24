@@ -1,21 +1,40 @@
 <script setup lang="ts">
-import { VariantInjectionKey } from '@/services/sandbox.service'
-import { inject, reactive, watch } from 'vue'
-import { VariantInitFunctions } from '@/services/sandbox.service'
+import {
+  DEFAULT_FRAME_COUNT,
+  setFrameCount,
+  stopAnimation,
+  VariantInjectionKey
+} from '@/services/sandbox.service'
+import { computed, inject, watch } from 'vue'
+import { VariantSetups } from '@/services/sandbox.service'
 import { noop } from '@/utils'
-import { VariantActionsForRef } from './types'
 
 const variant = inject(VariantInjectionKey)
 
-const actions = reactive<VariantActionsForRef>({ init: noop, visualize: noop })
+const actions = computed(() => {
+  if (variant?.value) {
+    return VariantSetups[variant.value].actions
+  }
+
+  return { init: noop, visualize: noop }
+})
+
+const delays = computed(() => {
+  if (variant?.value) {
+    return VariantSetups[variant.value].delays
+  }
+
+  return [DEFAULT_FRAME_COUNT]
+})
 
 watch(
   () => variant?.value,
   (current) => {
-    actions.init = VariantInitFunctions[current].init
-    actions.visualize = VariantInitFunctions[current].visualize
+    if (!current) return
 
-    actions.init()
+    stopAnimation()
+    setFrameCount(VariantSetups[current].delays[0])
+    actions.value.init()
   }
 )
 </script>
@@ -23,6 +42,12 @@ watch(
 <template>
   <div class="sandbox-container">
     <canvas id="sandbox" />
+
+    <div v-if="delays.length > 1">
+      <button v-for="delay in delays" :key="delay" @click="setFrameCount(delay)">
+        {{ delay }}
+      </button>
+    </div>
 
     <button @click="actions.visualize">Run</button>
     <button @click="actions.init">init</button>

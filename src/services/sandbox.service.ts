@@ -2,7 +2,18 @@ import type { ComputedRef, InjectionKey } from 'vue'
 import { initBubbleSort, visualizeBubbleSort } from './bubble-sort.service'
 import type { Noop } from '@/types'
 
+export const DEFAULT_FRAME_COUNT = 10
+
 let _animationFrameId = -1
+let currentFrameCount = DEFAULT_FRAME_COUNT
+
+export const setFrameCount = (frameCount: number) => {
+  currentFrameCount = frameCount
+}
+
+export const getFrameCount = () => {
+  return currentFrameCount
+}
 
 export const initSandbox = () => {
   const canvas = getCanvas()
@@ -63,10 +74,16 @@ export const VariantInjectionKey = Symbol() as InjectionKey<ComputedRef<Variant>
 
 export type VariantActions = { init: () => void; visualize: () => void }
 
-export const VariantInitFunctions: Record<NonNullable<Variant>, VariantActions> = {
-  BubbleSort: { init: initBubbleSort, visualize: visualizeBubbleSort }
+type VariantSetup = {
+  actions: VariantActions
+  delays: number[]
 }
 
-export const VariantFrameCounts: Record<NonNullable<Variant>, number> = {
-  BubbleSort: 10
+const BubbleSortSetup = {
+  actions: { init: initBubbleSort, visualize: visualizeBubbleSort },
+  delays: [10, 20, 50]
+}
+
+export const VariantSetups: Record<NonNullable<Variant>, VariantSetup> = {
+  BubbleSort: BubbleSortSetup
 }

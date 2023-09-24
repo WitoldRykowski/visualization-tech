@@ -1,6 +1,8 @@
 import { lerp } from '@/utils'
-import { getContext, VariantFrameCounts } from '@/services/sandbox.service'
+import { getContext, getFrameCount } from '@/services/sandbox.service'
 import { colors } from 'quasar'
+
+export type MoveAnimation = 'swap' | 'jump'
 
 export const Column = (columnConfig: ColumnConfig): Column => {
   const column: Column = {
@@ -17,8 +19,10 @@ export const Column = (columnConfig: ColumnConfig): Column => {
   return column
 
   function moveTo(location: Location, yOffset = 1) {
-    for (let i = 0; i <= VariantFrameCounts['BubbleSort']; i++) {
-      const t = i / VariantFrameCounts['BubbleSort']
+    const frameCount = getFrameCount()
+
+    for (let i = 0; i <= frameCount; i++) {
+      const t = i / frameCount
       const u = Math.sin(t * Math.PI)
 
       column.queue.push({
@@ -30,8 +34,10 @@ export const Column = (columnConfig: ColumnConfig): Column => {
   }
 
   function jump() {
-    for (let i = 0; i <= VariantFrameCounts['BubbleSort']; i++) {
-      const t = i / VariantFrameCounts['BubbleSort']
+    const frameCount = getFrameCount()
+
+    for (let i = 0; i <= frameCount; i++) {
+      const t = i / frameCount
       const u = Math.sin(t * Math.PI)
 
       column.queue.push({
