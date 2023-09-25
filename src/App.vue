@@ -4,7 +4,7 @@ import { QPageContainer, QPage, QHeader, QLayout } from 'quasar'
 import { useMainStore } from '@/stores/main'
 
 import { computed, onMounted, provide } from 'vue'
-import { initSandbox, VariantInjectionKey } from '@/services/sandbox.service'
+import { initSandbox, VariantInjectionKey } from '@/services/SandboxService/sandbox.service'
 
 const store = useMainStore()
 
@@ -23,12 +23,20 @@ onMounted(initSandbox)
 
     <QPageContainer>
       <QPage padding>
-        <TheSandbox v-show="variant" />
+        <div id="main-container">
+          <VariantsList />
 
-        <VariantsList v-show="!variant" />
+          <TheSandbox />
+        </div>
       </QPage>
     </QPageContainer>
   </QLayout>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+#main-container {
+  @include flex-row();
+  gap: 1rem;
+  height: calc(100vh - 98px);
+}
+</style>

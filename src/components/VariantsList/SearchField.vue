@@ -12,7 +12,7 @@ const search = computed({
 </script>
 
 <template>
-  <QInput v-model="search" outlined dense label="Search" />
+  <QInput v-model="search" outlined dense label="Search" style="width: 100%" />
 </template>
 
 <style scoped lang="scss"></style>

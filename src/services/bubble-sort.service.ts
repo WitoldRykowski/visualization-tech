@@ -1,6 +1,6 @@
 import { generateNonSortedArray, renderArray } from './ArrayService/array.service'
 import type { Column, MoveAnimation } from '@/services/ArrayService/Column'
-import { animate, stopAnimation } from './sandbox.service'
+import { animate, stopAnimation } from './SandboxService/sandbox.service'
 
 type Move = {
   indexes: [number, number]

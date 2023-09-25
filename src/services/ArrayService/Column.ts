@@ -1,8 +1,9 @@
 import { lerp } from '@/utils'
-import { getContext, getFrameCount } from '@/services/sandbox.service'
+import { getContext, getFrameCount } from '@/services/SandboxService/sandbox.service'
 import { colors } from 'quasar'
+import type { Noop } from '@/types'
 
-export type MoveAnimation = 'swap' | 'jump'
+export type MoveAnimation = 'swap' | 'jump' | 'collapse'
 
 export const Column = (columnConfig: ColumnConfig): Column => {
   const column: Column = {
@@ -11,14 +12,19 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     queue: [],
     draw,
     moveTo,
-    jump
+    jump,
+    collapse
   }
 
   draw()
 
   return column
 
-  function moveTo(location: Location, yOffset = 1) {
+  function moveTo(location: QueueItem, yOffset = 1) {
+    if (!location.x || !location.y) {
+      throw Error(`x and y are required! Current ${{ x: location.x, y: location.y }}`)
+    }
+
     const frameCount = getFrameCount()
 
     for (let i = 0; i <= frameCount; i++) {
@@ -48,18 +54,29 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     }
   }
 
+  function collapse() {
+    const frameCount = getFrameCount()
+
+    for (let i = 0; i <= frameCount; i++) {
+      const t = i / frameCount
+
+      column.queue.push({})
+    }
+  }
+
   function draw() {
     let isChanged = false
+    const primary = colors.getPaletteColor('primary')
 
     if (column.queue.length > 0) {
       const { x, y, color } = column.queue.shift()!
 
-      column.x = x
-      column.y = y
-      column.color = color
+      column.x = x!
+      column.y = y!
+      column.color = color ?? primary
       isChanged = true
     } else {
-      column.color = colors.getPaletteColor('primary')
+      column.color = primary
     }
 
     const context = getContext()
@@ -82,7 +99,7 @@ export const Column = (columnConfig: ColumnConfig): Column => {
   }
 }
 
-type Location = Pick<Column, 'x' | 'y'> & { color: string }
+type QueueItem = Partial<ColumnConfig> & { color?: string }
 
 type ColumnConfig = {
   x: number
@@ -92,9 +109,10 @@ type ColumnConfig = {
 }
 
 export type Column = ColumnConfig & {
-  queue: Location[]
+  queue: QueueItem[]
   color: string
   draw: () => boolean
-  moveTo: (location: Location, yOffset?: number, frameCount?: number) => void
-  jump: () => void
+  moveTo: (location: QueueItem, yOffset?: number, frameCount?: number) => void
+  jump: Noop
+  collapse: Noop
 }

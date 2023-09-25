@@ -1,6 +1,6 @@
 import { reactive, readonly } from 'vue'
 import { defineStore } from 'pinia'
-import type { Variant } from '@/services/sandbox.service'
+import type { Variant } from '@/services/SandboxService/sandbox.service'
 
 export type MainState = {
   search: string

@@ -3,7 +3,7 @@ import { QBtn } from 'quasar'
 </script>
 
 <template>
-  <QBtn outline />
+  <QBtn outline color="primary" />
 </template>
 
 <style scoped lang="scss"></style>
