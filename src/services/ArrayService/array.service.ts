@@ -35,7 +35,6 @@ export const renderArray = (values: number[], columnHeightMultiplier = 500) => {
     const yAxis = canvas.height - MARGIN - i * 3
     const columnHeight = columnHeightMultiplier * values[i]
 
-    // TODO try to use value instead of height, i redukcja value żeby zmniejszała się wysokość podczas animacji
     columns[i] = Column({
       x: xAxis,
       y: yAxis,

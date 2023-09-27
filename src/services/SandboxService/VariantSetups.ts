@@ -15,7 +15,7 @@ const QuickSortSetup = {
 
 const BinarySearchSetup = {
   actions: { init: initBinarySearch, visualize: visualizeBinarySearch },
-  delays: [10, 20, 50]
+  delays: [30, 50, 100]
 }
 
 const StackSetup = {

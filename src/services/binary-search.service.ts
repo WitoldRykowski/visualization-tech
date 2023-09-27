@@ -36,16 +36,6 @@ const binarySearch = (values: number[]) => {
   while (max >= min) {
     guess = Math.floor((max + min) / 2)
 
-    columns[guess].color = 'red'
-
-    moves.push({
-      min,
-      max,
-      guess,
-      target,
-      animation: 'collapse'
-    })
-
     if (values[guess] > target) {
       max = guess - 1
     } else if (values[guess] < target) {
@@ -54,6 +44,14 @@ const binarySearch = (values: number[]) => {
       min = max = guess
       break
     }
+
+    moves.push({
+      min,
+      max,
+      guess,
+      target,
+      animation: 'collapse'
+    })
   }
 
   moves.push({
@@ -62,6 +60,14 @@ const binarySearch = (values: number[]) => {
     guess,
     target,
     animation: 'collapse'
+  })
+
+  moves.push({
+    min,
+    max,
+    guess,
+    target,
+    animation: 'jump'
   })
 
   return moves
@@ -76,16 +82,22 @@ const animateBinarySearch = () => {
 
   if (!isChanged && moves.length > 0) {
     const move = moves.shift()!
-    const { min, max, guess, target } = move
+    const { min, max, guess, target, animation } = move
 
-    for (let i = min; i <= max; i++) {
-      if (values[i] !== target) {
-        for (let i = 0; i < columns.length; i++) {
-          if (i < min) {
-            //
-          } else {
-            //
-          }
+    if (animation === 'jump') {
+      columns[guess].jump()
+    } else {
+      // TODO fixnąć skrajne kolumny, zawalają się za każdym razem
+
+      for (let i = 0; i <= min; i++) {
+        if (values[i] !== target) {
+          columns[i].collapse()
+        }
+      }
+
+      for (let i = max; i < columns.length; i++) {
+        if (values[i] !== target) {
+          columns[i].collapse()
         }
       }
     }

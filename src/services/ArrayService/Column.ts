@@ -12,7 +12,8 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     queue: [],
     draw,
     moveTo,
-    jump
+    jump,
+    collapse
   }
 
   draw()
@@ -23,12 +24,12 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     const frameCount = getFrameCount()
 
     for (let i = 0; i <= frameCount; i++) {
-      const t = i / frameCount
-      const u = Math.sin(t * Math.PI)
+      const tickRate = i / frameCount
+      const u = Math.sin(tickRate * Math.PI)
 
       column.queue.push({
-        x: lerp(column.x, location.x, t),
-        y: lerp(column.y, location.y, t) + ((u * column.width) / 2) * yOffset,
+        x: lerp(column.x, location.x, tickRate),
+        y: lerp(column.y, location.y, tickRate) + ((u * column.width) / 2) * yOffset,
         color: colors.getPaletteColor('secondary')
       })
     }
@@ -38,8 +39,8 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     const frameCount = getFrameCount()
 
     for (let i = 0; i <= frameCount; i++) {
-      const t = i / frameCount
-      const u = Math.sin(t * Math.PI)
+      const tickRate = i / frameCount
+      const u = Math.sin(tickRate * Math.PI)
 
       column.queue.push({
         x: column.x,
@@ -49,23 +50,39 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     }
   }
 
+  function collapse() {
+    const frameCount = getFrameCount()
+    const COLLAPSED_COLUMN_HEIGHT = 2
+
+    for (let i = 0; i <= frameCount; i++) {
+      const tickRate = i / frameCount
+      const u = column.height - column.height * tickRate
+      const height = u > COLLAPSED_COLUMN_HEIGHT ? u : COLLAPSED_COLUMN_HEIGHT
+
+      column.queue.push({
+        height
+      })
+    }
+  }
+
   function draw() {
     let isChanged = false
-    const primary = colors.getPaletteColor('primary')
 
     if (column.queue.length > 0) {
-      const { x, y, color } = column.queue.shift()!
+      const { x, y, height, color } = column.queue.shift()!
 
-      column.x = x!
-      column.y = y!
-      column.color = color ?? primary
+      column.x = x ?? column.x
+      column.y = y ?? column.y
+      column.height = height ?? column.height
+      column.color = color ?? column.color
       isChanged = true
     } else {
-      column.color = primary
+      column.color = colors.getPaletteColor('primary')
     }
 
     const context = getContext()
     const { x, y, width, height, color } = column
+
     const left = x - width / 2
     const top = y - height
     const right = x + width / 2
@@ -98,4 +115,5 @@ export type Column = ColumnConfig & {
   draw: () => boolean
   moveTo: (location: Pick<ColumnConfig, 'x' | 'y'>, yOffset?: number, frameCount?: number) => void
   jump: Noop
+  collapse: Noop
 }
