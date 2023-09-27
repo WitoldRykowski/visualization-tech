@@ -12,19 +12,14 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     queue: [],
     draw,
     moveTo,
-    jump,
-    collapse
+    jump
   }
 
   draw()
 
   return column
 
-  function moveTo(location: QueueItem, yOffset = 1) {
-    if (!location.x || !location.y) {
-      throw Error(`x and y are required! Current ${{ x: location.x, y: location.y }}`)
-    }
-
+  function moveTo(location: Pick<ColumnConfig, 'x' | 'y'>, yOffset = 1) {
     const frameCount = getFrameCount()
 
     for (let i = 0; i <= frameCount; i++) {
@@ -51,16 +46,6 @@ export const Column = (columnConfig: ColumnConfig): Column => {
         y: column.y - u * column.width,
         color: colors.getPaletteColor('accent')
       })
-    }
-  }
-
-  function collapse() {
-    const frameCount = getFrameCount()
-
-    for (let i = 0; i <= frameCount; i++) {
-      const t = i / frameCount
-
-      column.queue.push({})
     }
   }
 
@@ -99,20 +84,18 @@ export const Column = (columnConfig: ColumnConfig): Column => {
   }
 }
 
-type QueueItem = Partial<ColumnConfig> & { color?: string }
-
 type ColumnConfig = {
   x: number
   y: number
   width: number
   height: number
+  color?: string
 }
 
 export type Column = ColumnConfig & {
-  queue: QueueItem[]
+  queue: Partial<ColumnConfig>[]
   color: string
   draw: () => boolean
-  moveTo: (location: QueueItem, yOffset?: number, frameCount?: number) => void
+  moveTo: (location: Pick<ColumnConfig, 'x' | 'y'>, yOffset?: number, frameCount?: number) => void
   jump: Noop
-  collapse: Noop
 }

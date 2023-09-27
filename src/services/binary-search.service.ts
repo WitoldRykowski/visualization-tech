@@ -25,7 +25,6 @@ export const initBinarySearch = () => {
 
 export const visualizeBinarySearch = () => {
   moves = binarySearch(values)!
-  console.log(moves)
 }
 
 const binarySearch = (values: number[]) => {
@@ -34,28 +33,10 @@ const binarySearch = (values: number[]) => {
   let max = values.length - 1
   const target = Math.floor(Math.random() * values.length)
 
-  moves.push({
-    min,
-    max,
-    guess,
-    target,
-    animation: 'collapse'
-  })
-
   while (max >= min) {
     guess = Math.floor((max + min) / 2)
 
-    if (values[guess] > target) {
-      max = guess - 1
-    } else if (values[guess] < target) {
-      min = guess + 1
-    } else {
-      min = max = guess
-
-      if (min === max && min == guess) {
-        break
-      }
-    }
+    columns[guess].color = 'red'
 
     moves.push({
       min,
@@ -64,7 +45,24 @@ const binarySearch = (values: number[]) => {
       target,
       animation: 'collapse'
     })
+
+    if (values[guess] > target) {
+      max = guess - 1
+    } else if (values[guess] < target) {
+      min = guess + 1
+    } else {
+      min = max = guess
+      break
+    }
   }
+
+  moves.push({
+    min,
+    max,
+    guess,
+    target,
+    animation: 'collapse'
+  })
 
   return moves
 }
@@ -78,15 +76,18 @@ const animateBinarySearch = () => {
 
   if (!isChanged && moves.length > 0) {
     const move = moves.shift()!
-    const { min, max, guess, animation } = move
+    const { min, max, guess, target } = move
 
-    for (let i = 0; i < columns.length; i++) {
-      if (i > min || i < max) {
-        // TODO implement collapse
-        columns[i].collapse()
+    for (let i = min; i <= max; i++) {
+      if (values[i] !== target) {
+        for (let i = 0; i < columns.length; i++) {
+          if (i < min) {
+            //
+          } else {
+            //
+          }
+        }
       }
-
-      console.log(columns)
     }
   }
 }
