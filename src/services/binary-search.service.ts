@@ -1,6 +1,6 @@
 import { Column, type MoveAnimation } from '@/services/ArrayService/Column'
 import { generateSortedArray, renderArray } from '@/services/ArrayService/array.service'
-import { animate, stopAnimation } from '@/services/SandboxService/sandbox.service'
+import { animate, drawColumns, stopAnimation } from '@/services/SandboxService/sandbox.service'
 
 let moves: Move[] = []
 let values: number[] = []
@@ -78,41 +78,43 @@ const binarySearch = (values: number[]) => {
 }
 
 const animateBinarySearch = () => {
-  let isChanged = false
-
-  for (let i = 0; i < columns.length; i++) {
-    isChanged = columns[i].draw() || isChanged
-  }
+  const isChanged = drawColumns(columns)
 
   if (!isChanged && moves.length > 0) {
     const move = moves.shift()!
-    const { min, max, guess, target, animation } = move
+    const { guess, target, animation } = move
 
     if (animation === 'jump') {
       columns[guess].jump()
 
       if (values[guess] == target) {
-        columns[guess].moveTo({ x: columns[guess].x + 2, y: columns[guess].y + 20 }, true)
+        const location = { x: columns[guess].x + 2, y: columns[guess].y + 20 }
+
+        columns[guess].moveTo(location, true)
       }
     } else if (animation === 'collapse') {
-      const { lastUpdatedValue } = move
-      const isMinLastUpdated = lastUpdatedValue === 'min' || lastUpdatedValue === 'both'
-      const isMaxLastUpdated = lastUpdatedValue === 'max' || lastUpdatedValue === 'both'
+      triggerCollapse(move)
+    }
+  }
+}
 
-      if (isMinLastUpdated) {
-        for (let i = 0; i < min; i++) {
-          if (values[i] !== target) {
-            columns[i].collapse()
-          }
-        }
+function triggerCollapse(move: CollapseMoveConfig) {
+  const { lastUpdatedValue, min, target, max } = move
+  const isMinLastUpdated = lastUpdatedValue === 'min' || lastUpdatedValue === 'both'
+  const isMaxLastUpdated = lastUpdatedValue === 'max' || lastUpdatedValue === 'both'
+
+  if (isMinLastUpdated) {
+    for (let i = 0; i < min; i++) {
+      if (values[i] !== target) {
+        columns[i].collapse()
       }
+    }
+  }
 
-      if (isMaxLastUpdated) {
-        for (let i = max + 1; i < columns.length; i++) {
-          if (values[i] !== target) {
-            columns[i].collapse()
-          }
-        }
+  if (isMaxLastUpdated) {
+    for (let i = max + 1; i < columns.length; i++) {
+      if (values[i] !== target) {
+        columns[i].collapse()
       }
     }
   }
@@ -120,21 +122,20 @@ const animateBinarySearch = () => {
 
 type LastUpdatedValue = 'min' | 'max' | 'both'
 
+type GeneralMoveConfig = {
+  min: number
+  max: number
+  guess: number
+  target: number
+}
+
 type CollapseMoveConfig = {
   animation: Extract<MoveAnimation, 'collapse'>
   lastUpdatedValue: LastUpdatedValue
-}
+} & GeneralMoveConfig
 
-type GeneralMoveConfig = {
+type JumpMoveConfig = {
   animation: Extract<MoveAnimation, 'jump'>
-}
+} & GeneralMoveConfig
 
-type MoveConfig = CollapseMoveConfig | GeneralMoveConfig
-
-type Move =
-  | {
-      min: number
-      max: number
-      guess: number
-      target: number
-    } & MoveConfig
+type Move = CollapseMoveConfig | JumpMoveConfig

@@ -1,6 +1,6 @@
 import { generateNonSortedArray, renderArray } from './ArrayService/array.service'
 import type { Column, MoveAnimation } from '@/services/ArrayService/Column'
-import { animate, stopAnimation } from './SandboxService/sandbox.service'
+import { animate, drawColumns, stopAnimation } from './SandboxService/sandbox.service'
 
 type Move = {
   indexes: [number, number]
@@ -57,11 +57,7 @@ function bubbleSort(values: number[]) {
 }
 
 function animateBubbleSort() {
-  let isChanged = false
-
-  for (let i = 0; i < columns.length; i++) {
-    isChanged = columns[i].draw() || isChanged
-  }
+  const isChanged = drawColumns(columns)
 
   if (!isChanged && moves.length > 0) {
     const move = moves.shift()!

@@ -1,5 +1,6 @@
 import type { ComputedRef, InjectionKey } from 'vue'
 import type { Noop } from '@/types'
+import type { Column } from '@/services/ArrayService/Column'
 
 export const DEFAULT_FRAME_COUNT = 10
 
@@ -48,8 +49,20 @@ export const animate = (callback: Noop) => {
   _animationFrameId = requestAnimationFrame(() => animate(callback))
 }
 
+export const drawColumns = (columns: Column[]) => {
+  let isChanged = false
+
+  for (let i = 0; i < columns.length; i++) {
+    isChanged = columns[i].draw() || isChanged
+  }
+
+  return isChanged
+}
+
 export const stopAnimation = () => {
   cancelAnimationFrame(_animationFrameId)
+
+  _animationFrameId = -1
 }
 
 export const ALGORITHMS_LIST = ['BinarySearch', 'BubbleSort', 'QuickSort'] as const

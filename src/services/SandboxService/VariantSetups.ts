@@ -2,6 +2,7 @@ import { initBubbleSort, visualizeBubbleSort } from '@/services/bubble-sort.serv
 import { noop } from '@/utils'
 import type { Variant } from '@/services/SandboxService/sandbox.service'
 import { initBinarySearch, visualizeBinarySearch } from '@/services/binary-search.service'
+import { initQuickSort, visualizeQuickSort } from '@/services/quick-sort.service'
 
 const BubbleSortSetup = {
   actions: { init: initBubbleSort, visualize: visualizeBubbleSort },
@@ -9,7 +10,7 @@ const BubbleSortSetup = {
 }
 
 const QuickSortSetup = {
-  actions: { init: noop, visualize: noop },
+  actions: { init: initQuickSort, visualize: visualizeQuickSort },
   delays: [10, 20, 50]
 }
 
