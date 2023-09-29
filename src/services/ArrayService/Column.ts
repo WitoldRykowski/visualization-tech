@@ -3,8 +3,6 @@ import { getContext, getFrameCount } from '@/services/SandboxService/sandbox.ser
 import { colors } from 'quasar'
 import type { Noop } from '@/types'
 
-export type MoveAnimation = 'swap' | 'jump' | 'collapse'
-
 export const Column = (columnConfig: ColumnConfig): Column => {
   const column: Column = {
     ...columnConfig,
@@ -20,13 +18,17 @@ export const Column = (columnConfig: ColumnConfig): Column => {
 
   return column
 
-  function moveTo(location: Pick<ColumnConfig, 'x' | 'y'>, yOffset = 1) {
+  function moveTo(location: Pick<ColumnConfig, 'x' | 'y'>, keepColor = false, yOffset = 1) {
     const frameCount = getFrameCount()
 
     for (let i = 0; i <= frameCount; i++) {
       const tickRate = i / frameCount
       const u = Math.sin(tickRate * Math.PI)
-      const color = getColor(colors.getPaletteColor('positive'), i === frameCount)
+      const color = getColor({
+        color: colors.getPaletteColor('positive'),
+        isLastFrame: i === frameCount,
+        keepColor
+      })
 
       column.queue.push({
         x: lerp(column.x, location.x, tickRate),
@@ -36,13 +38,17 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     }
   }
 
-  function jump() {
+  function jump(keepColor = false) {
     const frameCount = getFrameCount()
 
     for (let i = 0; i <= frameCount; i++) {
       const tickRate = i / frameCount
       const u = Math.sin(tickRate * Math.PI)
-      const color = getColor(colors.getPaletteColor('warning'), i === frameCount)
+      const color = getColor({
+        color: colors.getPaletteColor('warning'),
+        isLastFrame: i === frameCount,
+        keepColor
+      })
 
       column.queue.push({
         x: column.x,
@@ -100,11 +106,30 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     return isChanged
   }
 
-  function getColor(color: string, isLastFrame: boolean) {
-    if (isLastFrame) return colors.getPaletteColor('primary')
+  function getColor(payload: GetColorPayload) {
+    const { color, isLastFrame, keepColor } = payload
+
+    if (isLastFrame && !keepColor) return colors.getPaletteColor('primary')
 
     return color
   }
+}
+
+export type MoveAnimation = 'swap' | 'jump' | 'collapse'
+
+export type Column = ColumnConfig & {
+  queue: Partial<ColumnConfig>[]
+  color: string
+  draw: () => boolean
+  moveTo: (location: Pick<ColumnConfig, 'x' | 'y'>, keepColor?: boolean, yOffset?: number) => void
+  jump: (keepColor?: boolean) => void
+  collapse: Noop
+}
+
+type GetColorPayload = {
+  color: string
+  isLastFrame: boolean
+  keepColor: boolean
 }
 
 type ColumnConfig = {
@@ -113,13 +138,4 @@ type ColumnConfig = {
   width: number
   height: number
   color?: string
-}
-
-export type Column = ColumnConfig & {
-  queue: Partial<ColumnConfig>[]
-  color: string
-  draw: () => boolean
-  moveTo: (location: Pick<ColumnConfig, 'x' | 'y'>, yOffset?: number, frameCount?: number) => void
-  jump: Noop
-  collapse: Noop
 }

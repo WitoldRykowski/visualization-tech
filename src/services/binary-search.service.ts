@@ -92,7 +92,7 @@ const animateBinarySearch = () => {
       columns[guess].jump()
 
       if (values[guess] == target) {
-        columns[guess].moveTo({ x: columns[guess].x + 2, y: columns[guess].y + 20 })
+        columns[guess].moveTo({ x: columns[guess].x + 2, y: columns[guess].y + 20 }, true)
       }
     } else if (animation === 'collapse') {
       const { lastUpdatedValue } = move

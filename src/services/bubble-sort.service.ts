@@ -70,7 +70,7 @@ function animateBubbleSort() {
 
     if (move.animation === 'swap') {
       columns[i].moveTo(columns[j])
-      columns[j].moveTo(columns[i], -1)
+      columns[j].moveTo(columns[i], false, -1)
       ;[columns[i], columns[j]] = [columns[j], columns[i]]
     } else {
       columns[i].jump()
