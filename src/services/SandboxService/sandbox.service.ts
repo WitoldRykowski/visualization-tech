@@ -1,7 +1,5 @@
 import type { ComputedRef, InjectionKey } from 'vue'
-import { initBubbleSort, visualizeBubbleSort } from '../bubble-sort.service'
 import type { Noop } from '@/types'
-import { noop } from '@/utils'
 
 export const DEFAULT_FRAME_COUNT = 10
 

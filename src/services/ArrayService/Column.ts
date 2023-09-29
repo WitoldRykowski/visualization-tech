@@ -26,11 +26,12 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     for (let i = 0; i <= frameCount; i++) {
       const tickRate = i / frameCount
       const u = Math.sin(tickRate * Math.PI)
+      const color = getColor(colors.getPaletteColor('positive'), i === frameCount)
 
       column.queue.push({
         x: lerp(column.x, location.x, tickRate),
         y: lerp(column.y, location.y, tickRate) + ((u * column.width) / 2) * yOffset,
-        color: colors.getPaletteColor('secondary')
+        color
       })
     }
   }
@@ -41,11 +42,12 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     for (let i = 0; i <= frameCount; i++) {
       const tickRate = i / frameCount
       const u = Math.sin(tickRate * Math.PI)
+      const color = getColor(colors.getPaletteColor('warning'), i === frameCount)
 
       column.queue.push({
         x: column.x,
         y: column.y - u * column.width,
-        color: colors.getPaletteColor('accent')
+        color
       })
     }
   }
@@ -76,8 +78,6 @@ export const Column = (columnConfig: ColumnConfig): Column => {
       column.height = height ?? column.height
       column.color = color ?? column.color
       isChanged = true
-    } else {
-      column.color = colors.getPaletteColor('primary')
     }
 
     const context = getContext()
@@ -98,6 +98,12 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     context.stroke()
 
     return isChanged
+  }
+
+  function getColor(color: string, isLastFrame: boolean) {
+    if (isLastFrame) return colors.getPaletteColor('primary')
+
+    return color
   }
 }
 
