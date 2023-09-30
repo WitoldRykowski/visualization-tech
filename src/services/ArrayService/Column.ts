@@ -3,15 +3,18 @@ import { getContext, getFrameCount } from '@/services/SandboxService/sandbox.ser
 import { colors } from 'quasar'
 import type { Noop } from '@/types'
 
+export const DEFAULT_COLOR = colors.getPaletteColor('primary')
+
 export const Column = (columnConfig: ColumnConfig): Column => {
   const column: Column = {
     ...columnConfig,
-    color: colors.getPaletteColor('primary'),
+    color: DEFAULT_COLOR,
     queue: [],
     draw,
     moveTo,
     jump,
-    collapse
+    collapse,
+    changeColor
   }
 
   draw()
@@ -56,6 +59,12 @@ export const Column = (columnConfig: ColumnConfig): Column => {
         color
       })
     }
+  }
+
+  function changeColor(color: string) {
+    column.queue.push({
+      color
+    })
   }
 
   function collapse() {
@@ -109,13 +118,13 @@ export const Column = (columnConfig: ColumnConfig): Column => {
   function getColor(payload: GetColorPayload) {
     const { color, isLastFrame, keepColor } = payload
 
-    if (isLastFrame && !keepColor) return colors.getPaletteColor('primary')
+    if (isLastFrame && !keepColor) return DEFAULT_COLOR
 
     return color
   }
 }
 
-export type MoveAnimation = 'swap' | 'jump' | 'collapse'
+export type MoveAnimation = 'swap' | 'jump' | 'collapse' | 'changeColor' | 'move'
 
 export type Column = ColumnConfig & {
   queue: Partial<ColumnConfig>[]
@@ -124,6 +133,7 @@ export type Column = ColumnConfig & {
   moveTo: (location: Pick<ColumnConfig, 'x' | 'y'>, keepColor?: boolean, yOffset?: number) => void
   jump: (keepColor?: boolean) => void
   collapse: Noop
+  changeColor: (color: string) => void
 }
 
 type GetColorPayload = {
