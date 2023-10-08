@@ -1,6 +1,7 @@
 import { Column, type MoveAnimation } from '@/services/ArrayService/Column'
 import { generateSortedArray, renderArray } from '@/services/ArrayService/array.service'
 import { animate, drawColumns, stopAnimation } from '@/services/SandboxService/sandbox.service'
+import { getMoveToAnimationConfig } from '@/services/AnimationService/animation.service'
 
 let moves: Move[] = []
 let values: number[] = []
@@ -80,21 +81,21 @@ const binarySearch = (values: number[]) => {
 const animateBinarySearch = () => {
   const isChanged = drawColumns(columns)
 
-  if (!isChanged && moves.length > 0) {
-    const move = moves.shift()!
-    const { guess, target, animation } = move
+  if (isChanged || !moves.length) return
 
-    if (animation === 'jump') {
-      columns[guess].jump()
+  const move = moves.shift()!
+  const { guess, target, animation } = move
 
-      if (values[guess] == target) {
-        const location = { x: columns[guess].x + 2, y: columns[guess].y + 20 }
+  if (animation === 'jump') {
+    columns[guess].jump()
 
-        columns[guess].moveTo(location, true)
-      }
-    } else if (animation === 'collapse') {
-      triggerCollapse(move)
+    if (values[guess] == target) {
+      const location = { x: columns[guess].x + 2, y: columns[guess].y + 20 }
+
+      columns[guess].moveTo(location, getMoveToAnimationConfig({ keepColor: true }))
     }
+  } else if (animation === 'collapse') {
+    triggerCollapse(move)
   }
 }
 

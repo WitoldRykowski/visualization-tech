@@ -11,7 +11,7 @@ const BubbleSortSetup = {
 
 const QuickSortSetup = {
   actions: { init: initQuickSort, visualize: visualizeQuickSort },
-  delays: [10, 20, 50]
+  delays: [10, 20, 30]
 }
 
 const BinarySearchSetup = {

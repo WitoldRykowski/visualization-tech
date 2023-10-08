@@ -1,13 +1,15 @@
 import type { Column, MoveAnimation } from '@/services/ArrayService/Column'
 import { generateNonSortedArray, renderArray } from '@/services/ArrayService/array.service'
 import { animate, drawColumns, stopAnimation } from '@/services/SandboxService/sandbox.service'
+import { colors } from 'quasar'
+import { getMoveToAnimationConfig } from '@/services/AnimationService/animation.service'
 
 type Move = {
   left: number
   right: number
   pivotIndex: number
   indexes: [number, number]
-  animation: MoveAnimation | 'move-back'
+  animation: MoveAnimation | `jump-${string}`
 }
 
 let moves: Move[] = []
@@ -44,26 +46,44 @@ function quickSort(values: number[], left: number, right: number) {
     let i = left
     let j = right
 
-    moves.push({
+    const basicPayload = {
       pivotIndex: middle,
       left,
-      right,
-      animation: 'move',
+      right
+    }
+
+    moves.push({
+      ...basicPayload,
+      animation: `changeColor`,
       indexes: [i, j]
     })
 
     while (i <= j) {
-      while (array[i] < pivot) i++
+      while (array[i] < pivot) {
+        i++
 
-      while (array[j] > pivot) j--
+        moves.push({
+          ...basicPayload,
+          animation: `jump-i`,
+          indexes: [i, j]
+        })
+      }
+
+      while (array[j] > pivot) {
+        j--
+
+        moves.push({
+          ...basicPayload,
+          animation: `jump-j`,
+          indexes: [i, j]
+        })
+      }
 
       if (i <= j) {
         ;[array[i], array[j]] = [array[j], array[i]]
 
         moves.push({
-          pivotIndex: middle,
-          left,
-          right,
+          ...basicPayload,
           animation: 'swap',
           indexes: [i, j]
         })
@@ -73,14 +93,6 @@ function quickSort(values: number[], left: number, right: number) {
       }
     }
 
-    moves.push({
-      pivotIndex: middle,
-      left,
-      right,
-      animation: 'move-back',
-      indexes: [i, j]
-    })
-
     return i
   }
 }
@@ -88,26 +100,61 @@ function quickSort(values: number[], left: number, right: number) {
 function animateQuickSort() {
   const isChanged = drawColumns(columns)
 
-  if (!isChanged && moves.length > 0) {
-    const { left, right, pivotIndex, animation, indexes } = moves.shift()!
-    // TODO think about better visualization
-    columns[pivotIndex].changeColor('red')
+  if (isChanged || !moves.length) return
 
-    if (animation === 'move') {
-      for (let i = left; i <= right; i++) {
-        columns[i].moveTo({ x: columns[i].x + 5, y: columns[i].y + 10 })
-        // columns[i].changeColor('green')
-      }
-    } else if (animation === 'swap') {
-      const [i, j] = indexes
-      columns[i].moveTo(columns[j])
-      columns[j].moveTo(columns[i], false, -1)
-      ;[columns[i], columns[j]] = [columns[j], columns[i]]
-    } else {
-      for (let i = left; i <= right; i++) {
-        columns[i].moveTo({ x: columns[i].x - 5, y: columns[i].y - 10 })
-        // columns[i].changeColor(DEFAULT_COLUMN_COLOR)
-      }
+  const { left, right, pivotIndex, animation, indexes } = moves.shift()!
+  const [i, j] = indexes
+  const grey = colors.getPaletteColor('grey-1')
+  const primary = colors.getPaletteColor('primary')
+  const negative = colors.getPaletteColor('negative')
+
+  if (animation.startsWith('changeColor')) {
+    handleChangeColor()
+  } else if (animation.startsWith('jump')) {
+    handleJump()
+  } else if (animation === 'swap') {
+    handleSwap()
+  }
+
+  if (!moves.length) {
+    for (let i = 0; i < columns.length; i++) {
+      columns[i].changeColor(primary)
     }
+  }
+
+  function handleSwap() {
+    if (i === j) return
+
+    const config = getMoveToAnimationConfig({
+      frameCount: 50
+    })
+
+    columns[i].moveTo(columns[j], config)
+    columns[j].moveTo(columns[i], { ...config, yOffset: -1 })
+    ;[columns[i], columns[j]] = [columns[j], columns[i]]
+
+    columns[pivotIndex].changeColor(negative)
+  }
+
+  function handleJump() {
+    const indexes = [i]
+
+    if (animation.endsWith('j')) {
+      indexes.push(j)
+    }
+
+    indexes.forEach((index) => {
+      columns[index].jump()
+    })
+  }
+
+  function handleChangeColor() {
+    for (let i = 0; i < columns.length; i++) {
+      const isInRange = i >= left && i <= right
+
+      columns[i].changeColor(isInRange ? primary : grey)
+    }
+
+    columns[pivotIndex].changeColor(negative)
   }
 }

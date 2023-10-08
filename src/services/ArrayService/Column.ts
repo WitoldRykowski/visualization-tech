@@ -1,7 +1,14 @@
 import { lerp } from '@/utils'
-import { getContext, getFrameCount } from '@/services/SandboxService/sandbox.service'
+import { getContext } from '@/services/SandboxService/sandbox.service'
+import type {
+  MoveToAnimationConfig,
+  AnimationConfig
+} from '@/services/AnimationService/animation.service'
 import { colors } from 'quasar'
-import type { Noop } from '@/types'
+import {
+  getAnimationConfig,
+  getMoveToAnimationConfig
+} from '@/services/AnimationService/animation.service'
 
 export const DEFAULT_COLOR = colors.getPaletteColor('primary')
 
@@ -21,8 +28,8 @@ export const Column = (columnConfig: ColumnConfig): Column => {
 
   return column
 
-  function moveTo(location: Pick<ColumnConfig, 'x' | 'y'>, keepColor = false, yOffset = 1) {
-    const frameCount = getFrameCount()
+  function moveTo(location: Pick<ColumnConfig, 'x' | 'y'>, config = getMoveToAnimationConfig()) {
+    const { keepColor, frameCount, yOffset } = config
 
     for (let i = 0; i <= frameCount; i++) {
       const tickRate = i / frameCount
@@ -41,8 +48,8 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     }
   }
 
-  function jump(keepColor = false) {
-    const frameCount = getFrameCount()
+  function jump(config = getAnimationConfig()) {
+    const { keepColor, frameCount } = config
 
     for (let i = 0; i <= frameCount; i++) {
       const tickRate = i / frameCount
@@ -67,8 +74,8 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     })
   }
 
-  function collapse() {
-    const frameCount = getFrameCount()
+  function collapse(config = getAnimationConfig()) {
+    const { frameCount } = config
     const COLLAPSED_COLUMN_HEIGHT = 2
 
     for (let i = 0; i <= frameCount; i++) {
@@ -130,9 +137,9 @@ export type Column = ColumnConfig & {
   queue: Partial<ColumnConfig>[]
   color: string
   draw: () => boolean
-  moveTo: (location: Pick<ColumnConfig, 'x' | 'y'>, keepColor?: boolean, yOffset?: number) => void
-  jump: (keepColor?: boolean) => void
-  collapse: Noop
+  moveTo: (location: Pick<ColumnConfig, 'x' | 'y'>, config?: MoveToAnimationConfig) => void
+  jump: (config?: AnimationConfig) => void
+  collapse: (config?: AnimationConfig) => void
   changeColor: (color: string) => void
 }
 
