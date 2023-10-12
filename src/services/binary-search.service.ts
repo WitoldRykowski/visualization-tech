@@ -1,7 +1,8 @@
-import { Column, type MoveAnimation } from '@/services/ArrayService/Column'
+import { Column, DEFAULT_COLOR, type MoveAnimation } from '@/services/ArrayService/Column'
 import { generateSortedArray, renderArray } from '@/services/ArrayService/array.service'
 import { animate, drawColumns, stopAnimation } from '@/services/SandboxService/sandbox.service'
-import { getMoveToAnimationConfig } from '@/services/AnimationService/animation.service'
+import { getAnimationConfig } from '@/services/AnimationService/animation.service'
+import { convertNamedColorToRGB } from '@/utils'
 
 let moves: Move[] = []
 let values: number[] = []
@@ -87,15 +88,17 @@ const animateBinarySearch = () => {
   const { guess, target, animation } = move
 
   if (animation === 'jump') {
-    columns[guess].jump()
+    columns[guess].jump(getAnimationConfig({ keepColor: true }))
 
-    if (values[guess] == target) {
-      const location = { x: columns[guess].x + 2, y: columns[guess].y + 20 }
-
-      columns[guess].moveTo(location, getMoveToAnimationConfig({ keepColor: true }))
+    if (values[guess] === target) {
+      columns[guess].changeColor(convertNamedColorToRGB('positive'))
     }
   } else if (animation === 'collapse') {
     triggerCollapse(move)
+
+    if (values[guess] !== target) {
+      columns[guess].changeColor(DEFAULT_COLOR)
+    }
   }
 }
 

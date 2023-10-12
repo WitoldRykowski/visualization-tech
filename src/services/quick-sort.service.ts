@@ -3,6 +3,7 @@ import { generateNonSortedArray, renderArray } from '@/services/ArrayService/arr
 import { animate, drawColumns, stopAnimation } from '@/services/SandboxService/sandbox.service'
 import { colors } from 'quasar'
 import { getMoveToAnimationConfig } from '@/services/AnimationService/animation.service'
+import { convertNamedColorToRGB } from '@/utils'
 
 type Move = {
   left: number
@@ -104,16 +105,16 @@ function animateQuickSort() {
 
   const { left, right, pivotIndex, animation, indexes } = moves.shift()!
   const [i, j] = indexes
-  const grey = colors.getPaletteColor('grey-1')
-  const primary = colors.getPaletteColor('primary')
-  const negative = colors.getPaletteColor('negative')
+  const grey = convertNamedColorToRGB('grey-1')
+  const primary = convertNamedColorToRGB('primary')
+  const negative = convertNamedColorToRGB('negative')
 
   if (animation.startsWith('changeColor')) {
-    handleChangeColor()
+    changeColumnColor()
   } else if (animation.startsWith('jump')) {
-    handleJump()
+    jump()
   } else if (animation === 'swap') {
-    handleSwap()
+    swapColumns()
   }
 
   if (!moves.length) {
@@ -122,7 +123,7 @@ function animateQuickSort() {
     }
   }
 
-  function handleSwap() {
+  function swapColumns() {
     if (i === j) return
 
     const config = getMoveToAnimationConfig({
@@ -136,7 +137,7 @@ function animateQuickSort() {
     columns[pivotIndex].changeColor(negative)
   }
 
-  function handleJump() {
+  function jump() {
     const indexes = [i]
 
     if (animation.endsWith('j')) {
@@ -148,13 +149,16 @@ function animateQuickSort() {
     })
   }
 
-  function handleChangeColor() {
+  function changeColumnColor() {
     for (let i = 0; i < columns.length; i++) {
       const isInRange = i >= left && i <= right
+      const color = isInRange ? primary : grey
 
-      columns[i].changeColor(isInRange ? primary : grey)
+      columns[i].changeColor(color)
     }
 
-    columns[pivotIndex].changeColor(negative)
+    if (moves.length) {
+      columns[pivotIndex].changeColor(negative)
+    }
   }
 }

@@ -67,8 +67,8 @@ function animateBubbleSort() {
   const [i, j] = move.indexes
 
   if (move.animation === 'swap') {
-    columns[i].moveTo(columns[j])
-    columns[j].moveTo(columns[i], getMoveToAnimationConfig({ yOffset: -1 }))
+    columns[i].moveTo(columns[j], getMoveToAnimationConfig({ frameCount: 15 }))
+    columns[j].moveTo(columns[i], getMoveToAnimationConfig({ yOffset: -1, frameCount: 15 }))
     ;[columns[i], columns[j]] = [columns[j], columns[i]]
   } else {
     columns[i].jump()

@@ -1,16 +1,16 @@
-import { lerp } from '@/utils'
-import { getContext } from '@/services/SandboxService/sandbox.service'
+import { convertNamedColorToRGB, lerp } from '@/utils'
+import { getContext, getFrameCount } from '@/services/SandboxService/sandbox.service'
 import type {
   MoveToAnimationConfig,
   AnimationConfig
 } from '@/services/AnimationService/animation.service'
-import { colors } from 'quasar'
+import { colors, type colorsRgba as ColorRGBA } from 'quasar'
 import {
   getAnimationConfig,
   getMoveToAnimationConfig
 } from '@/services/AnimationService/animation.service'
 
-export const DEFAULT_COLOR = colors.getPaletteColor('primary')
+export const DEFAULT_COLOR = convertNamedColorToRGB('primary')
 
 export const Column = (columnConfig: ColumnConfig): Column => {
   const column: Column = {
@@ -31,47 +31,53 @@ export const Column = (columnConfig: ColumnConfig): Column => {
   function moveTo(location: Pick<ColumnConfig, 'x' | 'y'>, config = getMoveToAnimationConfig()) {
     const { keepColor, frameCount, yOffset } = config
 
+    changeColor(convertNamedColorToRGB('positive'))
+
     for (let i = 0; i <= frameCount; i++) {
       const tickRate = i / frameCount
       const u = Math.sin(tickRate * Math.PI)
-      const color = getColor({
-        color: colors.getPaletteColor('positive'),
-        isLastFrame: i === frameCount,
-        keepColor
-      })
 
       column.queue.push({
         x: lerp(column.x, location.x, tickRate),
-        y: lerp(column.y, location.y, tickRate) + ((u * column.width) / 2) * yOffset,
-        color
+        y: lerp(column.y, location.y, tickRate) + ((u * column.width) / 2) * yOffset
       })
     }
+
+    if (!keepColor) changeColor(DEFAULT_COLOR)
   }
 
   function jump(config = getAnimationConfig()) {
     const { keepColor, frameCount } = config
 
+    changeColor(convertNamedColorToRGB('warning'))
+
     for (let i = 0; i <= frameCount; i++) {
       const tickRate = i / frameCount
       const u = Math.sin(tickRate * Math.PI)
-      const color = getColor({
-        color: colors.getPaletteColor('warning'),
-        isLastFrame: i === frameCount,
-        keepColor
-      })
 
       column.queue.push({
         x: column.x,
-        y: column.y - u * column.width,
-        color
+        y: column.y - u * column.width
       })
     }
+
+    if (!keepColor) changeColor(DEFAULT_COLOR)
   }
 
-  function changeColor(color: string) {
-    column.queue.push({
-      color
-    })
+  function changeColor(color: ColorRGBA, frameCount = getFrameCount()) {
+    const { r: startR, g: startG, b: startB } = column.color
+    const { r: targetR, g: targetG, b: targetB } = color
+    const rStep = (targetR - startR) / frameCount
+    const gStep = (targetG - startG) / frameCount
+    const bStep = (targetB - startB) / frameCount
+
+    for (let i = 0; i <= frameCount; i++) {
+      const r = startR + rStep * i
+      const g = startG + gStep * i
+      const b = startB + bStep * i
+
+      column.queue.push({ color: { r, g, b } })
+    }
   }
 
   function collapse(config = getAnimationConfig()) {
@@ -110,7 +116,7 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     const right = x + width / 2
 
     context.beginPath()
-    context.fillStyle = color
+    context.fillStyle = colors.rgbToHex(color)
     context.moveTo(left, top)
     context.lineTo(left, y)
     context.ellipse(x, y, width / 2, width / 4, 0, Math.PI, Math.PI * 2, true)
@@ -121,32 +127,18 @@ export const Column = (columnConfig: ColumnConfig): Column => {
 
     return isChanged
   }
-
-  function getColor(payload: GetColorPayload) {
-    const { color, isLastFrame, keepColor } = payload
-
-    if (isLastFrame && !keepColor) return DEFAULT_COLOR
-
-    return color
-  }
 }
 
 export type MoveAnimation = 'swap' | 'jump' | 'collapse' | 'changeColor' | 'move'
 
 export type Column = ColumnConfig & {
   queue: Partial<ColumnConfig>[]
-  color: string
+  color: ColorRGBA
   draw: () => boolean
   moveTo: (location: Pick<ColumnConfig, 'x' | 'y'>, config?: MoveToAnimationConfig) => void
   jump: (config?: AnimationConfig) => void
   collapse: (config?: AnimationConfig) => void
-  changeColor: (color: string) => void
-}
-
-type GetColorPayload = {
-  color: string
-  isLastFrame: boolean
-  keepColor: boolean
+  changeColor: (color: ColorRGBA) => void
 }
 
 type ColumnConfig = {
@@ -154,5 +146,5 @@ type ColumnConfig = {
   y: number
   width: number
   height: number
-  color?: string
+  color?: ColorRGBA
 }

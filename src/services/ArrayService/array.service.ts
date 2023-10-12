@@ -1,7 +1,7 @@
 import { getCanvas } from '@/services/SandboxService/sandbox.service'
 import { Column } from './Column'
 
-const DEFAULT_ARRAY_SIZE = 70
+const DEFAULT_ARRAY_SIZE = 50
 const MARGIN = 30
 
 export const generateSortedArray = (size = DEFAULT_ARRAY_SIZE) => {
