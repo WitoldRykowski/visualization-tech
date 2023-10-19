@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import VariantsListCard from './VariantsListCard.vue'
+import SearchField from './components/SearchField.vue'
+import VariantsListCard from './components/VariantsListCard.vue'
 import {
   ALGORITHMS_LIST,
   DATA_STRUCTURES_LIST,
   Variant
 } from '@/services/SandboxService/sandbox.service'
 import { QCard, QSeparator, QExpansionItem } from 'quasar'
-import SearchField from './SearchField.vue'
 import { computed } from 'vue'
 import { useMainStore } from '@/stores/main'
 

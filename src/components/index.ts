@@ -1,5 +1,3 @@
-export { default as TheSandbox } from './Sandbox'
 export { default as AppButton } from './AppButton'
 export { default as AppCard } from './AppCard'
-export { default as VariantsList } from './VariantsList'
 export { default as AppToolbar } from './AppToolbar'

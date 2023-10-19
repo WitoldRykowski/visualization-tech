@@ -1,18 +1,15 @@
 <script setup lang="ts">
-import { VariantsList, AppToolbar, TheSandbox } from '@/components'
+import { AppToolbar } from '@/components'
 import { QPageContainer, QPage, QHeader, QLayout } from 'quasar'
 import { useMainStore } from '@/stores/main'
-
-import { computed, onMounted, provide } from 'vue'
-import { initSandbox, VariantInjectionKey } from '@/services/SandboxService/sandbox.service'
+import { computed, provide } from 'vue'
+import { VariantInjectionKey } from '@/services/SandboxService/sandbox.service'
 
 const store = useMainStore()
 
 const variant = computed(() => store.state.variant)
 
 provide(VariantInjectionKey, variant)
-
-onMounted(initSandbox)
 </script>
 
 <template>
@@ -24,9 +21,7 @@ onMounted(initSandbox)
     <QPageContainer>
       <QPage padding>
         <div id="main-container">
-          <VariantsList />
-
-          <TheSandbox />
+          <RouterView />
         </div>
       </QPage>
     </QPageContainer>
@@ -35,8 +30,6 @@ onMounted(initSandbox)
 
 <style lang="scss" scoped>
 #main-container {
-  @include flex-row();
-  gap: 1rem;
   height: calc(100vh - 98px);
 }
 </style>

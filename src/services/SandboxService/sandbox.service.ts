@@ -19,7 +19,7 @@ export const initSandbox = () => {
   const mainContainer = document.getElementById('main-container')!
   const canvas = getCanvas()
 
-  canvas.width = mainContainer.offsetWidth - 266
+  canvas.width = mainContainer.offsetWidth
   canvas.height = mainContainer.offsetHeight
 }
 
@@ -36,13 +36,6 @@ export const getSandboxSize = () => {
   const canvas = getCanvas()
 
   return { width: canvas.width, height: canvas.height }
-}
-
-export const clearSandbox = () => {
-  const { width, height } = getSandboxSize()
-  const context = getContext()
-
-  context.clearRect(0, 0, width, height)
 }
 
 export const animate = (callback: Noop) => {

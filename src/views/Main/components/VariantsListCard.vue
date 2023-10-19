@@ -2,16 +2,24 @@
 import { AppCard } from '@/components'
 import { useMainStore } from '@/stores/main'
 import type { Variant } from '@/services/SandboxService/sandbox.service'
+import { useRouter } from 'vue-router'
 
 const store = useMainStore()
+const router = useRouter()
 
-defineProps<{
+const props = defineProps<{
   variant: Variant
 }>()
+
+const setVariant = () => {
+  store.setVariant(props.variant)
+
+  router.push({ name: 'Sandbox' })
+}
 </script>
 
 <template>
-  <AppCard class="app-list-card" @click="store.setVariant(variant)">
+  <AppCard class="app-list-card" @click="setVariant">
     {{ variant }}
   </AppCard>
 </template>
