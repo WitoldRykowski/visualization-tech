@@ -1,7 +1,6 @@
 import { generateNonSortedArray, renderArray } from './ArrayService/array.service'
 import type { Column, MoveAnimation } from '@/services/ArrayService/Column'
 import { animate, drawColumns, stopAnimation } from './SandboxService/sandbox.service'
-import { getMoveToAnimationConfig } from '@/services/AnimationService/animation.service'
 
 type Move = {
   indexes: [number, number]
@@ -67,8 +66,8 @@ function animateBubbleSort() {
   const [i, j] = move.indexes
 
   if (move.animation === 'swap') {
-    columns[i].moveTo(columns[j], getMoveToAnimationConfig({ frameCount: 15 }))
-    columns[j].moveTo(columns[i], getMoveToAnimationConfig({ yOffset: -1, frameCount: 15 }))
+    columns[i].moveTo(columns[j])
+    columns[j].moveTo(columns[i], { yOffset: -1 })
     ;[columns[i], columns[j]] = [columns[j], columns[i]]
   } else {
     columns[i].jump()

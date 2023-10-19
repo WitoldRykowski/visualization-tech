@@ -1,5 +1,5 @@
 import { convertNamedColorToRGB, lerp } from '@/utils'
-import { getContext, getFrameCount } from '@/services/SandboxService/sandbox.service'
+import { getContext } from '@/services/SandboxService/sandbox.service'
 import type {
   MoveToAnimationConfig,
   AnimationConfig
@@ -28,8 +28,11 @@ export const Column = (columnConfig: ColumnConfig): Column => {
 
   return column
 
-  function moveTo(location: Pick<ColumnConfig, 'x' | 'y'>, config = getMoveToAnimationConfig()) {
-    const { keepColor, frameCount, yOffset } = config
+  function moveTo(
+    location: Pick<ColumnConfig, 'x' | 'y'>,
+    config?: Partial<MoveToAnimationConfig>
+  ) {
+    const { keepColor, frameCount, yOffset } = getMoveToAnimationConfig(config)
 
     changeColor(convertNamedColorToRGB('positive'))
 
@@ -46,8 +49,8 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     if (!keepColor) changeColor(DEFAULT_COLOR)
   }
 
-  function jump(config = getAnimationConfig()) {
-    const { keepColor, frameCount } = config
+  function jump(config?: Partial<AnimationConfig>) {
+    const { keepColor, frameCount } = getAnimationConfig(config)
 
     changeColor(convertNamedColorToRGB('warning'))
 
@@ -64,24 +67,26 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     if (!keepColor) changeColor(DEFAULT_COLOR)
   }
 
-  function changeColor(color: ColorRGBA, frameCount = getFrameCount()) {
-    const { r: startR, g: startG, b: startB } = column.color
-    const { r: targetR, g: targetG, b: targetB } = color
-    const rStep = (targetR - startR) / frameCount
-    const gStep = (targetG - startG) / frameCount
-    const bStep = (targetB - startB) / frameCount
+  function changeColor(color: ColorRGBA) {
+    const FRAME_COUNT = 5
 
-    for (let i = 0; i <= frameCount; i++) {
-      const r = startR + rStep * i
-      const g = startG + gStep * i
-      const b = startB + bStep * i
+    const { r: basicR, g: basicG, b: basicB } = column.color
+    const { r: targetR, g: targetG, b: targetB } = color
+    const rStep = (targetR - basicR) / FRAME_COUNT
+    const gStep = (targetG - basicG) / FRAME_COUNT
+    const bStep = (targetB - basicB) / FRAME_COUNT
+
+    for (let i = 0; i <= FRAME_COUNT; i++) {
+      const r = basicR + rStep * i
+      const g = basicG + gStep * i
+      const b = basicB + bStep * i
 
       column.queue.push({ color: { r, g, b } })
     }
   }
 
-  function collapse(config = getAnimationConfig()) {
-    const { frameCount } = config
+  function collapse(config?: Partial<MoveToAnimationConfig>) {
+    const { frameCount } = getAnimationConfig(config)
     const COLLAPSED_COLUMN_HEIGHT = 2
 
     for (let i = 0; i <= frameCount; i++) {
@@ -135,9 +140,9 @@ export type Column = ColumnConfig & {
   queue: Partial<ColumnConfig>[]
   color: ColorRGBA
   draw: () => boolean
-  moveTo: (location: Pick<ColumnConfig, 'x' | 'y'>, config?: MoveToAnimationConfig) => void
-  jump: (config?: AnimationConfig) => void
-  collapse: (config?: AnimationConfig) => void
+  moveTo: (location: Pick<ColumnConfig, 'x' | 'y'>, config?: Partial<MoveToAnimationConfig>) => void
+  jump: (config?: Partial<AnimationConfig>) => void
+  collapse: (config?: Partial<AnimationConfig>) => void
   changeColor: (color: ColorRGBA) => void
 }
 

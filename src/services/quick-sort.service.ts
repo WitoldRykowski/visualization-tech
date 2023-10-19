@@ -1,8 +1,6 @@
 import type { Column, MoveAnimation } from '@/services/ArrayService/Column'
 import { generateNonSortedArray, renderArray } from '@/services/ArrayService/array.service'
 import { animate, drawColumns, stopAnimation } from '@/services/SandboxService/sandbox.service'
-import { colors } from 'quasar'
-import { getMoveToAnimationConfig } from '@/services/AnimationService/animation.service'
 import { convertNamedColorToRGB } from '@/utils'
 
 type Move = {
@@ -126,9 +124,9 @@ function animateQuickSort() {
   function swapColumns() {
     if (i === j) return
 
-    const config = getMoveToAnimationConfig({
+    const config = {
       frameCount: 50
-    })
+    }
 
     columns[i].moveTo(columns[j], config)
     columns[j].moveTo(columns[i], { ...config, yOffset: -1 })

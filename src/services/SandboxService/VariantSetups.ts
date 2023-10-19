@@ -38,9 +38,9 @@ export const VariantSetups: Record<NonNullable<Variant>, VariantSetup> = {
 }
 
 function generateDelays(payload?: Partial<DelaysPayload>) {
-  const defaultDelays = [5, 10, 20]
+  const delays = [10, 20, 30]
 
-  if (!payload) return defaultDelays
+  if (!payload) return delays
 
   type Key = keyof DelaysPayload
   const keys = Object.keys(payload)
@@ -48,10 +48,10 @@ function generateDelays(payload?: Partial<DelaysPayload>) {
   keys.forEach((key) => {
     const index = Number(key)
 
-    defaultDelays[index] = payload[key as unknown as Key]!
+    delays[index] = payload[key as unknown as Key]!
   })
 
-  return defaultDelays
+  return delays
 }
 
 type DelaysPayload = {
