@@ -2,13 +2,14 @@ import type { Column, MoveAnimation } from '@/services/ArrayService/Column'
 import { generateNonSortedArray, renderArray } from '@/services/ArrayService/array.service'
 import { animate, drawColumns, stopAnimation } from '@/services/SandboxService/sandbox.service'
 import { convertNamedColorToRGB } from '@/utils'
+import type { ColorRGBA } from '@/types'
 
 type Move = {
   left: number
   right: number
   pivotIndex: number
   indexes: [number, number]
-  animation: MoveAnimation | `jump-${string}`
+  animation: MoveAnimation | `touch-${string}`
 }
 
 let moves: Move[] = []
@@ -63,7 +64,7 @@ function quickSort(values: number[], left: number, right: number) {
 
         moves.push({
           ...basicPayload,
-          animation: `jump-i`,
+          animation: `touch-i`,
           indexes: [i, j]
         })
       }
@@ -73,7 +74,7 @@ function quickSort(values: number[], left: number, right: number) {
 
         moves.push({
           ...basicPayload,
-          animation: `jump-j`,
+          animation: `touch-j`,
           indexes: [i, j]
         })
       }
@@ -106,11 +107,12 @@ function animateQuickSort() {
   const grey = convertNamedColorToRGB('grey-1')
   const primary = convertNamedColorToRGB('primary')
   const negative = convertNamedColorToRGB('negative')
+  const warning = convertNamedColorToRGB('warning')
 
   if (animation.startsWith('changeColor')) {
     changeColumnColor()
-  } else if (animation.startsWith('jump')) {
-    jump()
+  } else if (animation.startsWith('touch')) {
+    touch()
   } else if (animation === 'swap') {
     swapColumns()
   }
@@ -125,26 +127,39 @@ function animateQuickSort() {
     if (i === j) return
 
     const config = {
-      frameCount: 50
+      frameCount: 40
     }
+
+    columns[i].jump()
+    columns[j].jump()
 
     columns[i].moveTo(columns[j], config)
     columns[j].moveTo(columns[i], { ...config, yOffset: -1 })
     ;[columns[i], columns[j]] = [columns[j], columns[i]]
 
-    columns[pivotIndex].changeColor(negative)
+    if (i === pivotIndex || j === pivotIndex) {
+      columns[pivotIndex].changeColor(negative)
+    }
   }
 
-  function jump() {
-    const indexes = [i]
+  function touch() {
+    changeColor(columns[i], warning)
 
-    if (animation.endsWith('j')) {
-      indexes.push(j)
+    if (i > 0) {
+      changeColor(columns[i - 1], primary)
     }
 
-    indexes.forEach((index) => {
-      columns[index].jump()
-    })
+    if (!animation.endsWith('j')) return
+
+    changeColor(columns[j], warning)
+
+    if (j < values.length - 1) {
+      changeColor(columns[j + 1], primary)
+    }
+
+    function changeColor(column: Column, RGBColor: ColorRGBA) {
+      column.changeColor(RGBColor, 10)
+    }
   }
 
   function changeColumnColor() {

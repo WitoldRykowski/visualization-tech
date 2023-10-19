@@ -1,14 +1,14 @@
-import { getCanvas } from '@/services/SandboxService/sandbox.service'
+import { getSandboxSize } from '@/services/SandboxService/sandbox.service'
 import { Column } from './Column'
 
 const DEFAULT_ARRAY_SIZE = 50
-const MARGIN = 30
 
 export const generateSortedArray = (size = DEFAULT_ARRAY_SIZE) => {
   const sortedArray: number[] = []
+  const SAFE_HEIGHT_MULTIPLIER = 50
 
   for (let i = 1; i <= size; i++) {
-    sortedArray.push(i)
+    sortedArray.push(i / SAFE_HEIGHT_MULTIPLIER)
   }
 
   return sortedArray
@@ -24,16 +24,17 @@ export const generateNonSortedArray = (size = DEFAULT_ARRAY_SIZE) => {
   return nonSortedArray
 }
 
-export const renderArray = (values: number[], columnHeightMultiplier = 500) => {
-  const canvas = getCanvas()
+export const renderArray = (values: number[]) => {
+  const MARGIN = 30
+  const size = getSandboxSize()
   const valuesSize = values.length
   const columns: Column[] = []
-  const spacing = (canvas.width - MARGIN * 2) / valuesSize
+  const spacing = (size.width - MARGIN * 2) / valuesSize
 
   for (let i = 0; i < valuesSize; i++) {
     const xAxis = i * spacing + spacing / 2 + MARGIN
-    const yAxis = canvas.height - MARGIN - i * 3
-    const columnHeight = columnHeightMultiplier * values[i]
+    const yAxis = size.height - MARGIN - i * 3
+    const columnHeight = 400 * values[i]
 
     columns[i] = Column({
       x: xAxis,

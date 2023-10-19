@@ -1,5 +1,5 @@
-import type { NamedColor, colorsRgba as ColorRGBA } from 'quasar'
-import { colors } from 'quasar'
+import { colors, type NamedColor } from 'quasar'
+import type { ColorRGBA } from '@/types'
 
 export const lerp = (a: number, b: number, t: number) => {
   return a + (b - a) * t

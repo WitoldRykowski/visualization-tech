@@ -10,7 +10,7 @@ let wasVisualize = false
 
 export const initBinarySearch = () => {
   values = generateSortedArray()
-  columns = renderArray(values, 8)
+  columns = renderArray(values)
   moves = []
 
   stopAnimation()
@@ -19,7 +19,7 @@ export const initBinarySearch = () => {
 
 export const visualizeBinarySearch = () => {
   if (wasVisualize) {
-    columns = renderArray(values, 8)
+    columns = renderArray(values)
   }
 
   wasVisualize = true
@@ -30,7 +30,8 @@ const binarySearch = (values: number[]) => {
   let guess = 0
   let min = 0
   let max = values.length - 1
-  const target = Math.floor(Math.random() * values.length)
+  const targetIndex = Math.floor(Math.random() * values.length)
+  const target = values[targetIndex]
 
   while (max >= min) {
     guess = Math.floor((max + min) / 2)

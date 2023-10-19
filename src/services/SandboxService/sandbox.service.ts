@@ -32,17 +32,23 @@ export const getContext = () => {
   return canvas.getContext('2d')!
 }
 
-export const clearSandbox = () => {
+export const getSandboxSize = () => {
   const canvas = getCanvas()
+
+  return { width: canvas.width, height: canvas.height }
+}
+
+export const clearSandbox = () => {
+  const { width, height } = getSandboxSize()
   const context = getContext()
 
-  context.clearRect(0, 0, canvas.width, canvas.height)
+  context.clearRect(0, 0, width, height)
 }
 
 export const animate = (callback: Noop) => {
-  const canvas = getCanvas()
   const context = getContext()
-  context.clearRect(0, 0, canvas.width, canvas.height)
+  const { width, height } = getSandboxSize()
+  context.clearRect(0, 0, width, height)
 
   callback()
 

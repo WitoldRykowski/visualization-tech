@@ -1,6 +1,7 @@
 import { generateNonSortedArray, renderArray } from './ArrayService/array.service'
 import type { Column, MoveAnimation } from '@/services/ArrayService/Column'
 import { animate, drawColumns, stopAnimation } from './SandboxService/sandbox.service'
+import { convertNamedColorToRGB } from '@/utils'
 
 type Move = {
   indexes: [number, number]

@@ -4,7 +4,8 @@ import type {
   MoveToAnimationConfig,
   AnimationConfig
 } from '@/services/AnimationService/animation.service'
-import { colors, type colorsRgba as ColorRGBA } from 'quasar'
+import type { ColorRGBA } from '@/types'
+import { colors } from 'quasar'
 import {
   getAnimationConfig,
   getMoveToAnimationConfig
@@ -51,8 +52,11 @@ export const Column = (columnConfig: ColumnConfig): Column => {
 
   function jump(config?: Partial<AnimationConfig>) {
     const { keepColor, frameCount } = getAnimationConfig(config)
+    const color = convertNamedColorToRGB('warning')
 
-    changeColor(convertNamedColorToRGB('warning'))
+    if (color && color !== column.color) {
+      changeColor(color)
+    }
 
     for (let i = 0; i <= frameCount; i++) {
       const tickRate = i / frameCount
@@ -67,16 +71,14 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     if (!keepColor) changeColor(DEFAULT_COLOR)
   }
 
-  function changeColor(color: ColorRGBA) {
-    const FRAME_COUNT = 5
-
+  function changeColor(color: ColorRGBA, frameCount = 5) {
     const { r: basicR, g: basicG, b: basicB } = column.color
     const { r: targetR, g: targetG, b: targetB } = color
-    const rStep = (targetR - basicR) / FRAME_COUNT
-    const gStep = (targetG - basicG) / FRAME_COUNT
-    const bStep = (targetB - basicB) / FRAME_COUNT
+    const rStep = (targetR - basicR) / frameCount
+    const gStep = (targetG - basicG) / frameCount
+    const bStep = (targetB - basicB) / frameCount
 
-    for (let i = 0; i <= FRAME_COUNT; i++) {
+    for (let i = 0; i <= frameCount; i++) {
       const r = basicR + rStep * i
       const g = basicG + gStep * i
       const b = basicB + bStep * i
@@ -143,7 +145,7 @@ export type Column = ColumnConfig & {
   moveTo: (location: Pick<ColumnConfig, 'x' | 'y'>, config?: Partial<MoveToAnimationConfig>) => void
   jump: (config?: Partial<AnimationConfig>) => void
   collapse: (config?: Partial<AnimationConfig>) => void
-  changeColor: (color: ColorRGBA) => void
+  changeColor: (color: ColorRGBA, frameCount?: number) => void
 }
 
 type ColumnConfig = {
