@@ -3,6 +3,7 @@ import { AppCard } from '@/components'
 import { useMainStore } from '@/stores/main'
 import type { Variant } from '@/services/SandboxService/sandbox.service'
 import { useRouter } from 'vue-router'
+import { computed } from 'vue'
 
 const store = useMainStore()
 const router = useRouter()
@@ -16,6 +17,10 @@ const setVariant = () => {
 
   router.push({ name: 'Sandbox' })
 }
+
+const variant = computed(() => {
+  return props.variant.replace(/([a-z])([A-Z])/g, '$1 $2')
+})
 </script>
 
 <template>

@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import SearchField from './components/SearchField.vue'
 import VariantsListCard from './components/VariantsListCard.vue'
 import {
   ALGORITHMS_LIST,
   DATA_STRUCTURES_LIST,
   Variant
 } from '@/services/SandboxService/sandbox.service'
-import { QCard, QSeparator, QExpansionItem } from 'quasar'
 import { computed } from 'vue'
 import { useMainStore } from '@/stores/main'
 
@@ -31,101 +29,55 @@ const algorithmsList = computed(() => {
 
   return ALGORITHMS_LIST.filter(compareSearchToVariant)
 })
-
-const isDataStructuresListVisible = computed(() => {
-  return dataStructuresList.value.length > 0
-})
-
-const isAlgorithmsListVisible = computed(() => {
-  return algorithmsList.value.length > 0
-})
 </script>
 
 <template>
-  <QCard class="variants-list">
-    <SearchField />
+  <div class="variants-list">
+    <span class="list-title">Algorithms</span>
+    <div class="variants-list__algorithms">
+      <VariantsListCard v-for="algorithm in algorithmsList" :key="algorithm" :variant="algorithm" />
 
-    <QSeparator spaced />
-
-    <QExpansionItem
-      v-show="isDataStructuresListVisible"
-      class="data-structures"
-      label="Data Structures"
-      default-opened
-    >
-      <div class="main-list__data-structures">
-        <VariantsListCard
-          v-for="dataStructure in dataStructuresList"
-          :key="dataStructure"
-          :variant="dataStructure"
-        />
+      <div v-show="algorithmsList.length === 0" class="empty-list">
+        List is empty! Try to search for another algorithm.
       </div>
-    </QExpansionItem>
+    </div>
 
-    <QSeparator spaced v-show="isAlgorithmsListVisible && isDataStructuresListVisible" />
+    <span class="list-title">Data Structures</span>
+    <div class="variants-list__data-structures">
+      <VariantsListCard
+        v-for="dataStructure in dataStructuresList"
+        :key="dataStructure"
+        :variant="dataStructure"
+      />
 
-    <QExpansionItem
-      v-show="isAlgorithmsListVisible"
-      class="algorithms"
-      label="Algorithms"
-      default-opened
-    >
-      <div class="main-list__algorithms">
-        <VariantsListCard
-          v-for="algorithm in algorithmsList"
-          :key="algorithm"
-          :variant="algorithm"
-        />
+      <div v-show="dataStructuresList.length === 0" class="empty-list">
+        List is empty! Try to search for another data structure.
       </div>
-    </QExpansionItem>
-  </QCard>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
 .variants-list {
-  @include flex-column(start, center);
-  width: 250px;
-  height: 100%;
+  @include flex-column();
   padding: 1rem;
-  overflow: auto;
-  border: 1px solid #ccc;
+  gap: 1rem;
 }
 
-.variants-list::-webkit-scrollbar {
-  width: 2px;
-}
-
-.variants-list::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-.variants-list::-webkit-scrollbar-thumb {
-  background: #888;
-}
-
-.variants-list::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-.main-list__algorithms,
-.main-list__data-structures {
+.variants-list__algorithms,
+.variants-list__data-structures {
   @include flex-row(start, start, wrap);
   gap: 0.5rem;
   width: 100%;
-  margin-top: 1rem;
-  padding: 0.25rem;
 }
 
-.main-list__algorithms {
-  margin-bottom: 1rem;
+.list-title {
+  font-weight: 600;
+  font-size: 1.5rem;
 }
 
-.algorithms,
-.data-structures {
-  width: 100%;
-}
-
-hr {
+.empty-list {
+  text-align: center;
   width: 100%;
 }
 </style>
