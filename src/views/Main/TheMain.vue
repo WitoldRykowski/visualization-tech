@@ -3,7 +3,7 @@ import VariantsListCard from './components/VariantsListCard.vue'
 import {
   ALGORITHMS_LIST,
   DATA_STRUCTURES_LIST,
-  Variant
+  type Variant
 } from '@/services/SandboxService/sandbox.service'
 import { computed } from 'vue'
 import { useMainStore } from '@/stores/main'

@@ -4,13 +4,7 @@ import { animate, drawColumns, stopAnimation } from '@/services/SandboxService/s
 import { convertNamedColorToRGB } from '@/utils'
 import type { ColorRGBA } from '@/types'
 
-type Move = {
-  left: number
-  right: number
-  pivotIndex: number
-  indexes: [number, number]
-  animation: MoveAnimation | `touch-${string}`
-}
+export const QUICK_SORT_DELAYS = [10, 20, 30] as const
 
 let moves: Move[] = []
 let values: number[] = []
@@ -174,4 +168,12 @@ function animateQuickSort() {
       columns[pivotIndex].changeColor(negative)
     }
   }
+}
+
+type Move = {
+  left: number
+  right: number
+  pivotIndex: number
+  indexes: [number, number]
+  animation: MoveAnimation | `touch-${string}`
 }

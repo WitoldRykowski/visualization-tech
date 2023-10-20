@@ -15,8 +15,8 @@ const search = computed({
   <QToolbar class="app-toolbar">
     <QToolbarTitle>Visualize Tech</QToolbarTitle>
 
-    <QInput v-model="search" outlined dense label="Search" />
     <div id="app-toolbar-actions"></div>
+    <QInput v-model="search" outlined dense label="Search" />
   </QToolbar>
 </template>
 
@@ -29,5 +29,6 @@ const search = computed({
 #app-toolbar-actions {
   @include flex-row();
   gap: 0.25rem;
+  margin-right: 1rem;
 }
 </style>

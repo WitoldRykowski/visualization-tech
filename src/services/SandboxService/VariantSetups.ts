@@ -1,63 +1,59 @@
-import { initBubbleSort, visualizeBubbleSort } from '@/services/bubble-sort.service'
 import { noop } from '@/utils'
 import type { Variant } from '@/services/SandboxService/sandbox.service'
-import { initBinarySearch, visualizeBinarySearch } from '@/services/binary-search.service'
-import { initQuickSort, visualizeQuickSort } from '@/services/quick-sort.service'
+import {
+  initBubbleSort,
+  visualizeBubbleSort,
+  BUBBLE_SORT_DELAYS
+} from '@/services/bubble-sort.service'
+import {
+  initBinarySearch,
+  visualizeBinarySearch,
+  BINARY_SEARCH_DELAYS
+} from '@/services/binary-search.service'
+import { initQuickSort, QUICK_SORT_DELAYS, visualizeQuickSort } from '@/services/quick-sort.service'
+import {
+  initSelectionSort,
+  SELECTION_SORT_DELAYS,
+  visualizeSelectionSort
+} from '@/services/selection-sort.service'
 
-const BubbleSortSetup = {
+const BubbleSort: VariantSetup = {
   actions: { init: initBubbleSort, visualize: visualizeBubbleSort },
-  delays: generateDelays()
+  delays: BUBBLE_SORT_DELAYS
 }
 
-const QuickSortSetup = {
+const QuickSort: VariantSetup = {
   actions: { init: initQuickSort, visualize: visualizeQuickSort },
-  delays: generateDelays()
+  delays: QUICK_SORT_DELAYS
 }
 
-const BinarySearchSetup = {
+const BinarySearch: VariantSetup = {
   actions: { init: initBinarySearch, visualize: visualizeBinarySearch },
-  delays: generateDelays({ 0: 15, 1: 25, 2: 35 })
+  delays: BINARY_SEARCH_DELAYS
 }
 
-const StackSetup = {
-  actions: { init: noop, visualize: noop },
-  delays: generateDelays()
+const SelectionSort: VariantSetup = {
+  actions: { init: initSelectionSort, visualize: visualizeSelectionSort },
+  delays: SELECTION_SORT_DELAYS
 }
 
-const QueueSetup = {
+const Stack: VariantSetup = {
   actions: { init: noop, visualize: noop },
-  delays: generateDelays()
+  delays: []
+}
+
+const Queue: VariantSetup = {
+  actions: { init: noop, visualize: noop },
+  delays: []
 }
 
 export const VariantSetups: Record<NonNullable<Variant>, VariantSetup> = {
-  BubbleSort: BubbleSortSetup,
-  QuickSort: QuickSortSetup,
-  BinarySearch: BinarySearchSetup,
-  Queue: QueueSetup,
-  Stack: StackSetup
-}
-
-function generateDelays(payload?: Partial<DelaysPayload>) {
-  const delays = [10, 20, 30]
-
-  if (!payload) return delays
-
-  type Key = keyof DelaysPayload
-  const keys = Object.keys(payload)
-
-  keys.forEach((key) => {
-    const index = Number(key)
-
-    delays[index] = payload[key as unknown as Key]!
-  })
-
-  return delays
-}
-
-type DelaysPayload = {
-  0: number
-  1: number
-  2: number
+  BubbleSort,
+  QuickSort,
+  BinarySearch,
+  SelectionSort,
+  Queue,
+  Stack
 }
 
 type BinarySearchActions = { init: () => void; visualize: (target: number) => void }
@@ -66,5 +62,5 @@ export type VariantActions = { init: () => void; visualize: () => void } | Binar
 
 type VariantSetup = {
   actions: VariantActions
-  delays: number[]
+  delays: Readonly<number[]>
 }

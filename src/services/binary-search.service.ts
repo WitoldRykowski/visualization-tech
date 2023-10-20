@@ -3,6 +3,8 @@ import { generateSortedArray, renderArray } from '@/services/ArrayService/array.
 import { animate, drawColumns, stopAnimation } from '@/services/SandboxService/sandbox.service'
 import { convertNamedColorToRGB } from '@/utils'
 
+export const BINARY_SEARCH_DELAYS = [15, 20, 30] as const
+
 let moves: Move[] = []
 let values: number[] = []
 let columns: Column[] = []

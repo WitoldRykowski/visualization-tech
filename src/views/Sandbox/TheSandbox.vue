@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, inject, onMounted } from 'vue'
+import { computed, inject, onBeforeUnmount, onMounted } from 'vue'
 import {
   DEFAULT_FRAME_COUNT,
   initSandbox,
   setFrameCount,
+  stopAnimation,
   VariantInjectionKey,
   VariantSetups
 } from '@/services/SandboxService/sandbox.service'
@@ -35,11 +36,18 @@ onMounted(() => {
   setFrameCount(VariantSetups[variant?.value].delays[0])
   actions.value.init()
 })
+
+onBeforeUnmount(stopAnimation)
 </script>
 
 <template>
   <canvas id="sandbox" />
   <Teleport to="#app-toolbar-actions">
+    <AppButton @click="actions.visualize" label="Visualize" />
+    <AppButton @click="actions.init" label="Init" />
+
+    <QSeparator vertical spaced />
+
     <div v-if="delays.length > 1" class="actions-delays">
       <AppButton
         v-for="delay in delays"
@@ -48,11 +56,6 @@ onMounted(() => {
         :label="delay"
       />
     </div>
-
-    <QSeparator vertical spaced />
-
-    <AppButton @click="actions.visualize" label="Visualize" />
-    <AppButton @click="actions.init" label="Init" />
   </Teleport>
 </template>
 

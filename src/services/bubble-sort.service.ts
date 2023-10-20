@@ -1,12 +1,8 @@
 import { generateNonSortedArray, renderArray } from './ArrayService/array.service'
-import type { Column, MoveAnimation } from '@/services/ArrayService/Column'
+import type { Column, MoveAnimation } from './ArrayService/Column'
 import { animate, drawColumns, stopAnimation } from './SandboxService/sandbox.service'
-import { convertNamedColorToRGB } from '@/utils'
 
-type Move = {
-  indexes: [number, number]
-  animation: MoveAnimation
-}
+export const BUBBLE_SORT_DELAYS = [10, 20, 30] as const
 
 let moves: Move[] = []
 let values: number[] = []
@@ -74,4 +70,9 @@ function animateBubbleSort() {
     columns[i].jump()
     columns[j].jump()
   }
+}
+
+type Move = {
+  indexes: [number, number]
+  animation: MoveAnimation
 }

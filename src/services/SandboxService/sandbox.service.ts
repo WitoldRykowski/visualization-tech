@@ -64,7 +64,7 @@ export const stopAnimation = () => {
   _animationFrameId = -1
 }
 
-export const ALGORITHMS_LIST = ['BinarySearch', 'BubbleSort', 'QuickSort'] as const
+export const ALGORITHMS_LIST = ['BinarySearch', 'BubbleSort', 'QuickSort', 'SelectionSort'] as const
 export const DATA_STRUCTURES_LIST = ['Stack', 'Queue'] as const
 
 export type Variant =
