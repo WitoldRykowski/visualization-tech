@@ -1,9 +1,11 @@
-import { getFrameCount } from '@/services/SandboxService/sandbox.service'
+// TODO zrobic tagi na kartach algorytmów i struktur
 
 export function getAnimationConfig(config?: Partial<AnimationConfig>): AnimationConfig {
+  const DEFAULT_FRAME_COUNT = 10
+
   return {
     keepColor: !!config?.keepColor,
-    frameCount: config?.frameCount ?? getFrameCount()
+    frameCount: config?.frameCount ?? DEFAULT_FRAME_COUNT
   }
 }
 

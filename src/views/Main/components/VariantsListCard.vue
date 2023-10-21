@@ -4,6 +4,7 @@ import { useMainStore } from '@/stores/main'
 import type { Variant } from '@/services/SandboxService/sandbox.service'
 import { useRouter } from 'vue-router'
 import { computed } from 'vue'
+import { QChip } from 'quasar'
 
 const store = useMainStore()
 const router = useRouter()
@@ -13,35 +14,62 @@ const props = defineProps<{
 }>()
 
 const setVariant = () => {
-  store.setVariant(props.variant)
+  store.setVariant(props.variant.name)
 
   router.push({ name: 'Sandbox' })
 }
 
-const variant = computed(() => {
-  return props.variant.replace(/([a-z])([A-Z])/g, '$1 $2')
+const variantName = computed(() => {
+  return props.variant.name.replace(/([a-z])([A-Z])/g, '$1 $2')
 })
 </script>
 
 <template>
   <AppCard class="app-list-card" @click="setVariant">
-    {{ variant }}
+    <span class="variant-name">{{ variantName }}</span>
+
+    <div class="tags">
+      <QChip class="tag" v-for="tag in variant.tags" :key="tag" :label="`#${tag}`" />
+    </div>
   </AppCard>
 </template>
 
 <style scoped lang="scss">
+$transition: 0.3s;
+
 .app-list-card {
   width: clamp(250px, 250px, 10%);
   cursor: pointer;
-  transition: 0.3s;
+  transition: $transition;
 }
 
 :deep(.q-card__section) {
-  @include flex-row(center, center);
+  @include flex-column(start, center);
+  gap: 1rem;
 }
 
 .app-list-card:hover {
   background: $primary;
   color: white;
+}
+
+.variant-name {
+  font-weight: 600;
+}
+
+.tags {
+  @include flex-row(center, center, wrap);
+  gap: 0.5rem;
+}
+
+.tag {
+  background: $primary;
+  color: white;
+  transition: $transition;
+}
+
+.app-list-card:hover .tag {
+  background: white;
+  color: $primary;
 }
 </style>

@@ -1,57 +1,45 @@
 import { noop } from '@/utils'
-import type { Variant } from '@/services/SandboxService/sandbox.service'
-import {
-  initBubbleSort,
-  visualizeBubbleSort,
-  BUBBLE_SORT_DELAYS
-} from '@/services/bubble-sort.service'
-import {
-  initBinarySearch,
-  visualizeBinarySearch,
-  BINARY_SEARCH_DELAYS
-} from '@/services/binary-search.service'
-import { initQuickSort, QUICK_SORT_DELAYS, visualizeQuickSort } from '@/services/quick-sort.service'
-import {
-  initSelectionSort,
-  SELECTION_SORT_DELAYS,
-  visualizeSelectionSort
-} from '@/services/selection-sort.service'
+import type { VariantName } from '@/services/SandboxService/sandbox.service'
+import { initBubbleSort, visualizeBubbleSort } from '@/services/bubble-sort.service'
+import { initBinarySearch, visualizeBinarySearch } from '@/services/binary-search.service'
+import { initQuickSort, visualizeQuickSort } from '@/services/quick-sort.service'
+import { initSelectionSort, visualizeSelectionSort } from '@/services/selection-sort.service'
+import { initInsertionSort, visualizeInsertionSort } from '@/services/insertion-sort.service'
 
 const BubbleSort: VariantSetup = {
-  actions: { init: initBubbleSort, visualize: visualizeBubbleSort },
-  delays: BUBBLE_SORT_DELAYS
+  actions: { init: initBubbleSort, visualize: visualizeBubbleSort }
 }
 
 const QuickSort: VariantSetup = {
-  actions: { init: initQuickSort, visualize: visualizeQuickSort },
-  delays: QUICK_SORT_DELAYS
+  actions: { init: initQuickSort, visualize: visualizeQuickSort }
 }
 
 const BinarySearch: VariantSetup = {
-  actions: { init: initBinarySearch, visualize: visualizeBinarySearch },
-  delays: BINARY_SEARCH_DELAYS
+  actions: { init: initBinarySearch, visualize: visualizeBinarySearch }
 }
 
 const SelectionSort: VariantSetup = {
-  actions: { init: initSelectionSort, visualize: visualizeSelectionSort },
-  delays: SELECTION_SORT_DELAYS
+  actions: { init: initSelectionSort, visualize: visualizeSelectionSort }
+}
+
+const InsertionSort: VariantSetup = {
+  actions: { init: initInsertionSort, visualize: visualizeInsertionSort }
 }
 
 const Stack: VariantSetup = {
-  actions: { init: noop, visualize: noop },
-  delays: []
+  actions: { init: noop, visualize: noop }
 }
 
 const Queue: VariantSetup = {
-  actions: { init: noop, visualize: noop },
-  delays: []
+  actions: { init: noop, visualize: noop }
 }
 
-export const VariantSetups: Record<NonNullable<Variant>, VariantSetup> = {
+export const VariantSetups: Record<NonNullable<VariantName>, VariantSetup> = {
   BubbleSort,
   QuickSort,
   BinarySearch,
   SelectionSort,
+  InsertionSort,
   Queue,
   Stack
 }
@@ -62,5 +50,4 @@ export type VariantActions = { init: () => void; visualize: () => void } | Binar
 
 type VariantSetup = {
   actions: VariantActions
-  delays: Readonly<number[]>
 }

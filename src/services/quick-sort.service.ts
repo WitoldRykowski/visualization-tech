@@ -4,8 +4,6 @@ import { animate, drawColumns, stopAnimation } from '@/services/SandboxService/s
 import { convertNamedColorToRGB } from '@/utils'
 import type { ColorRGBA } from '@/types'
 
-export const QUICK_SORT_DELAYS = [10, 20, 30] as const
-
 let moves: Move[] = []
 let values: number[] = []
 let columns: Column[] = []

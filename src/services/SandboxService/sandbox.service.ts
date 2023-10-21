@@ -2,18 +2,7 @@ import type { ComputedRef, InjectionKey } from 'vue'
 import type { Noop } from '@/types'
 import type { Column } from '@/services/ArrayService/Column'
 
-export const DEFAULT_FRAME_COUNT = 10
-
 let _animationFrameId = -1
-let currentFrameCount = DEFAULT_FRAME_COUNT
-
-export const setFrameCount = (frameCount: number) => {
-  currentFrameCount = frameCount
-}
-
-export const getFrameCount = () => {
-  return currentFrameCount
-}
 
 export const initSandbox = () => {
   const mainContainer = document.getElementById('main-container')!
@@ -64,14 +53,49 @@ export const stopAnimation = () => {
   _animationFrameId = -1
 }
 
-export const ALGORITHMS_LIST = ['BinarySearch', 'BubbleSort', 'QuickSort', 'SelectionSort'] as const
-export const DATA_STRUCTURES_LIST = ['Stack', 'Queue'] as const
+const POSSIBLE_ALGORITHM_TAGS = ['sorting'] as const
+const POSSIBLE_DATA_STRUCTURE_TAGS = [
+  'stacks',
+  'queues',
+  'linked-lists',
+  'trees',
+  'graphs',
+  'heaps'
+] as const
 
-export type Variant =
-  | (typeof ALGORITHMS_LIST)[number]
-  | (typeof DATA_STRUCTURES_LIST)[number]
+type PossibleAlgorithmTags = readonly (typeof POSSIBLE_ALGORITHM_TAGS)[number][]
+type PossibleDataStructuresTags = readonly (typeof POSSIBLE_DATA_STRUCTURE_TAGS)[number][]
+
+export type Algorithm = {
+  name: string
+  tags: PossibleAlgorithmTags
+}
+
+export type DataStructure = {
+  name: string
+  tags: PossibleDataStructuresTags
+}
+
+export type VariantName =
+  | (typeof ALGORITHMS)[number]['name']
+  | (typeof DATA_STRUCTURES)[number]['name']
   | undefined
 
-export const VariantInjectionKey = Symbol() as InjectionKey<ComputedRef<Variant>>
+export type Variant = Algorithm | DataStructure
+
+export const ALGORITHMS: readonly Algorithm[] = [
+  { name: 'BinarySearch', tags: ['sorting'] },
+  { name: 'BubbleSort', tags: ['sorting'] },
+  { name: 'QuickSort', tags: ['sorting'] },
+  { name: 'SelectionSort', tags: ['sorting'] },
+  { name: 'InsertionSort', tags: ['sorting'] }
+]
+
+export const DATA_STRUCTURES: readonly DataStructure[] = [
+  { name: 'Stack', tags: ['stacks'] },
+  { name: 'Queue', tags: ['queues'] }
+]
+
+export const VariantInjectionKey = Symbol() as InjectionKey<ComputedRef<VariantName>>
 
 export * from './VariantSetups'

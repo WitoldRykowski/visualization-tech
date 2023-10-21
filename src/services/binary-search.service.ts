@@ -3,8 +3,6 @@ import { generateSortedArray, renderArray } from '@/services/ArrayService/array.
 import { animate, drawColumns, stopAnimation } from '@/services/SandboxService/sandbox.service'
 import { convertNamedColorToRGB } from '@/utils'
 
-export const BINARY_SEARCH_DELAYS = [15, 20, 30] as const
-
 let moves: Move[] = []
 let values: number[] = []
 let columns: Column[] = []
@@ -102,9 +100,17 @@ const animateBinarySearch = () => {
       columns[guess].changeColor(DEFAULT_COLOR)
     }
   }
+
+  // TODO Add color to animation config to fix keepColor flag
+  // if (!moves.length) {
+  //   for (let i = 0; i < columns.length; i++) {
+  //     columns[i].jump()
+  //   }
+  // }
 }
 
 function triggerCollapse(move: CollapseMoveConfig) {
+  const COLLAPSE_DELAY = 15
   const { lastUpdatedValue, min, target, max } = move
   const isMinLastUpdated = lastUpdatedValue === 'min' || lastUpdatedValue === 'both'
   const isMaxLastUpdated = lastUpdatedValue === 'max' || lastUpdatedValue === 'both'
@@ -112,7 +118,7 @@ function triggerCollapse(move: CollapseMoveConfig) {
   if (isMinLastUpdated) {
     for (let i = 0; i < min; i++) {
       if (values[i] !== target) {
-        columns[i].collapse()
+        columns[i].collapse({ frameCount: COLLAPSE_DELAY })
       }
     }
   }
@@ -120,7 +126,7 @@ function triggerCollapse(move: CollapseMoveConfig) {
   if (isMaxLastUpdated) {
     for (let i = max + 1; i < columns.length; i++) {
       if (values[i] !== target) {
-        columns[i].collapse()
+        columns[i].collapse({ frameCount: COLLAPSE_DELAY })
       }
     }
   }

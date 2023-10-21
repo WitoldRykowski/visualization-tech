@@ -2,8 +2,6 @@ import { generateNonSortedArray, renderArray } from './ArrayService/array.servic
 import type { Column, MoveAnimation } from './ArrayService/Column'
 import { animate, drawColumns, stopAnimation } from './SandboxService/sandbox.service'
 
-export const BUBBLE_SORT_DELAYS = [10, 20, 30] as const
-
 let moves: Move[] = []
 let values: number[] = []
 let columns: Column[] = []

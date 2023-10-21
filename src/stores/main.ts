@@ -1,10 +1,10 @@
 import { reactive, readonly } from 'vue'
 import { defineStore } from 'pinia'
-import type { Variant } from '@/services/SandboxService/sandbox.service'
+import type { VariantName } from '@/services/SandboxService/sandbox.service'
 
 export type MainState = {
   search: string
-  variant: Variant
+  variant: VariantName
 }
 
 export const useMainStore = defineStore('main', () => {
@@ -17,7 +17,7 @@ export const useMainStore = defineStore('main', () => {
     state.search = value
   }
 
-  const setVariant = (variant: Variant) => {
+  const setVariant = (variant: VariantName) => {
     state.variant = variant
   }
 

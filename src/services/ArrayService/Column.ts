@@ -136,7 +136,7 @@ export const Column = (columnConfig: ColumnConfig): Column => {
   }
 }
 
-export type MoveAnimation = 'swap' | 'jump' | 'collapse' | 'changeColor' | 'move'
+export type MoveAnimation = 'swap' | 'jump' | 'collapse' | 'changeColor' | 'move' | 'touch'
 
 export type Column = ColumnConfig & {
   queue: Partial<ColumnConfig>[]

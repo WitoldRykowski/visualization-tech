@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import { computed, inject, onBeforeUnmount, onMounted } from 'vue'
 import {
-  DEFAULT_FRAME_COUNT,
   initSandbox,
-  setFrameCount,
   stopAnimation,
   VariantInjectionKey,
   VariantSetups
 } from '@/services/SandboxService/sandbox.service'
 import { noop } from '@/utils'
-import { QSeparator } from 'quasar'
 import { AppButton } from '@/components'
 
 const variant = inject(VariantInjectionKey)
@@ -22,18 +19,9 @@ const actions = computed(() => {
   return { init: noop, visualize: noop }
 })
 
-const delays = computed(() => {
-  if (variant?.value) {
-    return VariantSetups[variant.value].delays
-  }
-
-  return [DEFAULT_FRAME_COUNT]
-})
-
 onMounted(() => {
   initSandbox()
 
-  setFrameCount(VariantSetups[variant?.value].delays[0])
   actions.value.init()
 })
 
@@ -45,17 +33,6 @@ onBeforeUnmount(stopAnimation)
   <Teleport to="#app-toolbar-actions">
     <AppButton @click="actions.visualize" label="Visualize" />
     <AppButton @click="actions.init" label="Init" />
-
-    <QSeparator vertical spaced />
-
-    <div v-if="delays.length > 1" class="actions-delays">
-      <AppButton
-        v-for="delay in delays"
-        :key="delay"
-        @click="setFrameCount(delay)"
-        :label="delay"
-      />
-    </div>
   </Teleport>
 </template>
 

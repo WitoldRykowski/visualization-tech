@@ -4,8 +4,6 @@ import { animate, drawColumns, stopAnimation } from './SandboxService/sandbox.se
 import { convertNamedColorToRGB } from '@/utils'
 import { DEFAULT_COLOR } from './ArrayService/Column'
 
-export const SELECTION_SORT_DELAYS = [10, 15, 20] as const
-
 let moves: Move[] = []
 let values: number[] = []
 let columns: Column[] = []

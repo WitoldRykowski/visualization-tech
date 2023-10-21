@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import VariantsListCard from './components/VariantsListCard.vue'
 import {
-  ALGORITHMS_LIST,
-  DATA_STRUCTURES_LIST,
-  type Variant
+  ALGORITHMS,
+  DATA_STRUCTURES,
+  type VariantName
 } from '@/services/SandboxService/sandbox.service'
 import { computed } from 'vue'
 import { useMainStore } from '@/stores/main'
@@ -12,22 +12,22 @@ const store = useMainStore()
 
 const search = computed(() => store.state.search)
 
-const compareSearchToVariant = (variant: Variant) => {
+const compareSearchToVariant = (variant: VariantName) => {
   const transformedSearch = search.value.replace(/\s/g, '').toLowerCase()
 
   return (variant as string).toLowerCase().includes(transformedSearch)
 }
 
 const dataStructuresList = computed(() => {
-  if (!search.value) return DATA_STRUCTURES_LIST
+  if (!search.value) return DATA_STRUCTURES
 
-  return DATA_STRUCTURES_LIST.filter(compareSearchToVariant)
+  return DATA_STRUCTURES.filter(({ name }) => compareSearchToVariant(name))
 })
 
 const algorithmsList = computed(() => {
-  if (!search.value) return ALGORITHMS_LIST
+  if (!search.value) return ALGORITHMS
 
-  return ALGORITHMS_LIST.filter(compareSearchToVariant)
+  return ALGORITHMS.filter(({ name }) => compareSearchToVariant(name))
 })
 </script>
 
