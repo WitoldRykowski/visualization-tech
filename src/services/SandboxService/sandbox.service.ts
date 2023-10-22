@@ -86,9 +86,9 @@ export type Variant = Algorithm | DataStructure
 export const ALGORITHMS: readonly Algorithm[] = [
   { name: 'BinarySearch', tags: ['sorting'] },
   { name: 'BubbleSort', tags: ['sorting'] },
-  { name: 'QuickSort', tags: ['sorting'] },
+  { name: 'InsertionSort', tags: ['sorting'] },
   { name: 'SelectionSort', tags: ['sorting'] },
-  { name: 'InsertionSort', tags: ['sorting'] }
+  { name: 'QuickSort', tags: ['sorting'] }
 ]
 
 export const DATA_STRUCTURES: readonly DataStructure[] = [

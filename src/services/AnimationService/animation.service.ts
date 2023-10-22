@@ -1,5 +1,3 @@
-// TODO zrobic tagi na kartach algorytmów i struktur
-
 export function getAnimationConfig(config?: Partial<AnimationConfig>): AnimationConfig {
   const DEFAULT_FRAME_COUNT = 10
 

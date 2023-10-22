@@ -5,6 +5,7 @@ import type { Variant } from '@/services/SandboxService/sandbox.service'
 import { useRouter } from 'vue-router'
 import { computed } from 'vue'
 import { QChip } from 'quasar'
+import { Sandbox } from '@/router/routes'
 
 const store = useMainStore()
 const router = useRouter()
@@ -16,7 +17,7 @@ const props = defineProps<{
 const setVariant = () => {
   store.setVariant(props.variant.name)
 
-  router.push({ name: 'Sandbox' })
+  router.push(Sandbox)
 }
 
 const variantName = computed(() => {

@@ -2,6 +2,8 @@
 import { QInput, QToolbar, QToolbarTitle } from 'quasar'
 import { computed } from 'vue'
 import { useMainStore } from '@/stores/main'
+import AppButton from '@/components/AppButton/AppButton.vue'
+import { Main } from '@/router/routes'
 
 const mainStore = useMainStore()
 
@@ -13,7 +15,14 @@ const search = computed({
 
 <template>
   <QToolbar class="app-toolbar">
-    <QToolbarTitle>Visualize Tech</QToolbarTitle>
+    <QToolbarTitle>
+      <AppButton
+        textColor="black"
+        flat
+        label="Visualize Tech"
+        @click="$router.push(Main)"
+      ></AppButton>
+    </QToolbarTitle>
 
     <div id="app-toolbar-actions"></div>
     <QInput v-model="search" outlined dense label="Search" />
@@ -23,7 +32,6 @@ const search = computed({
 <style scoped lang="scss">
 .app-toolbar {
   background: white;
-  color: black;
 }
 
 #app-toolbar-actions {
