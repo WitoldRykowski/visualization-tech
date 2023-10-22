@@ -100,13 +100,6 @@ const animateBinarySearch = () => {
       columns[guess].changeColor(DEFAULT_COLOR)
     }
   }
-
-  // TODO Add color to animation config to fix keepColor flag
-  // if (!moves.length) {
-  //   for (let i = 0; i < columns.length; i++) {
-  //     columns[i].jump()
-  //   }
-  // }
 }
 
 function triggerCollapse(move: CollapseMoveConfig) {
