@@ -6,7 +6,6 @@ import { convertNamedColorToRGB } from '@/utils'
 let moves: Move[] = []
 let values: number[] = []
 let columns: Column[] = []
-let wasVisualize = false
 
 export const initBinarySearch = () => {
   values = generateSortedArray()
@@ -18,11 +17,8 @@ export const initBinarySearch = () => {
 }
 
 export const visualizeBinarySearch = () => {
-  if (wasVisualize) {
-    columns = renderArray(values)
-  }
+  columns = renderArray(values)
 
-  wasVisualize = true
   moves = binarySearch(values)!
 }
 

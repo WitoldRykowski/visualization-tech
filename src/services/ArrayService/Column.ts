@@ -148,7 +148,7 @@ export type Column = ColumnConfig & {
   changeColor: (color: ColorRGBA, frameCount?: number) => void
 }
 
-type ColumnConfig = {
+export type ColumnConfig = {
   x: number
   y: number
   width: number

@@ -26,14 +26,14 @@ export const generateNonSortedArray = (size = DEFAULT_ARRAY_SIZE) => {
 
 export const renderArray = (values: number[]) => {
   const MARGIN = 30
-  const size = getSandboxSize()
+  const { width, height } = getSandboxSize()
   const valuesSize = values.length
   const columns: Column[] = []
-  const spacing = (size.width - MARGIN * 2) / valuesSize
+  const spacing = (width - MARGIN * 2) / valuesSize
 
   for (let i = 0; i < valuesSize; i++) {
     const xAxis = i * spacing + spacing / 2 + MARGIN
-    const yAxis = size.height - MARGIN - i * 3
+    const yAxis = height - MARGIN - i * 3
     const columnHeight = 400 * values[i]
 
     columns[i] = Column({
