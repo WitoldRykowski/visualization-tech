@@ -105,17 +105,13 @@ const animateBinarySearch = () => {
 
     if (isMinLastUpdated) {
       for (let i = 0; i < min; i++) {
-        if (values[i] !== target) {
-          columns[i].collapse({ frameCount: COLLAPSE_DELAY })
-        }
+        columns[i].collapse({ frameCount: COLLAPSE_DELAY })
       }
     }
 
     if (isMaxLastUpdated) {
       for (let i = max + 1; i < columns.length; i++) {
-        if (values[i] !== target) {
-          columns[i].collapse({ frameCount: COLLAPSE_DELAY })
-        }
+        columns[i].collapse({ frameCount: COLLAPSE_DELAY })
       }
     }
   }

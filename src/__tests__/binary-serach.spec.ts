@@ -70,7 +70,7 @@ describe('Binary Search', () => {
         if (lastUpdatedValue === 'min' || lastUpdatedValue === 'both') {
           for (let i = 0; i < min; i++) {
             if (values[i] !== target) {
-              expect(columns[i].collapse).toHaveBeenCalledTimes(2)
+              expect(columns[i].collapse).toHaveBeenCalledTimes(1)
               expect(columns[i].collapse).toHaveBeenCalledWith({ frameCount: 15 })
             }
           }
@@ -79,7 +79,7 @@ describe('Binary Search', () => {
         if (lastUpdatedValue === 'max' || lastUpdatedValue === 'both') {
           for (let i = max + 1; i < columns.length; i++) {
             if (values[i] !== target) {
-              expect(columns[i].collapse).toHaveBeenCalledTimes(2)
+              expect(columns[i].collapse).toHaveBeenCalledTimes(1)
               expect(columns[i].collapse).toHaveBeenCalledWith({ frameCount: 15 })
             }
           }
