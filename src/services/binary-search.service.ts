@@ -19,7 +19,7 @@ export const initBinarySearch = () => {
 export const visualizeBinarySearch = () => {
   columns = renderArray(values)
 
-  moves = binarySearch(values)!
+  moves = binarySearch(values)
 }
 
 const binarySearch = (values: number[]) => {
@@ -96,30 +96,37 @@ const animateBinarySearch = () => {
       columns[guess].changeColor(DEFAULT_COLOR)
     }
   }
-}
 
-function triggerCollapse(move: CollapseMoveConfig) {
-  const COLLAPSE_DELAY = 15
-  const { lastUpdatedValue, min, target, max } = move
-  const isMinLastUpdated = lastUpdatedValue === 'min' || lastUpdatedValue === 'both'
-  const isMaxLastUpdated = lastUpdatedValue === 'max' || lastUpdatedValue === 'both'
+  function triggerCollapse(move: CollapseMoveConfig) {
+    const COLLAPSE_DELAY = 15
+    const { lastUpdatedValue, min, target, max } = move
+    const isMinLastUpdated = lastUpdatedValue === 'min' || lastUpdatedValue === 'both'
+    const isMaxLastUpdated = lastUpdatedValue === 'max' || lastUpdatedValue === 'both'
 
-  if (isMinLastUpdated) {
-    for (let i = 0; i < min; i++) {
-      if (values[i] !== target) {
-        columns[i].collapse({ frameCount: COLLAPSE_DELAY })
+    if (isMinLastUpdated) {
+      for (let i = 0; i < min; i++) {
+        if (values[i] !== target) {
+          columns[i].collapse({ frameCount: COLLAPSE_DELAY })
+        }
+      }
+    }
+
+    if (isMaxLastUpdated) {
+      for (let i = max + 1; i < columns.length; i++) {
+        if (values[i] !== target) {
+          columns[i].collapse({ frameCount: COLLAPSE_DELAY })
+        }
       }
     }
   }
-
-  if (isMaxLastUpdated) {
-    for (let i = max + 1; i < columns.length; i++) {
-      if (values[i] !== target) {
-        columns[i].collapse({ frameCount: COLLAPSE_DELAY })
-      }
-    }
-  }
 }
+
+export const __testing = () => ({
+  values,
+  moves,
+  columns,
+  animateBinarySearch
+})
 
 type LastUpdatedValue = 'min' | 'max' | 'both'
 
@@ -130,7 +137,7 @@ type GeneralMoveConfig = {
   target: number
 }
 
-type CollapseMoveConfig = {
+export type CollapseMoveConfig = {
   animation: Extract<MoveAnimation, 'collapse'>
   lastUpdatedValue: LastUpdatedValue
 } & GeneralMoveConfig

@@ -1,7 +1,17 @@
-import { DEFAULT_COLOR, type ColumnConfig } from '../services/ArrayService/Column'
+import { DEFAULT_COLOR, type ColumnConfig, Column } from '../services/ArrayService/Column'
 import { Noop } from '../types'
 
 const SANDBOX_SIZE = 400
+
+beforeEach(() => {
+  const container = document.createElement('div')
+  container.id = 'main-container'
+
+  const canvas = document.createElement('canvas')
+
+  container.appendChild(canvas)
+  document.body.appendChild(container)
+})
 
 jest.mock('../services/SandboxService/sandbox.service', () => {
   return {
@@ -13,24 +23,21 @@ jest.mock('../services/SandboxService/sandbox.service', () => {
       callback()
       return 1
     }),
+    drawColumns: jest.fn((columns: Column[]) => {
+      return false
+    }),
     getContext: jest.fn(() => {
-      const canvas = document.createElement('canvas')
+      const canvas = document.getElementById('sandbox') as HTMLCanvasElement
       canvas.width = SANDBOX_SIZE
       canvas.height = SANDBOX_SIZE
 
       return canvas.getContext('2d')
     }),
     initSandbox: jest.fn(() => {
-      const container = document.createElement('div')
-      container.id = 'main-container'
+      const canvas = document.getElementById('sandbox') as HTMLCanvasElement
 
-      const canvas = document.createElement('canvas')
-      canvas.id = 'sandbox'
       canvas.width = SANDBOX_SIZE
       canvas.height = SANDBOX_SIZE
-
-      container.appendChild(canvas)
-      document.body.appendChild(container)
     })
   }
 })

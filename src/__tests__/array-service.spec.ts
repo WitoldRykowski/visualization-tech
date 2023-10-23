@@ -4,15 +4,14 @@ import {
   renderArray
 } from '../services/ArrayService/array.service'
 import { Column } from '../services/ArrayService/Column'
+import { isArraySortedAscending } from '../utils/testUtils'
 
 describe('Array Service', () => {
   test('should generate sorted array', () => {
     const values = generateSortedArray()
 
     expect(values.length).toBe(50)
-    for (let i = values.length - 1; i >= 1; i--) {
-      expect(values[i] > values[i - 1]).toBe(true)
-    }
+    expect(isArraySortedAscending(values)).toBe(true)
   })
 
   test('should generate not sorted array', () => {
