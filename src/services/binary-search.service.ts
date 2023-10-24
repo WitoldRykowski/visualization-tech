@@ -1,4 +1,9 @@
-import { Column, DEFAULT_COLOR, type MoveAnimation } from '@/services/ArrayService/Column'
+import {
+  COLLAPSED_COLUMN_HEIGHT,
+  Column,
+  DEFAULT_COLOR,
+  type MoveAnimation
+} from '@/services/ArrayService/Column'
 import { generateSortedArray, renderArray } from '@/services/ArrayService/array.service'
 import { animate, drawColumns, stopAnimation } from '@/services/SandboxService/sandbox.service'
 import { convertNamedColorToRGB } from '@/utils'
@@ -40,14 +45,10 @@ const binarySearch = (values: number[]) => {
       animation: 'jump'
     })
 
-    let lastUpdatedValue: LastUpdatedValue = 'both'
-
     if (values[guess] > target) {
       max = guess - 1
-      lastUpdatedValue = 'max'
     } else if (values[guess] < target) {
       min = guess + 1
-      lastUpdatedValue = 'min'
     } else {
       min = max = guess
 
@@ -56,8 +57,7 @@ const binarySearch = (values: number[]) => {
         max,
         guess,
         target,
-        animation: 'collapse',
-        lastUpdatedValue: 'both'
+        animation: 'collapse'
       })
       break
     }
@@ -67,8 +67,7 @@ const binarySearch = (values: number[]) => {
       max,
       guess,
       target,
-      animation: 'collapse',
-      lastUpdatedValue
+      animation: 'collapse'
     })
   }
 
@@ -97,20 +96,18 @@ const animateBinarySearch = () => {
     }
   }
 
-  function triggerCollapse(move: CollapseMoveConfig) {
+  function triggerCollapse(move: Move) {
     const COLLAPSE_DELAY = 15
-    const { lastUpdatedValue, min, target, max } = move
-    const isMinLastUpdated = lastUpdatedValue === 'min' || lastUpdatedValue === 'both'
-    const isMaxLastUpdated = lastUpdatedValue === 'max' || lastUpdatedValue === 'both'
+    const { min, max } = move
 
-    if (isMinLastUpdated) {
-      for (let i = 0; i < min; i++) {
+    for (let i = 0; i < min; i++) {
+      if (columns[i].height > COLLAPSED_COLUMN_HEIGHT) {
         columns[i].collapse({ frameCount: COLLAPSE_DELAY })
       }
     }
 
-    if (isMaxLastUpdated) {
-      for (let i = max + 1; i < columns.length; i++) {
+    for (let i = max + 1; i < columns.length; i++) {
+      if (columns[i].height > COLLAPSED_COLUMN_HEIGHT) {
         columns[i].collapse({ frameCount: COLLAPSE_DELAY })
       }
     }
@@ -124,22 +121,10 @@ export const __testing = () => ({
   animateBinarySearch
 })
 
-type LastUpdatedValue = 'min' | 'max' | 'both'
-
-type GeneralMoveConfig = {
+type Move = {
   min: number
   max: number
   guess: number
   target: number
+  animation: MoveAnimation
 }
-
-export type CollapseMoveConfig = {
-  animation: Extract<MoveAnimation, 'collapse'>
-  lastUpdatedValue: LastUpdatedValue
-} & GeneralMoveConfig
-
-type JumpMoveConfig = {
-  animation: Extract<MoveAnimation, 'jump'>
-} & GeneralMoveConfig
-
-type Move = CollapseMoveConfig | JumpMoveConfig

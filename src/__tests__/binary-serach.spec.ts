@@ -1,8 +1,7 @@
 import {
   initBinarySearch,
   visualizeBinarySearch,
-  __testing,
-  type CollapseMoveConfig
+  __testing
 } from '../services/binary-search.service'
 import { generateRandomColumn, isArraySortedAscending } from '../utils/testUtils'
 import { stopAnimation, animate } from '../services/SandboxService/sandbox.service'
@@ -64,24 +63,19 @@ describe('Binary Search', () => {
           expect(columns[guess].changeColor).toHaveBeenCalledTimes(1)
         }
       } else if (animation === 'collapse') {
-        const { lastUpdatedValue, min, max } = move as CollapseMoveConfig
+        const { min, max } = move
 
-        // FIXME why 2 times?
-        if (lastUpdatedValue === 'min' || lastUpdatedValue === 'both') {
-          for (let i = 0; i < min; i++) {
-            if (values[i] !== target) {
-              expect(columns[i].collapse).toHaveBeenCalledTimes(1)
-              expect(columns[i].collapse).toHaveBeenCalledWith({ frameCount: 15 })
-            }
+        for (let i = 0; i < min; i++) {
+          if (columns[i].height > 2) {
+            expect(columns[i].collapse).toHaveBeenCalled()
+            expect(columns[i].collapse).toHaveBeenCalledWith({ frameCount: 15 })
           }
         }
 
-        if (lastUpdatedValue === 'max' || lastUpdatedValue === 'both') {
-          for (let i = max + 1; i < columns.length; i++) {
-            if (values[i] !== target) {
-              expect(columns[i].collapse).toHaveBeenCalledTimes(1)
-              expect(columns[i].collapse).toHaveBeenCalledWith({ frameCount: 15 })
-            }
+        for (let i = max + 1; i < columns.length; i++) {
+          if (columns[i].height > 2) {
+            expect(columns[i].collapse).toHaveBeenCalled()
+            expect(columns[i].collapse).toHaveBeenCalledWith({ frameCount: 15 })
           }
         }
 

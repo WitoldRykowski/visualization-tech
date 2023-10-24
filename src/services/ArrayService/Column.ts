@@ -12,6 +12,7 @@ import {
 } from '@/services/AnimationService/animation.service'
 
 export const DEFAULT_COLOR = convertNamedColorToRGB('primary')
+export const COLLAPSED_COLUMN_HEIGHT = 2
 
 export const Column = (columnConfig: ColumnConfig): Column => {
   const column: Column = {
@@ -89,7 +90,6 @@ export const Column = (columnConfig: ColumnConfig): Column => {
 
   function collapse(config?: Partial<MoveToAnimationConfig>) {
     const { frameCount } = getAnimationConfig(config)
-    const COLLAPSED_COLUMN_HEIGHT = 2
 
     for (let i = 0; i <= frameCount; i++) {
       const tickRate = i / frameCount
