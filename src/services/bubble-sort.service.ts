@@ -56,11 +56,12 @@ function animateBubbleSort() {
 
   if (isChanged || !moves.length) return
 
-  const move = moves.shift()!
+  const {
+    indexes: [i, j],
+    animation
+  } = moves.shift()!
 
-  const [i, j] = move.indexes
-
-  if (move.animation === 'swap') {
+  if (animation === 'swap') {
     columns[i].moveTo(columns[j])
     columns[j].moveTo(columns[i], { yOffset: -1 })
     ;[columns[i], columns[j]] = [columns[j], columns[i]]
@@ -69,6 +70,13 @@ function animateBubbleSort() {
     columns[j].jump()
   }
 }
+
+export const __testing = () => ({
+  values,
+  columns,
+  moves,
+  animateBubbleSort
+})
 
 type Move = {
   indexes: [number, number]

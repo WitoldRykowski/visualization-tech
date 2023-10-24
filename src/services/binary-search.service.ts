@@ -8,6 +8,8 @@ import { generateSortedArray, renderArray } from '@/services/ArrayService/array.
 import { animate, drawColumns, stopAnimation } from '@/services/SandboxService/sandbox.service'
 import { convertNamedColorToRGB } from '@/utils'
 
+export const COLLAPSE_DELAY = 15
+
 let moves: Move[] = []
 let values: number[] = []
 let columns: Column[] = []
@@ -89,8 +91,6 @@ const animateBinarySearch = () => {
       columns[guess].changeColor(convertNamedColorToRGB('positive'))
     }
   } else if (animation === 'collapse') {
-    const COLLAPSE_DELAY = 15
-
     for (let i = 0; i < min; i++) {
       if (columns[i].height > COLLAPSED_COLUMN_HEIGHT) {
         columns[i].collapse({ frameCount: COLLAPSE_DELAY })

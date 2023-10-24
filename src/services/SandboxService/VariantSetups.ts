@@ -5,6 +5,7 @@ import { initBinarySearch, visualizeBinarySearch } from '@/services/binary-searc
 import { initQuickSort, visualizeQuickSort } from '@/services/quick-sort.service'
 import { initSelectionSort, visualizeSelectionSort } from '@/services/selection-sort.service'
 import { initInsertionSort, visualizeInsertionSort } from '@/services/insertion-sort.service'
+import { initGnomeSort, visualizeGnomeSort } from '@/services/gnome-sort.service'
 
 const BubbleSort: VariantSetup = {
   actions: { init: initBubbleSort, visualize: visualizeBubbleSort }
@@ -26,6 +27,10 @@ const InsertionSort: VariantSetup = {
   actions: { init: initInsertionSort, visualize: visualizeInsertionSort }
 }
 
+const GnomeSort: VariantSetup = {
+  actions: { init: initGnomeSort, visualize: visualizeGnomeSort }
+}
+
 const Stack: VariantSetup = {
   actions: { init: noop, visualize: noop }
 }
@@ -36,10 +41,11 @@ const Queue: VariantSetup = {
 
 export const VariantSetups: Record<NonNullable<VariantName>, VariantSetup> = {
   BubbleSort,
-  QuickSort,
   BinarySearch,
-  SelectionSort,
+  GnomeSort,
   InsertionSort,
+  SelectionSort,
+  QuickSort,
   Queue,
   Stack
 }

@@ -9,6 +9,14 @@ export function isArraySortedAscending(values: number[]) {
   return true
 }
 
+export const isNotSorted = (values: number[]) => {
+  return values.some((value, index) => {
+    if (index === values.length - 1) return true
+
+    return value > values[index + 1]
+  })
+}
+
 export const generateRandomColumn = (columnConfig?: Partial<ColumnConfig>) => {
   return Column({
     x: columnConfig?.x ?? 1,
