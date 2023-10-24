@@ -80,7 +80,7 @@ const animateBinarySearch = () => {
   if (isChanged || !moves.length) return
 
   const move = moves.shift()!
-  const { guess, target, animation } = move
+  const { guess, target, animation, min, max } = move
 
   if (animation === 'jump') {
     columns[guess].jump({ keepColor: true })
@@ -89,16 +89,7 @@ const animateBinarySearch = () => {
       columns[guess].changeColor(convertNamedColorToRGB('positive'))
     }
   } else if (animation === 'collapse') {
-    triggerCollapse(move)
-
-    if (values[guess] !== target) {
-      columns[guess].changeColor(DEFAULT_COLOR)
-    }
-  }
-
-  function triggerCollapse(move: Move) {
     const COLLAPSE_DELAY = 15
-    const { min, max } = move
 
     for (let i = 0; i < min; i++) {
       if (columns[i].height > COLLAPSED_COLUMN_HEIGHT) {
@@ -111,6 +102,10 @@ const animateBinarySearch = () => {
         columns[i].collapse({ frameCount: COLLAPSE_DELAY })
       }
     }
+  }
+
+  if (values[guess] !== target) {
+    columns[guess].changeColor(DEFAULT_COLOR)
   }
 }
 

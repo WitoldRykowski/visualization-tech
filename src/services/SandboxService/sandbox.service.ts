@@ -53,7 +53,7 @@ export const stopAnimation = () => {
   _animationFrameId = -1
 }
 
-const POSSIBLE_ALGORITHM_TAGS = ['sorting'] as const
+const POSSIBLE_ALGORITHM_TAGS = ['sorting', 'searching'] as const
 const POSSIBLE_DATA_STRUCTURE_TAGS = [
   'stacks',
   'queues',
@@ -84,7 +84,7 @@ export type VariantName =
 export type Variant = Algorithm | DataStructure
 
 export const ALGORITHMS: readonly Algorithm[] = [
-  { name: 'BinarySearch', tags: ['sorting'] },
+  { name: 'BinarySearch', tags: ['searching'] },
   { name: 'BubbleSort', tags: ['sorting'] },
   { name: 'InsertionSort', tags: ['sorting'] },
   { name: 'SelectionSort', tags: ['sorting'] },
