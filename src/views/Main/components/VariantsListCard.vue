@@ -39,7 +39,7 @@ const variantName = computed(() => {
 $transition: 0.3s;
 
 .app-list-card {
-  width: clamp(250px, 250px, 10%);
+  min-width: calc(20% - 1rem);
   cursor: pointer;
   transition: $transition;
 }

@@ -72,15 +72,15 @@ function animateSelectionSort() {
   const { minIndex, lastMinIndex, animation, indexes } = moves.shift()!
   const [i, j] = indexes
 
-  if (animation === 'changeColor') {
-    if (lastMinIndex !== minIndex) {
-      columns[lastMinIndex].changeColor(DEFAULT_COLOR)
-    }
-
-    columns[minIndex].changeColor(convertNamedColorToRGB('negative'))
-  } else if (animation === 'jump') {
+  if (animation === 'swap' && minIndex !== i) {
+    handleSwap()
+  } else if (animation === 'changeColor') {
+    handleChangeColor()
+  } else {
     columns[j].jump()
-  } else if (animation === 'swap' && minIndex !== i) {
+  }
+
+  function handleSwap() {
     const frameCount = 40
 
     columns[minIndex].jump()
@@ -89,6 +89,18 @@ function animateSelectionSort() {
     columns[minIndex].moveTo(columns[i], { frameCount })
     columns[i].moveTo(columns[minIndex], { yOffset: -1, frameCount })
     ;[columns[minIndex], columns[i]] = [columns[i], columns[minIndex]]
+  }
+
+  function handleChangeColor() {
+    if (lastMinIndex !== minIndex) {
+      if (lastMinIndex === i && j !== -1) {
+        columns[i].changeColor(convertNamedColorToRGB('warning'))
+      } else {
+        columns[lastMinIndex].changeColor(DEFAULT_COLOR)
+      }
+    }
+
+    columns[minIndex].changeColor(convertNamedColorToRGB('negative'))
   }
 }
 

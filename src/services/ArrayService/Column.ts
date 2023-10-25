@@ -23,7 +23,8 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     moveTo,
     jump,
     collapse,
-    changeColor
+    changeColor,
+    touch
   }
 
   draw()
@@ -88,6 +89,11 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     }
   }
 
+  function touch(color: ColorRGBA, originalColor = DEFAULT_COLOR, frameCount = 5) {
+    changeColor(color, frameCount)
+    changeColor(originalColor, frameCount)
+  }
+
   function collapse(config?: Partial<MoveToAnimationConfig>) {
     const { frameCount } = getAnimationConfig(config)
 
@@ -146,6 +152,7 @@ export type Column = ColumnConfig & {
   jump: (config?: Partial<AnimationConfig>) => void
   collapse: (config?: Partial<AnimationConfig>) => void
   changeColor: (color: ColorRGBA, frameCount?: number) => void
+  touch: (color: ColorRGBA, originalColor?: ColorRGBA, frameCount?: number) => void
 }
 
 export type ColumnConfig = {
