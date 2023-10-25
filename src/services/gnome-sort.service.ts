@@ -1,6 +1,7 @@
-import { Column, type MoveAnimation } from '@/services/ArrayService/Column'
+import { Column, DEFAULT_COLOR, type MoveAnimation } from '@/services/ArrayService/Column'
 import { generateNonSortedArray, renderArray } from '@/services/ArrayService/array.service'
 import { animate, drawColumns, stopAnimation } from '@/services/SandboxService/sandbox.service'
+import { convertNamedColorToRGB } from '@/utils'
 
 let moves: Move[] = []
 let values: number[] = []
@@ -21,18 +22,22 @@ export const visualizeGnomeSort = () => {
 
 function gnomeSort(values: number[]) {
   let index = 0
+  let isSwapped = false
 
   while (index < values.length) {
     if (index == 0) {
-      moves.push({ animation: 'jump', left: index - 1, right: index })
+      moves.push({ animation: 'touch', left: index - 1, right: index })
 
       index++
     }
 
     if (values[index] >= values[index - 1]) {
-      moves.push({ animation: 'jump', left: index - 1, right: index })
+      moves.push({ animation: 'touch', left: index - 1, right: index })
       index++
     } else {
+      // TODO Add move to change color of the right only for first swap
+      // moves.push({ animation: ''})
+      isSwapped = true
       ;[values[index], values[index - 1]] = [values[index - 1], values[index]]
       moves.push({ animation: 'swap', left: index - 1, right: index })
       index--
@@ -49,12 +54,13 @@ function animateGnomeSort() {
 
   const { animation, left, right } = moves.shift()!
 
-  if (animation === 'jump') {
+  if (animation === 'touch') {
+    const color = convertNamedColorToRGB('warning')
     if (left !== -1) {
-      columns[left].jump()
+      columns[left].changeColor(color, 10)
     }
 
-    columns[right].jump()
+    columns[right].changeColor(color, 10)
   } else {
     columns[left].moveTo(columns[right])
     columns[right].moveTo(columns[left], { yOffset: -1 })
