@@ -32,17 +32,22 @@ function gnomeSort(values: number[]) {
     }
 
     if (values[index] >= values[index - 1]) {
+      isSwapped = false
       moves.push({ animation: 'touch', left: index - 1, right: index })
       index++
     } else {
-      // TODO Add move to change color of the right only for first swap
-      // moves.push({ animation: ''})
-      isSwapped = true
+      if (!isSwapped) {
+        moves.push({ animation: 'jump', left: index - 1, right: index })
+        isSwapped = true
+      }
+
       ;[values[index], values[index - 1]] = [values[index - 1], values[index]]
       moves.push({ animation: 'swap', left: index - 1, right: index })
       index--
     }
   }
+
+  moves.push({ animation: 'finish', left: -1, right: -1 })
 
   return moves
 }
@@ -55,21 +60,27 @@ function animateGnomeSort() {
   const { animation, left, right } = moves.shift()!
 
   if (animation === 'touch') {
-    const color = convertNamedColorToRGB('warning')
+    const color = convertNamedColorToRGB('grey-1')
     if (left !== -1) {
-      columns[left].changeColor(color, 10)
+      columns[left].changeColor(color)
     }
 
-    columns[right].changeColor(color, 10)
-  } else {
+    columns[right].changeColor(color)
+  } else if (animation === 'swap') {
     columns[left].moveTo(columns[right])
     columns[right].moveTo(columns[left], { yOffset: -1 })
     ;[columns[left], columns[right]] = [columns[right], columns[left]]
+  } else if (animation === 'jump') {
+    columns[right].jump()
+  } else {
+    for (let i = columns.length - 1; i >= 0; i--) {
+      columns[i].changeColor(DEFAULT_COLOR)
+    }
   }
 }
 
 type Move = {
-  animation: MoveAnimation
+  animation: MoveAnimation | 'finish'
   left: number
   right: number
 }
