@@ -18,7 +18,7 @@ const setup = () => {
 }
 
 describe('Bubble Sort', () => {
-  test('should initialize bubble sort sandbox', () => {
+  test('should initialize algorithm sandbox', () => {
     initBubbleSort()
 
     const { values, columns, moves, animateBubbleSort } = __testing()
@@ -30,7 +30,7 @@ describe('Bubble Sort', () => {
     expect(initAnimation).toHaveBeenCalledWith(expect.anything(), animateBubbleSort)
   })
 
-  test('should start visualizing bubble sort', () => {
+  test('should start visualizing algorithm', () => {
     initBubbleSort()
     visualizeBubbleSort()
     const { moves, values } = __testing()

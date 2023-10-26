@@ -24,7 +24,7 @@ const setup = () => {
 }
 
 describe('Binary Search', () => {
-  test('should initialize binary search sandbox', () => {
+  test('should initialize algorithm sandbox', () => {
     initBinarySearch()
 
     const { values, columns, moves, animateBinarySearch } = __testing()
@@ -36,7 +36,7 @@ describe('Binary Search', () => {
     expect(initAnimation).toHaveBeenCalledWith(expect.anything(), animateBinarySearch)
   })
 
-  test('should start visualizing binary search', () => {
+  test('should start visualizing algorithm', () => {
     const { renderArray } = setup()
     const { values, moves } = __testing()
 

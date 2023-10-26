@@ -80,6 +80,13 @@ function animateGnomeSort() {
   }
 }
 
+export const __testing = () => ({
+  animateGnomeSort,
+  moves,
+  values,
+  columns
+})
+
 type Move = {
   animation: MoveAnimation | 'finish'
   left: number
