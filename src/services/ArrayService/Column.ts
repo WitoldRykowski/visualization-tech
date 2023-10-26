@@ -62,10 +62,11 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     for (let i = 0; i <= frameCount; i++) {
       const tickRate = i / frameCount
       const u = Math.sin(tickRate * Math.PI)
+      const y = i < frameCount ? column.y - u * column.width : 0
 
       column.queue.push({
         x: column.x,
-        y: column.y - u * column.width
+        y
       })
     }
 
