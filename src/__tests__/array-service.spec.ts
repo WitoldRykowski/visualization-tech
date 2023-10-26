@@ -10,7 +10,7 @@ describe('Array Service', () => {
   test('should generate sorted array', () => {
     const values = generateSortedArray()
 
-    expect(values.length).toBe(50)
+    expect(values.length).toBe(40)
     expect(isArraySortedAscending(values)).toBe(true)
   })
 

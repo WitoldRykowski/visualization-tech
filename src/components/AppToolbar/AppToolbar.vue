@@ -16,12 +16,7 @@ const search = computed({
 <template>
   <QToolbar class="app-toolbar">
     <QToolbarTitle>
-      <AppButton
-        textColor="black"
-        flat
-        label="Visualize Tech"
-        @click="$router.push(Main)"
-      ></AppButton>
+      <AppButton flat label="Visualize Tech" @click="$router.push(Main)"></AppButton>
     </QToolbarTitle>
 
     <div id="app-toolbar-actions"></div>
@@ -31,7 +26,7 @@ const search = computed({
 
 <style scoped lang="scss">
 .app-toolbar {
-  background: white;
+  background: $dark;
 }
 
 #app-toolbar-actions {

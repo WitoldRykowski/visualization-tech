@@ -1,6 +1,6 @@
 import type { Column, MoveAnimation } from './ArrayService/Column'
 import { generateNonSortedArray, renderArray } from './ArrayService/array.service'
-import { animate, drawColumns, stopAnimation } from './SandboxService/sandbox.service'
+import { drawColumns, initAnimation } from './SandboxService/sandbox.service'
 import { convertNamedColorToRGB } from '@/utils'
 import { DEFAULT_COLOR } from './ArrayService/Column'
 
@@ -9,12 +9,13 @@ let values: number[] = []
 let columns: Column[] = []
 
 export const initSelectionSort = () => {
-  values = generateNonSortedArray()
-  columns = renderArray(values)
-  moves = []
+  initAnimation(init, animateSelectionSort)
 
-  stopAnimation()
-  animate(animateSelectionSort)
+  function init() {
+    values = generateNonSortedArray()
+    columns = renderArray(values)
+    moves = []
+  }
 }
 
 export const visualizeSelectionSort = () => {

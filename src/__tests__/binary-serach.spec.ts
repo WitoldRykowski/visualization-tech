@@ -5,7 +5,7 @@ import {
   COLLAPSE_DELAY
 } from '../services/binary-search.service'
 import { generateRandomColumn, isArraySortedAscending } from '../utils/testUtils'
-import { stopAnimation, animate } from '../services/SandboxService/sandbox.service'
+import { stopAnimation, initAnimation } from '../services/SandboxService/sandbox.service'
 import * as ArrayService from '../services/ArrayService/array.service'
 import { COLLAPSED_COLUMN_HEIGHT } from '../services/ArrayService/Column'
 
@@ -27,13 +27,13 @@ describe('Binary Search', () => {
   test('should initialize binary search sandbox', () => {
     initBinarySearch()
 
-    const { values, columns, moves } = __testing()
+    const { values, columns, moves, animateBinarySearch } = __testing()
 
     expect(moves.length).toBe(0)
     expect(columns.length).toBe(values.length)
     expect(isArraySortedAscending(values)).toBe(true)
-    expect(animate).toHaveBeenCalledTimes(1)
-    expect(stopAnimation).toHaveBeenCalledTimes(1)
+    expect(initAnimation).toHaveBeenCalledTimes(1)
+    expect(initAnimation).toHaveBeenCalledWith(expect.anything(), animateBinarySearch)
   })
 
   test('should start visualizing binary search', () => {

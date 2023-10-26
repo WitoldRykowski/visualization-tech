@@ -1,7 +1,7 @@
 import { getSandboxSize } from '@/services/SandboxService/sandbox.service'
 import { Column } from './Column'
 
-const DEFAULT_ARRAY_SIZE = 50
+const DEFAULT_ARRAY_SIZE = 40
 
 export const generateSortedArray = (size = DEFAULT_ARRAY_SIZE) => {
   const sortedArray: number[] = []

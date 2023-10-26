@@ -5,7 +5,7 @@ import {
   type MoveAnimation
 } from '@/services/ArrayService/Column'
 import { generateSortedArray, renderArray } from '@/services/ArrayService/array.service'
-import { animate, drawColumns, stopAnimation } from '@/services/SandboxService/sandbox.service'
+import { drawColumns, initAnimation } from '@/services/SandboxService/sandbox.service'
 import { convertNamedColorToRGB } from '@/utils'
 
 export const COLLAPSE_DELAY = 15
@@ -15,12 +15,13 @@ let values: number[] = []
 let columns: Column[] = []
 
 export const initBinarySearch = () => {
-  values = generateSortedArray()
-  columns = renderArray(values)
-  moves = []
+  initAnimation(init, animateBinarySearch)
 
-  stopAnimation()
-  animate(animateBinarySearch)
+  function init() {
+    values = generateSortedArray()
+    columns = renderArray(values)
+    moves = []
+  }
 }
 
 export const visualizeBinarySearch = () => {

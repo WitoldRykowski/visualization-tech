@@ -1,7 +1,7 @@
 import { initBubbleSort, visualizeBubbleSort, __testing } from '../services/bubble-sort.service'
 import * as ArrayService from '../services/ArrayService/array.service'
 import { generateRandomColumn, isArraySortedAscending, isNotSorted } from '../utils/testUtils'
-import { animate, stopAnimation } from '../services/SandboxService/sandbox.service'
+import { initAnimation } from '../services/SandboxService/sandbox.service'
 
 const setup = () => {
   initBubbleSort()
@@ -21,13 +21,13 @@ describe('Bubble Sort', () => {
   test('should initialize bubble sort sandbox', () => {
     initBubbleSort()
 
-    const { values, columns, moves } = __testing()
+    const { values, columns, moves, animateBubbleSort } = __testing()
 
     expect(moves.length).toBe(0)
     expect(columns.length).toBe(values.length)
     expect(isNotSorted(values)).toBe(true)
-    expect(animate).toHaveBeenCalledTimes(1)
-    expect(stopAnimation).toHaveBeenCalledTimes(1)
+    expect(initAnimation).toHaveBeenCalledTimes(1)
+    expect(initAnimation).toHaveBeenCalledWith(expect.anything(), animateBubbleSort)
   })
 
   test('should start visualizing bubble sort', () => {

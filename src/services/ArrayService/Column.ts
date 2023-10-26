@@ -11,7 +11,7 @@ import {
   getMoveToAnimationConfig
 } from '@/services/AnimationService/animation.service'
 
-export const DEFAULT_COLOR = convertNamedColorToRGB('primary')
+export const DEFAULT_COLOR = convertNamedColorToRGB('pink-6')
 export const COLLAPSED_COLUMN_HEIGHT = 2
 
 export const Column = (columnConfig: ColumnConfig): Column => {
@@ -36,7 +36,7 @@ export const Column = (columnConfig: ColumnConfig): Column => {
   ) {
     const { keepColor, frameCount, yOffset } = getMoveToAnimationConfig(config)
 
-    changeColor(convertNamedColorToRGB('positive'))
+    changeColor(convertNamedColorToRGB('green-13'))
 
     for (let i = 0; i <= frameCount; i++) {
       const tickRate = i / frameCount
@@ -88,7 +88,7 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     }
   }
 
-  function collapse(config?: Partial<MoveToAnimationConfig>) {
+  function collapse(config?: Partial<AnimationConfig>) {
     const { frameCount } = getAnimationConfig(config)
 
     for (let i = 0; i <= frameCount; i++) {

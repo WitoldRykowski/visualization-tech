@@ -1,6 +1,6 @@
 import type { Column, MoveAnimation } from '@/services/ArrayService/Column'
 import { generateNonSortedArray, renderArray } from '@/services/ArrayService/array.service'
-import { animate, drawColumns, stopAnimation } from '@/services/SandboxService/sandbox.service'
+import { drawColumns, initAnimation } from '@/services/SandboxService/sandbox.service'
 import { convertNamedColorToRGB } from '@/utils'
 import type { ColorRGBA } from '@/types'
 
@@ -9,12 +9,13 @@ let values: number[] = []
 let columns: Column[] = []
 
 export const initQuickSort = () => {
-  values = generateNonSortedArray()
-  columns = renderArray(values)
-  moves = []
+  initAnimation(init, animateQuickSort)
 
-  stopAnimation()
-  animate(animateQuickSort)
+  function init() {
+    values = generateNonSortedArray()
+    columns = renderArray(values)
+    moves = []
+  }
 }
 
 export const visualizeQuickSort = () => {

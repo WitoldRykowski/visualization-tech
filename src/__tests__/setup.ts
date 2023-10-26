@@ -1,5 +1,6 @@
 import { DEFAULT_COLOR, type ColumnConfig, Column } from '../services/ArrayService/Column'
 import { Noop } from '../types'
+import { initAnimation } from '../services/SandboxService/sandbox.service'
 
 const SANDBOX_SIZE = 400
 
@@ -19,8 +20,9 @@ jest.mock('../services/SandboxService/sandbox.service', () => {
       return { width: SANDBOX_SIZE, height: SANDBOX_SIZE }
     }),
     stopAnimation: jest.fn(() => -1),
-    animate: jest.fn((callback: Noop) => {
+    initAnimation: jest.fn((callback: Noop, animation: Noop) => {
       callback()
+      animation()
       return 1
     }),
     drawColumns: jest.fn((columns: Column[]) => {

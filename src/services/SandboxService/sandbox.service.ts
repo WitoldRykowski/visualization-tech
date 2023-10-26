@@ -27,16 +27,6 @@ export const getSandboxSize = () => {
   return { width: canvas.width, height: canvas.height }
 }
 
-export const animate = (callback: Noop) => {
-  const context = getContext()
-  const { width, height } = getSandboxSize()
-  context.clearRect(0, 0, width, height)
-
-  callback()
-
-  _animationFrameId = requestAnimationFrame(() => animate(callback))
-}
-
 export const drawColumns = (columns: Column[]) => {
   let isChanged = false
 
@@ -51,6 +41,23 @@ export const stopAnimation = () => {
   cancelAnimationFrame(_animationFrameId)
 
   _animationFrameId = -1
+}
+
+export const initAnimation = (callback: Noop, animation: Noop) => {
+  callback()
+  stopAnimation()
+
+  const animate = () => {
+    const context = getContext()
+    const { width, height } = getSandboxSize()
+    context.clearRect(0, 0, width, height)
+
+    animation()
+
+    _animationFrameId = requestAnimationFrame(animate)
+  }
+
+  animate()
 }
 
 const POSSIBLE_ALGORITHM_TAGS = ['sorting', 'searching'] as const

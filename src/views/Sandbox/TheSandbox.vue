@@ -1,38 +1,43 @@
 <script setup lang="ts">
-import { computed, inject, onBeforeUnmount, onMounted } from 'vue'
+import { inject, onBeforeUnmount, onMounted, ref } from 'vue'
 import {
   initSandbox,
   stopAnimation,
   VariantInjectionKey,
   VariantSetups
 } from '@/services/SandboxService/sandbox.service'
-import { noop } from '@/utils'
 import { AppButton } from '@/components'
 
 const variant = inject(VariantInjectionKey)
+const isFirstRun = ref(true)
 
-const actions = computed(() => {
-  if (variant?.value) {
-    return VariantSetups[variant.value].actions
+const visualize = () => {
+  if (!variant?.value) return
+
+  if (!isFirstRun.value) {
+    VariantSetups[variant.value].init()
   }
 
-  return { init: noop, visualize: noop }
-})
+  isFirstRun.value = false
+  VariantSetups[variant.value].visualize()
+}
 
-onMounted(() => {
+const createSandbox = () => {
   initSandbox()
 
-  actions.value.init()
-})
+  if (!variant?.value) return
 
+  VariantSetups[variant.value].init()
+}
+
+onMounted(createSandbox)
 onBeforeUnmount(stopAnimation)
 </script>
 
 <template>
   <canvas id="sandbox" />
   <Teleport to="#app-toolbar-actions">
-    <AppButton @click="actions.visualize" label="Visualize" />
-    <AppButton @click="actions.init" label="Init" />
+    <AppButton @click="visualize" label="Visualize" />
   </Teleport>
 </template>
 

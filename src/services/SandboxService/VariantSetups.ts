@@ -8,35 +8,43 @@ import { initInsertionSort, visualizeInsertionSort } from '@/services/insertion-
 import { initGnomeSort, visualizeGnomeSort } from '@/services/gnome-sort.service'
 
 const BubbleSort: VariantSetup = {
-  actions: { init: initBubbleSort, visualize: visualizeBubbleSort }
+  init: initBubbleSort,
+  visualize: visualizeBubbleSort
 }
 
 const QuickSort: VariantSetup = {
-  actions: { init: initQuickSort, visualize: visualizeQuickSort }
+  init: initQuickSort,
+  visualize: visualizeQuickSort
 }
 
 const BinarySearch: VariantSetup = {
-  actions: { init: initBinarySearch, visualize: visualizeBinarySearch }
+  init: initBinarySearch,
+  visualize: visualizeBinarySearch
 }
 
 const SelectionSort: VariantSetup = {
-  actions: { init: initSelectionSort, visualize: visualizeSelectionSort }
+  init: initSelectionSort,
+  visualize: visualizeSelectionSort
 }
 
 const InsertionSort: VariantSetup = {
-  actions: { init: initInsertionSort, visualize: visualizeInsertionSort }
+  init: initInsertionSort,
+  visualize: visualizeInsertionSort
 }
 
 const GnomeSort: VariantSetup = {
-  actions: { init: initGnomeSort, visualize: visualizeGnomeSort }
+  init: initGnomeSort,
+  visualize: visualizeGnomeSort
 }
 
 const Stack: VariantSetup = {
-  actions: { init: noop, visualize: noop }
+  init: noop,
+  visualize: noop
 }
 
 const Queue: VariantSetup = {
-  actions: { init: noop, visualize: noop }
+  init: noop,
+  visualize: noop
 }
 
 export const VariantSetups: Record<NonNullable<VariantName>, VariantSetup> = {
@@ -50,10 +58,4 @@ export const VariantSetups: Record<NonNullable<VariantName>, VariantSetup> = {
   Stack
 }
 
-type BinarySearchActions = { init: () => void; visualize: (target: number) => void }
-
-export type VariantActions = { init: () => void; visualize: () => void } | BinarySearchActions
-
-type VariantSetup = {
-  actions: VariantActions
-}
+type VariantSetup = { init: () => void; visualize: () => void }

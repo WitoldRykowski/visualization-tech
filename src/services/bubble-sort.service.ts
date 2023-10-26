@@ -1,18 +1,19 @@
 import { generateNonSortedArray, renderArray } from './ArrayService/array.service'
 import type { Column, MoveAnimation } from './ArrayService/Column'
-import { animate, drawColumns, stopAnimation } from './SandboxService/sandbox.service'
+import { drawColumns, initAnimation } from './SandboxService/sandbox.service'
 
 let moves: Move[] = []
 let values: number[] = []
 let columns: Column[] = []
 
 export const initBubbleSort = () => {
-  values = generateNonSortedArray()
-  columns = renderArray(values)
-  moves = []
+  initAnimation(init, animateBubbleSort)
 
-  stopAnimation()
-  animate(animateBubbleSort)
+  function init() {
+    values = generateNonSortedArray()
+    columns = renderArray(values)
+    moves = []
+  }
 }
 
 export const visualizeBubbleSort = () => {
