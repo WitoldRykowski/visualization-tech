@@ -53,6 +53,8 @@ describe('Gnome Sort', () => {
 
         expect(columns[right].changeColor).toHaveBeenCalledWith(color)
       } else if (animation === 'swap') {
+        expect(columns[left].moveTo).toHaveBeenCalledTimes(1)
+        expect(columns[right].moveTo).toHaveBeenCalledTimes(1)
         expect(columns[left].moveTo).toHaveBeenCalledWith(columns[right], { yOffset: -1 })
         expect(columns[right].moveTo).toHaveBeenCalledWith(columns[left])
       } else if (animation === 'jump') {
@@ -67,5 +69,7 @@ describe('Gnome Sort', () => {
 
       movesLength--
     }
+
+    expect(__testing().moves.length).toBe(0)
   })
 })

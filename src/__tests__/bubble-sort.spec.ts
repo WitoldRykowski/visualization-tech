@@ -58,7 +58,6 @@ describe('Bubble Sort', () => {
       } else if (animation === 'swap') {
         expect(columns[i].moveTo).toHaveBeenCalledTimes(1)
         expect(columns[j].moveTo).toHaveBeenCalledTimes(1)
-        // FIXME think about it ({ yOffset: -1 } should be in second check)
         expect(columns[i].moveTo).toHaveBeenCalledWith(columns[j], { yOffset: -1 })
         expect(columns[j].moveTo).toHaveBeenCalledWith(columns[i])
       }
@@ -67,5 +66,7 @@ describe('Bubble Sort', () => {
 
       movesLength--
     }
+
+    expect(__testing().moves.length).toBe(0)
   })
 })

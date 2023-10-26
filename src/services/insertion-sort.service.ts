@@ -59,6 +59,13 @@ function animateInsertionSort() {
   }
 }
 
+export const __testing = () => ({
+  moves,
+  columns,
+  values,
+  animateInsertionSort
+})
+
 type Move = {
   indexes: [number, number]
   animation: MoveAnimation

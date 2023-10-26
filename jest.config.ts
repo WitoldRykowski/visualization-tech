@@ -8,7 +8,7 @@ module.exports = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1'
   },
-  setupFilesAfterEnv: ['<rootDir>/src/__tests__/setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/src/__tests__/setup.ts', 'jest-canvas-mock'],
   moduleFileExtensions: ['js', 'ts', 'json', 'vue'],
   testMatch: ['**/__tests__/**/*.spec.ts'],
   testPathIgnorePatterns: ['/node_modules/'],

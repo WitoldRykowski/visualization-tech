@@ -5,7 +5,7 @@ import {
   COLLAPSE_DELAY
 } from '../services/binary-search.service'
 import { generateRandomColumn, isArraySortedAscending } from '../utils/testUtils'
-import { stopAnimation, initAnimation } from '../services/SandboxService/sandbox.service'
+import { initAnimation } from '../services/SandboxService/sandbox.service'
 import * as ArrayService from '../services/ArrayService/array.service'
 import { COLLAPSED_COLUMN_HEIGHT } from '../services/ArrayService/Column'
 
@@ -88,5 +88,7 @@ describe('Binary Search', () => {
 
       movesLength--
     }
+
+    expect(__testing().moves.length).toBe(0)
   })
 })
