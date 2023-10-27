@@ -2,6 +2,7 @@ import { getSandboxSize } from '@/services/SandboxService/sandbox.service'
 import { Column } from '@/services/SandboxService/elements/Column'
 import { Point as createPoint, type Point } from '@/services/SandboxService/elements/Point'
 import { Segment as createSegment, type Segment } from '@/services/SandboxService/elements/Segment'
+import Delaunator from 'delaunator'
 
 export const renderArray = (values: number[]) => {
   const MARGIN = 30
@@ -28,74 +29,47 @@ export const renderArray = (values: number[]) => {
 
 export const renderGraph = (values: number[]) => {
   const points: Point[] = []
-  const segments: Segment[] = []
+  const edges = []
 
   const MARGIN = 20
   const { width, height } = getSandboxSize()
 
   for (let i = 0; i < values.length; i++) {
-    const x = getX(i)
-    const y = getY(i)
-
-    const point = createPoint(x, y)
-    points.push(point)
-
-    points.sort((a, b) => a.x - b.x)
-
-    for (let i = 1; i < points.length; i++) {
-      const segment = createSegment(points[i], points[i - 1])
-      segments.push(segment)
-
-      if (i > 1) {
-        const segment = createSegment(points[i], points[i - 2])
-        segments.push(segment)
-      }
-    }
-
-    // if (points.length > 1) {
-    //   segments.push(createSegment(points[i], points[i - 1]))
-    // }
-    //
-    // if (i === values.length - 1) {
-    //   segments.push(createSegment(points[i], points[i - 2]))
-    // }
+    const x = calculateXWithMargin()
+    const y = calculateYWithMargin()
+    points.push(createPoint(x, y))
   }
 
-  function getX(i: number) {
-    const t = i / points.length
-    const x = (Math.random() * width) / t
+  // https://github.com/mapbox/delaunator
+  const delaunay = Delaunator.from(points.map((point) => [point.x, point.y]))
 
-    if (x > width / 2) {
-      return x - MARGIN
-    }
+  for (let i = 0; i < delaunay.triangles.length; i += 3) {
+    const point1 = points[delaunay.triangles[i]]
+    const point2 = points[delaunay.triangles[i + 1]]
+    const point3 = points[delaunay.triangles[i + 2]]
 
-    return x + MARGIN
+    edges.push([point1, point2])
+    edges.push([point2, point3])
+    edges.push([point3, point1])
   }
 
-  function getY(i: number) {
-    const t = i / points.length
+  const segments: Segment[] = edges.map(([start, end]) =>
+    createSegment(createPoint(start.x, start.y), createPoint(end.x, end.y))
+  )
 
-    const y = (Math.random() * height) / t
+  function calculateXWithMargin() {
+    const x = Math.random() * width
+    const margin = x > width / 2 ? -MARGIN : MARGIN
 
-    if (y > height / 2) {
-      return y - MARGIN
-    }
-
-    return y + MARGIN
+    return x + margin
   }
 
-  // for (let i = 0; i < points.length - 1; i++) {
-  //   segments.push(createSegment(points[i], points[i + 1]))
-  // }
-  //
-  // for (let i = 0; i < points.length; i++) {
-  //   const greatestIndex = points.length - 1
-  //   let index = i
-  //   while (index !== i) {
-  //     index = Math.random() * greatestIndex
-  //   }
-  //   segments.push(createSegment(points[i], points[index]))
-  // }
+  function calculateYWithMargin() {
+    const y = Math.random() * height
+    const margin = y > height / 2 ? -MARGIN : MARGIN
+
+    return y + margin
+  }
 
   return { points, segments }
 }
