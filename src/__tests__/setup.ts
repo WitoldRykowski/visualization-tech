@@ -1,6 +1,6 @@
 import * as SandboxService from '../services/SandboxService/sandbox.service'
 import * as Column from '../services/SandboxService/elements/Column'
-import * as ArrayService from '../services/ArrayService/array.service'
+import * as Renderer from '../services/SandboxService/Renderer'
 import { Noop } from '../types'
 
 beforeEach(() => {
@@ -38,7 +38,7 @@ beforeEach(() => {
   }
 
   if (!currentTestName.includes('renderArray')) {
-    const renderArray = jest.spyOn(ArrayService, 'renderArray')
+    const renderArray = jest.spyOn(Renderer, 'renderArray')
 
     renderArray.mockImplementation((values: number[]) => {
       return values.map(() => {

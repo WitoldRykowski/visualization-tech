@@ -3,7 +3,8 @@ import {
   DEFAULT_COLOR,
   type MoveAnimation
 } from '@/services/SandboxService/elements/Column'
-import { generateNonSortedArray, renderArray } from '@/services/ArrayService/array.service'
+import { generateNonSortedArray } from '@/services/ArrayService/array.service'
+import { renderArray } from '@/services/SandboxService/Renderer'
 import { drawColumns, initAnimation } from './/SandboxService/sandbox.service'
 import { convertNamedColorToRGB } from '@/utils'
 import type { VariantSetup } from '@/services/SandboxService/types'

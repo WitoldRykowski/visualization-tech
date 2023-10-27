@@ -1,8 +1,6 @@
 import { __testing } from '../services/selection-sort.service'
 import { isArraySortedAscending, isNotSorted } from '../utils/testUtils'
 import { initAnimation } from '../services/SandboxService/sandbox.service'
-import { convertNamedColorToRGB } from '../utils'
-import { DEFAULT_COLOR } from '../services/SandboxService/elements/Column'
 
 describe('', () => {
   test('should initialize algorithm sandbox', () => {

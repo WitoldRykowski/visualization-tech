@@ -1,5 +1,6 @@
 import type { Column, MoveAnimation } from './SandboxService/elements/Column'
-import { generateNonSortedArray, renderArray } from './ArrayService/array.service'
+import { generateNonSortedArray } from './ArrayService/array.service'
+import { renderArray } from '@/services/SandboxService/Renderer'
 import { drawColumns, initAnimation } from './SandboxService/sandbox.service'
 import { convertNamedColorToRGB } from '@/utils'
 import { DEFAULT_COLOR } from './SandboxService/elements/Column'

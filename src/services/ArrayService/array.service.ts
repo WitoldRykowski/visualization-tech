@@ -1,6 +1,3 @@
-import { getSandboxSize } from '@/services/SandboxService/sandbox.service'
-import { Column } from '../SandboxService/elements/Column'
-
 const DEFAULT_ARRAY_SIZE = 40
 
 export const generateSortedArray = (size = DEFAULT_ARRAY_SIZE) => {
@@ -14,6 +11,16 @@ export const generateSortedArray = (size = DEFAULT_ARRAY_SIZE) => {
   return sortedArray
 }
 
+export const generateRandomArray = (size = 10) => {
+  const randomArray = []
+
+  for (let i = 0; i < size; i++) {
+    randomArray.push(Math.floor(Math.random()))
+  }
+
+  return randomArray
+}
+
 export const generateNonSortedArray = (size = DEFAULT_ARRAY_SIZE) => {
   const nonSortedArray: number[] = []
 
@@ -22,27 +29,4 @@ export const generateNonSortedArray = (size = DEFAULT_ARRAY_SIZE) => {
   }
 
   return nonSortedArray
-}
-
-export const renderArray = (values: number[]) => {
-  const MARGIN = 30
-  const { width, height } = getSandboxSize()
-  const valuesSize = values.length
-  const columns: Column[] = []
-  const spacing = (width - MARGIN * 2) / valuesSize
-
-  for (let i = 0; i < valuesSize; i++) {
-    const xAxis = i * spacing + spacing / 2 + MARGIN
-    const yAxis = height - MARGIN - i * 3
-    const columnHeight = 400 * values[i]
-
-    columns[i] = Column({
-      x: xAxis,
-      y: yAxis,
-      width: spacing - 4,
-      height: columnHeight
-    })
-  }
-
-  return columns
 }
