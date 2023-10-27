@@ -3,12 +3,13 @@ import { generateNonSortedArray, renderArray } from './ArrayService/array.servic
 import { drawColumns, initAnimation } from './SandboxService/sandbox.service'
 import { convertNamedColorToRGB } from '@/utils'
 import { DEFAULT_COLOR } from './ArrayService/Column'
+import type { VariantSetup } from '@/services/SandboxService/types'
 
 let moves: Move[] = []
 let values: number[] = []
 let columns: Column[] = []
 
-export const initSelectionSort = () => {
+const initSelectionSort = () => {
   initAnimation(init, animateSelectionSort)
 
   function init() {
@@ -18,7 +19,7 @@ export const initSelectionSort = () => {
   }
 }
 
-export const visualizeSelectionSort = () => {
+const visualizeSelectionSort = () => {
   moves = selectionSort(values)
 }
 
@@ -103,6 +104,11 @@ function animateSelectionSort() {
 
     columns[minIndex].changeColor(convertNamedColorToRGB('negative'))
   }
+}
+
+export const SelectionSort: VariantSetup = {
+  init: initSelectionSort,
+  visualize: visualizeSelectionSort
 }
 
 type Move = {

@@ -54,6 +54,7 @@ export const Column = (columnConfig: ColumnConfig): Column => {
   function jump(config?: Partial<AnimationConfig>) {
     const { keepColor, frameCount } = getAnimationConfig(config)
     const color = convertNamedColorToRGB('warning')
+    const baseY = column.y
 
     if (color && color !== column.color) {
       changeColor(color)
@@ -62,7 +63,7 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     for (let i = 0; i <= frameCount; i++) {
       const tickRate = i / frameCount
       const u = Math.sin(tickRate * Math.PI)
-      const y = i < frameCount ? column.y - u * column.width : 0
+      const y = i === frameCount ? baseY : column.y - u * column.width
 
       column.queue.push({
         x: column.x,

@@ -1,16 +1,12 @@
-import {
-  initInsertionSort,
-  visualizeInsertionSort,
-  __testing
-} from '../services/insertion-sort.service'
+import { __testing } from '../services/insertion-sort.service'
 import { generateRandomColumn, isArraySortedAscending, isNotSorted } from '../utils/testUtils'
 import { initAnimation } from '../services/SandboxService/sandbox.service'
 import * as ArrayService from '../services/ArrayService/array.service'
 
 describe('Insertion Sort', () => {
   test('should initialize algorithm sandbox', () => {
+    const { values, columns, moves, animateInsertionSort, initInsertionSort } = __testing()
     initInsertionSort()
-    const { values, columns, moves, animateInsertionSort } = __testing()
 
     expect(moves.length).toBe(0)
     expect(columns.length).toBe(values.length)
@@ -20,9 +16,9 @@ describe('Insertion Sort', () => {
   })
 
   test('should start visualizing algorithm', () => {
+    const { moves, values, initInsertionSort, visualizeInsertionSort } = __testing()
     initInsertionSort()
     visualizeInsertionSort()
-    const { moves, values } = __testing()
 
     expect(moves.length).toBeGreaterThan(0)
     expect(isArraySortedAscending(values)).toBe(true)
@@ -35,10 +31,11 @@ describe('Insertion Sort', () => {
       return values.map((value) => generateRandomColumn({ height: 10 * value }))
     })
 
+    const { moves, columns, animateInsertionSort, initInsertionSort, visualizeInsertionSort } =
+      __testing()
+
     initInsertionSort()
     visualizeInsertionSort()
-
-    const { moves, columns, animateInsertionSort } = __testing()
     let movesLength = moves.length
 
     while (movesLength > 0) {

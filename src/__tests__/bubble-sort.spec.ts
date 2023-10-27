@@ -1,9 +1,11 @@
-import { initBubbleSort, visualizeBubbleSort, __testing } from '../services/bubble-sort.service'
+import { __testing } from '../services/bubble-sort.service'
 import * as ArrayService from '../services/ArrayService/array.service'
 import { generateRandomColumn, isArraySortedAscending, isNotSorted } from '../utils/testUtils'
 import { initAnimation } from '../services/SandboxService/sandbox.service'
 
 const setup = () => {
+  const { initBubbleSort, visualizeBubbleSort } = __testing()
+
   initBubbleSort()
 
   const renderArray = jest.spyOn(ArrayService, 'renderArray')
@@ -19,9 +21,9 @@ const setup = () => {
 
 describe('Bubble Sort', () => {
   test('should initialize algorithm sandbox', () => {
-    initBubbleSort()
+    const { values, columns, moves, animateBubbleSort, initBubbleSort } = __testing()
 
-    const { values, columns, moves, animateBubbleSort } = __testing()
+    initBubbleSort()
 
     expect(moves.length).toBe(0)
     expect(columns.length).toBe(values.length)
@@ -31,9 +33,10 @@ describe('Bubble Sort', () => {
   })
 
   test('should start visualizing algorithm', () => {
+    const { moves, values, initBubbleSort, visualizeBubbleSort } = __testing()
+
     initBubbleSort()
     visualizeBubbleSort()
-    const { moves, values } = __testing()
 
     expect(moves.length).toBeGreaterThan(0)
     expect(isArraySortedAscending(values)).toBe(true)

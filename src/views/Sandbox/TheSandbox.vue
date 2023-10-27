@@ -4,7 +4,7 @@ import {
   initSandbox,
   stopAnimation,
   VariantInjectionKey,
-  VariantSetups
+  Variants
 } from '@/services/SandboxService/sandbox.service'
 import { AppButton } from '@/components'
 
@@ -15,11 +15,11 @@ const visualize = () => {
   if (!variant?.value) return
 
   if (!isFirstRun.value) {
-    VariantSetups[variant.value].init()
+    Variants[variant.value].init()
   }
 
   isFirstRun.value = false
-  VariantSetups[variant.value].visualize()
+  Variants[variant.value].visualize()
 }
 
 const createSandbox = () => {
@@ -27,7 +27,7 @@ const createSandbox = () => {
 
   if (!variant?.value) return
 
-  VariantSetups[variant.value].init()
+  Variants[variant.value].init()
 }
 
 onMounted(createSandbox)

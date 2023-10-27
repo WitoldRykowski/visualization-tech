@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import VariantsListCard from './components/VariantsListCard.vue'
-import {
-  ALGORITHMS,
-  DATA_STRUCTURES,
-  type VariantName
-} from '@/services/SandboxService/sandbox.service'
+import { ALGORITHMS, type VariantName } from '@/services/SandboxService/sandbox.service'
 import { computed } from 'vue'
 import { useMainStore } from '@/stores/main'
 
@@ -18,12 +14,6 @@ const compareSearchToVariant = (variant: VariantName) => {
   return (variant as string).toLowerCase().includes(transformedSearch)
 }
 
-const dataStructuresList = computed(() => {
-  if (!search.value) return DATA_STRUCTURES
-
-  return DATA_STRUCTURES.filter(({ name }) => compareSearchToVariant(name))
-})
-
 const algorithmsList = computed(() => {
   if (!search.value) return ALGORITHMS
 
@@ -33,25 +23,11 @@ const algorithmsList = computed(() => {
 
 <template>
   <div class="variants-list">
-    <span class="list-title">Algorithms</span>
     <div class="variants-list__algorithms">
       <VariantsListCard v-for="algorithm in algorithmsList" :key="algorithm" :variant="algorithm" />
 
       <div v-show="algorithmsList.length === 0" class="empty-list">
         List is empty! Try to search for another algorithm.
-      </div>
-    </div>
-
-    <span class="list-title">Data Structures</span>
-    <div class="variants-list__data-structures">
-      <VariantsListCard
-        v-for="dataStructure in dataStructuresList"
-        :key="dataStructure"
-        :variant="dataStructure"
-      />
-
-      <div v-show="dataStructuresList.length === 0" class="empty-list">
-        List is empty! Try to search for another data structure.
       </div>
     </div>
   </div>
@@ -64,8 +40,7 @@ const algorithmsList = computed(() => {
   gap: 1rem;
 }
 
-.variants-list__algorithms,
-.variants-list__data-structures {
+.variants-list__algorithms {
   @include flex-row(start, start, wrap);
   gap: 0.5rem;
   width: 100%;

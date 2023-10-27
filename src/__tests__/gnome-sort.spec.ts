@@ -1,4 +1,4 @@
-import { initGnomeSort, visualizeGnomeSort, __testing } from '../services/gnome-sort.service'
+import { __testing } from '../services/gnome-sort.service'
 import { generateRandomColumn, isArraySortedAscending, isNotSorted } from '../utils/testUtils'
 import { initAnimation } from '../services/SandboxService/sandbox.service'
 import * as ArrayService from '../services/ArrayService/array.service'
@@ -7,8 +7,8 @@ import { DEFAULT_COLOR } from '../services/ArrayService/Column'
 
 describe('Gnome Sort', () => {
   test('should initialize algorithm sandbox', () => {
+    const { values, columns, moves, animateGnomeSort, initGnomeSort } = __testing()
     initGnomeSort()
-    const { values, columns, moves, animateGnomeSort } = __testing()
 
     expect(moves.length).toBe(0)
     expect(columns.length).toBe(values.length)
@@ -18,9 +18,9 @@ describe('Gnome Sort', () => {
   })
 
   test('should start visualizing algorithm', () => {
+    const { moves, values, initGnomeSort, visualizeGnomeSort } = __testing()
     initGnomeSort()
     visualizeGnomeSort()
-    const { moves, values } = __testing()
 
     expect(moves.length).toBeGreaterThan(0)
     expect(isArraySortedAscending(values)).toBe(true)
@@ -33,10 +33,10 @@ describe('Gnome Sort', () => {
       return values.map((value) => generateRandomColumn({ height: 10 * value }))
     })
 
+    const { moves, columns, animateGnomeSort, initGnomeSort, visualizeGnomeSort } = __testing()
+
     initGnomeSort()
     visualizeGnomeSort()
-
-    const { moves, columns, animateGnomeSort } = __testing()
     let movesLength = moves.length
 
     while (movesLength > 0) {

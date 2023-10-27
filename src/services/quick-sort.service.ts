@@ -3,12 +3,13 @@ import { generateNonSortedArray, renderArray } from '@/services/ArrayService/arr
 import { drawColumns, initAnimation } from '@/services/SandboxService/sandbox.service'
 import { convertNamedColorToRGB } from '@/utils'
 import type { ColorRGBA } from '@/types'
+import type { VariantSetup } from '@/services/SandboxService/types'
 
 let moves: Move[] = []
 let values: number[] = []
 let columns: Column[] = []
 
-export const initQuickSort = () => {
+const initQuickSort = () => {
   initAnimation(init, animateQuickSort)
 
   function init() {
@@ -18,7 +19,7 @@ export const initQuickSort = () => {
   }
 }
 
-export const visualizeQuickSort = () => {
+const visualizeQuickSort = () => {
   moves = quickSort(values, 0, values.length - 1)
 }
 
@@ -167,6 +168,11 @@ function animateQuickSort() {
       columns[pivotIndex].changeColor(negative)
     }
   }
+}
+
+export const QuickSort: VariantSetup = {
+  init: initQuickSort,
+  visualize: visualizeQuickSort
 }
 
 type Move = {

@@ -1,15 +1,12 @@
-import {
-  initBinarySearch,
-  visualizeBinarySearch,
-  __testing,
-  COLLAPSE_DELAY
-} from '../services/binary-search.service'
+import { __testing, COLLAPSE_DELAY } from '../services/binary-search.service'
 import { generateRandomColumn, isArraySortedAscending } from '../utils/testUtils'
 import { initAnimation } from '../services/SandboxService/sandbox.service'
 import * as ArrayService from '../services/ArrayService/array.service'
 import { COLLAPSED_COLUMN_HEIGHT } from '../services/ArrayService/Column'
 
 const setup = () => {
+  const { initBinarySearch, visualizeBinarySearch } = __testing()
+
   initBinarySearch()
 
   const renderArray = jest.spyOn(ArrayService, 'renderArray')
@@ -25,9 +22,9 @@ const setup = () => {
 
 describe('Binary Search', () => {
   test('should initialize algorithm sandbox', () => {
-    initBinarySearch()
+    const { values, columns, moves, animateBinarySearch, initBinarySearch } = __testing()
 
-    const { values, columns, moves, animateBinarySearch } = __testing()
+    initBinarySearch()
 
     expect(moves.length).toBe(0)
     expect(columns.length).toBe(values.length)

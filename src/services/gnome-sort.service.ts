@@ -2,12 +2,13 @@ import { Column, DEFAULT_COLOR, type MoveAnimation } from '@/services/ArrayServi
 import { generateNonSortedArray, renderArray } from '@/services/ArrayService/array.service'
 import { drawColumns, initAnimation } from './/SandboxService/sandbox.service'
 import { convertNamedColorToRGB } from '@/utils'
+import type { VariantSetup } from '@/services/SandboxService/types'
 
 let moves: Move[] = []
 let values: number[] = []
 let columns: Column[] = []
 
-export const initGnomeSort = () => {
+const initGnomeSort = () => {
   initAnimation(init, animateGnomeSort)
 
   function init() {
@@ -17,7 +18,7 @@ export const initGnomeSort = () => {
   }
 }
 
-export const visualizeGnomeSort = () => {
+const visualizeGnomeSort = () => {
   moves = gnomeSort(values)
 }
 
@@ -80,8 +81,15 @@ function animateGnomeSort() {
   }
 }
 
+export const GnomeSort: VariantSetup = {
+  init: initGnomeSort,
+  visualize: visualizeGnomeSort
+}
+
 export const __testing = () => ({
   animateGnomeSort,
+  initGnomeSort,
+  visualizeGnomeSort,
   moves,
   values,
   columns

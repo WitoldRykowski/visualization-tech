@@ -7,6 +7,7 @@ import {
 import { generateSortedArray, renderArray } from '@/services/ArrayService/array.service'
 import { drawColumns, initAnimation } from '@/services/SandboxService/sandbox.service'
 import { convertNamedColorToRGB } from '@/utils'
+import type { VariantSetup } from '@/services/SandboxService/types'
 
 export const COLLAPSE_DELAY = 15
 
@@ -14,7 +15,7 @@ let moves: Move[] = []
 let values: number[] = []
 let columns: Column[] = []
 
-export const initBinarySearch = () => {
+const initBinarySearch = () => {
   initAnimation(init, animateBinarySearch)
 
   function init() {
@@ -24,7 +25,7 @@ export const initBinarySearch = () => {
   }
 }
 
-export const visualizeBinarySearch = () => {
+const visualizeBinarySearch = () => {
   columns = renderArray(values)
 
   moves = binarySearch(values)
@@ -110,11 +111,18 @@ const animateBinarySearch = () => {
   }
 }
 
+export const BinarySearch: VariantSetup = {
+  init: initBinarySearch,
+  visualize: visualizeBinarySearch
+}
+
 export const __testing = () => ({
   values,
   moves,
   columns,
-  animateBinarySearch
+  animateBinarySearch,
+  visualizeBinarySearch,
+  initBinarySearch
 })
 
 type Move = {

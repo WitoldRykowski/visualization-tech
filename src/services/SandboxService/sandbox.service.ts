@@ -60,37 +60,18 @@ export const initAnimation = (callback: Noop, animation: Noop) => {
   animate()
 }
 
-const POSSIBLE_ALGORITHM_TAGS = ['sorting', 'searching'] as const
-const POSSIBLE_DATA_STRUCTURE_TAGS = [
-  'stacks',
-  'queues',
-  'linked-lists',
-  'trees',
-  'graphs',
-  'heaps'
-] as const
+const POSSIBLE_TAGS = ['sorting', 'searching'] as const
 
-type PossibleAlgorithmTags = readonly (typeof POSSIBLE_ALGORITHM_TAGS)[number][]
-type PossibleDataStructuresTags = readonly (typeof POSSIBLE_DATA_STRUCTURE_TAGS)[number][]
+type PossibleTags = readonly (typeof POSSIBLE_TAGS)[number][]
 
-export type Algorithm = {
+export type VariantName = (typeof ALGORITHMS)[number]['name'] | undefined
+
+export type Variant = {
   name: string
-  tags: PossibleAlgorithmTags
+  tags: PossibleTags
 }
 
-export type DataStructure = {
-  name: string
-  tags: PossibleDataStructuresTags
-}
-
-export type VariantName =
-  | (typeof ALGORITHMS)[number]['name']
-  | (typeof DATA_STRUCTURES)[number]['name']
-  | undefined
-
-export type Variant = Algorithm | DataStructure
-
-export const ALGORITHMS: readonly Algorithm[] = [
+export const ALGORITHMS: readonly Variant[] = [
   { name: 'BinarySearch', tags: ['searching'] },
   { name: 'BubbleSort', tags: ['sorting'] },
   { name: 'GnomeSort', tags: ['sorting'] },
@@ -99,11 +80,6 @@ export const ALGORITHMS: readonly Algorithm[] = [
   { name: 'QuickSort', tags: ['sorting'] }
 ]
 
-export const DATA_STRUCTURES: readonly DataStructure[] = [
-  { name: 'Stack', tags: ['stacks'] },
-  { name: 'Queue', tags: ['queues'] }
-]
-
 export const VariantInjectionKey = Symbol() as InjectionKey<ComputedRef<VariantName>>
 
-export * from './VariantSetups'
+export * from './variants'

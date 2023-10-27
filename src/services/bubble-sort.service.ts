@@ -1,12 +1,13 @@
 import { generateNonSortedArray, renderArray } from './ArrayService/array.service'
 import type { Column, MoveAnimation } from './ArrayService/Column'
 import { drawColumns, initAnimation } from './SandboxService/sandbox.service'
+import type { VariantSetup } from '@/services/SandboxService/types'
 
 let moves: Move[] = []
 let values: number[] = []
 let columns: Column[] = []
 
-export const initBubbleSort = () => {
+const initBubbleSort = () => {
   initAnimation(init, animateBubbleSort)
 
   function init() {
@@ -16,7 +17,7 @@ export const initBubbleSort = () => {
   }
 }
 
-export const visualizeBubbleSort = () => {
+const visualizeBubbleSort = () => {
   moves = bubbleSort(values)
 }
 
@@ -72,11 +73,18 @@ function animateBubbleSort() {
   }
 }
 
+export const BubbleSort: VariantSetup = {
+  init: initBubbleSort,
+  visualize: visualizeBubbleSort
+}
+
 export const __testing = () => ({
   values,
   columns,
   moves,
-  animateBubbleSort
+  animateBubbleSort,
+  initBubbleSort,
+  visualizeBubbleSort
 })
 
 type Move = {
