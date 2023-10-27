@@ -3,7 +3,7 @@ import {
   Column,
   DEFAULT_COLOR,
   type MoveAnimation
-} from '@/services/ArrayService/Column'
+} from '@/services/SandboxService/elements/Column'
 import { generateSortedArray, renderArray } from '@/services/ArrayService/array.service'
 import { drawColumns, initAnimation } from '@/services/SandboxService/sandbox.service'
 import { convertNamedColorToRGB } from '@/utils'
@@ -117,9 +117,7 @@ export const BinarySearch: VariantSetup = {
 }
 
 export const __testing = () => ({
-  values,
-  moves,
-  columns,
+  getState: () => ({ values, moves, columns }),
   animateBinarySearch,
   visualizeBinarySearch,
   initBinarySearch

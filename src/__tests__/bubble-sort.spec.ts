@@ -4,7 +4,7 @@ import { generateRandomColumn, isArraySortedAscending, isNotSorted } from '../ut
 import { initAnimation } from '../services/SandboxService/sandbox.service'
 
 const setup = () => {
-  const { initBubbleSort, visualizeBubbleSort } = __testing()
+  const { initBubbleSort, visualizeBubbleSort } = __testing
 
   initBubbleSort()
 
@@ -21,9 +21,11 @@ const setup = () => {
 
 describe('Bubble Sort', () => {
   test('should initialize algorithm sandbox', () => {
-    const { values, columns, moves, animateBubbleSort, initBubbleSort } = __testing()
+    const { getState, animateBubbleSort, initBubbleSort } = __testing
 
     initBubbleSort()
+
+    const { moves, columns, values } = getState()
 
     expect(moves.length).toBe(0)
     expect(columns.length).toBe(values.length)
@@ -33,10 +35,12 @@ describe('Bubble Sort', () => {
   })
 
   test('should start visualizing algorithm', () => {
-    const { moves, values, initBubbleSort, visualizeBubbleSort } = __testing()
+    const { getState, visualizeBubbleSort, initBubbleSort } = __testing
 
     initBubbleSort()
     visualizeBubbleSort()
+
+    const { moves, values } = getState()
 
     expect(moves.length).toBeGreaterThan(0)
     expect(isArraySortedAscending(values)).toBe(true)
@@ -44,13 +48,14 @@ describe('Bubble Sort', () => {
 
   test('should visualize every move correctly', () => {
     setup()
-    const { moves, animateBubbleSort } = __testing()
+    const { getState, animateBubbleSort } = __testing
+
+    const { moves, columns } = getState()
+
     let movesLength = moves.length
 
     while (movesLength > 0) {
-      const { moves, columns } = __testing()
-      const move = moves[0]
-      const { animation, indexes } = move
+      const { animation, indexes } = moves[0]
       const [i, j] = indexes
 
       animateBubbleSort()
@@ -70,6 +75,6 @@ describe('Bubble Sort', () => {
       movesLength--
     }
 
-    expect(__testing().moves.length).toBe(0)
+    expect(moves.length).toBe(0)
   })
 })

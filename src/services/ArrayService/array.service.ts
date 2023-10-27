@@ -1,5 +1,5 @@
 import { getSandboxSize } from '@/services/SandboxService/sandbox.service'
-import { Column } from './Column'
+import { Column } from '../SandboxService/elements/Column'
 
 const DEFAULT_ARRAY_SIZE = 40
 

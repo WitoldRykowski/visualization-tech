@@ -3,7 +3,7 @@ import {
   generateSortedArray,
   renderArray
 } from '../services/ArrayService/array.service'
-import { Column } from '../services/ArrayService/Column'
+import { Column } from '../services/SandboxService/elements/Column'
 import { isArraySortedAscending } from '../utils/testUtils'
 
 describe('Array Service', () => {

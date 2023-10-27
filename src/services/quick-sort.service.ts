@@ -1,4 +1,4 @@
-import type { Column, MoveAnimation } from '@/services/ArrayService/Column'
+import type { Column, MoveAnimation } from '@/services/SandboxService/elements/Column'
 import { generateNonSortedArray, renderArray } from '@/services/ArrayService/array.service'
 import { drawColumns, initAnimation } from '@/services/SandboxService/sandbox.service'
 import { convertNamedColorToRGB } from '@/utils'

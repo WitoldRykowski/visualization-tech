@@ -3,13 +3,15 @@ import { generateRandomColumn, isArraySortedAscending, isNotSorted } from '../ut
 import { initAnimation } from '../services/SandboxService/sandbox.service'
 import * as ArrayService from '../services/ArrayService/array.service'
 import { convertNamedColorToRGB } from '../utils'
-import { DEFAULT_COLOR } from '../services/ArrayService/Column'
+import { DEFAULT_COLOR } from '../services/SandboxService/elements/Column'
 
 describe('Gnome Sort', () => {
   test('should initialize algorithm sandbox', () => {
-    const { values, columns, moves, animateGnomeSort, initGnomeSort } = __testing()
+    const { getState, animateGnomeSort, initGnomeSort } = __testing()
+
     initGnomeSort()
 
+    const { values, columns, moves } = getState()
     expect(moves.length).toBe(0)
     expect(columns.length).toBe(values.length)
     expect(isNotSorted(values)).toBe(true)
@@ -18,9 +20,12 @@ describe('Gnome Sort', () => {
   })
 
   test('should start visualizing algorithm', () => {
-    const { moves, values, initGnomeSort, visualizeGnomeSort } = __testing()
+    const { getState, initGnomeSort, visualizeGnomeSort } = __testing()
+
     initGnomeSort()
     visualizeGnomeSort()
+
+    const { values, moves } = getState()
 
     expect(moves.length).toBeGreaterThan(0)
     expect(isArraySortedAscending(values)).toBe(true)
@@ -33,15 +38,17 @@ describe('Gnome Sort', () => {
       return values.map((value) => generateRandomColumn({ height: 10 * value }))
     })
 
-    const { moves, columns, animateGnomeSort, initGnomeSort, visualizeGnomeSort } = __testing()
+    const { getState, animateGnomeSort, initGnomeSort, visualizeGnomeSort } = __testing()
 
     initGnomeSort()
     visualizeGnomeSort()
+    const { columns, moves } = getState()
+
     let movesLength = moves.length
 
     while (movesLength > 0) {
-      const move = moves[0]
-      const { animation, left, right } = move
+      const { moves } = getState()
+      const { animation, left, right } = moves[0]
 
       animateGnomeSort()
 
@@ -70,6 +77,6 @@ describe('Gnome Sort', () => {
       movesLength--
     }
 
-    expect(__testing().moves.length).toBe(0)
+    expect(getState().moves.length).toBe(0)
   })
 })

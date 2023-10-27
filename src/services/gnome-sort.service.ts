@@ -1,4 +1,8 @@
-import { Column, DEFAULT_COLOR, type MoveAnimation } from '@/services/ArrayService/Column'
+import {
+  Column,
+  DEFAULT_COLOR,
+  type MoveAnimation
+} from '@/services/SandboxService/elements/Column'
 import { generateNonSortedArray, renderArray } from '@/services/ArrayService/array.service'
 import { drawColumns, initAnimation } from './/SandboxService/sandbox.service'
 import { convertNamedColorToRGB } from '@/utils'
@@ -90,9 +94,7 @@ export const __testing = () => ({
   animateGnomeSort,
   initGnomeSort,
   visualizeGnomeSort,
-  moves,
-  values,
-  columns
+  getState: () => ({ moves, values, columns })
 })
 
 type Move = {

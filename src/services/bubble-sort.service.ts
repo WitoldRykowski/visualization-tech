@@ -1,7 +1,8 @@
 import { generateNonSortedArray, renderArray } from './ArrayService/array.service'
-import type { Column, MoveAnimation } from './ArrayService/Column'
+import type { Column, MoveAnimation } from './SandboxService/elements/Column'
 import { drawColumns, initAnimation } from './SandboxService/sandbox.service'
 import type { VariantSetup } from '@/services/SandboxService/types'
+import { reactive } from 'vue'
 
 let moves: Move[] = []
 let values: number[] = []
@@ -78,14 +79,12 @@ export const BubbleSort: VariantSetup = {
   visualize: visualizeBubbleSort
 }
 
-export const __testing = () => ({
-  values,
-  columns,
-  moves,
+export const __testing = {
   animateBubbleSort,
   initBubbleSort,
-  visualizeBubbleSort
-})
+  visualizeBubbleSort,
+  getState: () => ({ values, columns, moves })
+}
 
 type Move = {
   indexes: [number, number]

@@ -1,5 +1,5 @@
 import { generateNonSortedArray, renderArray } from './ArrayService/array.service'
-import type { Column, MoveAnimation } from './ArrayService/Column'
+import type { Column, MoveAnimation } from './SandboxService/elements/Column'
 import { drawColumns, initAnimation } from './SandboxService/sandbox.service'
 import type { VariantSetup } from '@/services/SandboxService/types'
 
@@ -66,9 +66,7 @@ export const InsertionSort: VariantSetup = {
 }
 
 export const __testing = () => ({
-  moves,
-  columns,
-  values,
+  getState: () => ({ moves, columns, values }),
   animateInsertionSort,
   initInsertionSort,
   visualizeInsertionSort

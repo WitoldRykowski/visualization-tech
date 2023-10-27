@@ -1,5 +1,5 @@
 import * as SandboxService from '../services/SandboxService/sandbox.service'
-import * as Column from '../services/ArrayService/Column'
+import * as Column from '../services/SandboxService/elements/Column'
 import { Noop } from '../types'
 
 beforeEach(() => {

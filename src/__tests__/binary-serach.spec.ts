@@ -2,7 +2,7 @@ import { __testing, COLLAPSE_DELAY } from '../services/binary-search.service'
 import { generateRandomColumn, isArraySortedAscending } from '../utils/testUtils'
 import { initAnimation } from '../services/SandboxService/sandbox.service'
 import * as ArrayService from '../services/ArrayService/array.service'
-import { COLLAPSED_COLUMN_HEIGHT } from '../services/ArrayService/Column'
+import { COLLAPSED_COLUMN_HEIGHT } from '../services/SandboxService/elements/Column'
 
 const setup = () => {
   const { initBinarySearch, visualizeBinarySearch } = __testing()
@@ -22,9 +22,11 @@ const setup = () => {
 
 describe('Binary Search', () => {
   test('should initialize algorithm sandbox', () => {
-    const { values, columns, moves, animateBinarySearch, initBinarySearch } = __testing()
+    const { getState, animateBinarySearch, initBinarySearch } = __testing()
 
     initBinarySearch()
+
+    const { values, columns, moves } = getState()
 
     expect(moves.length).toBe(0)
     expect(columns.length).toBe(values.length)
@@ -35,7 +37,8 @@ describe('Binary Search', () => {
 
   test('should start visualizing algorithm', () => {
     const { renderArray } = setup()
-    const { values, moves } = __testing()
+    const { getState } = __testing()
+    const { values, moves } = getState()
 
     expect(renderArray).toHaveBeenCalledTimes(1)
     expect(renderArray).toHaveBeenCalledWith(values)
@@ -44,13 +47,12 @@ describe('Binary Search', () => {
 
   test('should visualize every step correctly', () => {
     setup()
-    const { moves, animateBinarySearch } = __testing()
-    let movesLength = moves.length
+    const { getState, animateBinarySearch } = __testing()
+    let movesLength = getState().moves.length
 
     while (movesLength > 0) {
-      const { moves, columns, values } = __testing()
-      const move = moves[0]
-      const { animation, guess, target, min, max } = move
+      const { values, columns, moves } = getState()
+      const { animation, guess, target, min, max } = moves[0]
 
       animateBinarySearch()
 
@@ -86,6 +88,6 @@ describe('Binary Search', () => {
       movesLength--
     }
 
-    expect(__testing().moves.length).toBe(0)
+    expect(getState().moves.length).toBe(0)
   })
 })

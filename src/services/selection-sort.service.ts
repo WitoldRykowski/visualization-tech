@@ -1,8 +1,8 @@
-import type { Column, MoveAnimation } from './ArrayService/Column'
+import type { Column, MoveAnimation } from './SandboxService/elements/Column'
 import { generateNonSortedArray, renderArray } from './ArrayService/array.service'
 import { drawColumns, initAnimation } from './SandboxService/sandbox.service'
 import { convertNamedColorToRGB } from '@/utils'
-import { DEFAULT_COLOR } from './ArrayService/Column'
+import { DEFAULT_COLOR } from './SandboxService/elements/Column'
 import type { VariantSetup } from '@/services/SandboxService/types'
 
 let moves: Move[] = []
