@@ -4,7 +4,7 @@ import { generateRandomArray } from '@/services/ArrayService/array.service'
 import { type Point } from '@/services/SandboxService/elements/Point'
 import { type Segment } from '@/services/SandboxService/elements/Segment'
 import { Graph } from './SandboxService/elements/Graph'
-import { renderGraph } from '@/services/SandboxService/Renderer'
+import { renderGraph } from '@/services/SandboxService/Creator'
 
 let moves: Move[] = []
 let values: number[] = []

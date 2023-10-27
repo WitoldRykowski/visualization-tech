@@ -5,7 +5,7 @@ import {
   type MoveAnimation
 } from '@/services/SandboxService/elements/Column'
 import { generateSortedArray } from '@/services/ArrayService/array.service'
-import { renderArray } from '@/services/SandboxService/Renderer'
+import { renderArray } from '@/services/SandboxService/Creator'
 import { drawColumns, initAnimation } from '@/services/SandboxService/sandbox.service'
 import { convertNamedColorToRGB } from '@/utils'
 import type { VariantSetup } from '@/services/SandboxService/types'

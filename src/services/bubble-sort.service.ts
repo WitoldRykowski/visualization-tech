@@ -1,5 +1,5 @@
 import { generateNonSortedArray } from './ArrayService/array.service'
-import { renderArray } from '@/services/SandboxService/Renderer'
+import { renderArray } from '@/services/SandboxService/Creator'
 import type { Column, MoveAnimation } from './SandboxService/elements/Column'
 import { drawColumns, initAnimation } from './SandboxService/sandbox.service'
 import type { VariantSetup } from '@/services/SandboxService/types'

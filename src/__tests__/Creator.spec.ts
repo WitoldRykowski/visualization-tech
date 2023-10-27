@@ -1,4 +1,4 @@
-import { renderArray } from '../services/SandboxService/Renderer'
+import { renderArray } from '../services/SandboxService/Creator'
 import { Column } from '../services/SandboxService/elements/Column'
 
 describe('Renderer', () => {
