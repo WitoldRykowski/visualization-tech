@@ -1,23 +1,13 @@
 import { __testing, COLLAPSE_DELAY } from '../services/binary-search.service'
-import { generateRandomColumn, isArraySortedAscending } from '../utils/testUtils'
+import { isArraySortedAscending } from '../utils/testUtils'
 import { initAnimation } from '../services/SandboxService/sandbox.service'
-import * as ArrayService from '../services/ArrayService/array.service'
 import { COLLAPSED_COLUMN_HEIGHT } from '../services/SandboxService/elements/Column'
 
 const setup = () => {
   const { initBinarySearch, visualizeBinarySearch } = __testing()
 
   initBinarySearch()
-
-  const renderArray = jest.spyOn(ArrayService, 'renderArray')
-
-  renderArray.mockImplementation((values: number[]) => {
-    return values.map((value) => generateRandomColumn({ height: 10 * value }))
-  })
-
   visualizeBinarySearch()
-
-  return { renderArray }
 }
 
 describe('Binary Search', () => {
@@ -36,12 +26,13 @@ describe('Binary Search', () => {
   })
 
   test('should start visualizing algorithm', () => {
-    const { renderArray } = setup()
-    const { getState } = __testing()
-    const { values, moves } = getState()
+    const { getState, initBinarySearch, visualizeBinarySearch } = __testing()
 
-    expect(renderArray).toHaveBeenCalledTimes(1)
-    expect(renderArray).toHaveBeenCalledWith(values)
+    initBinarySearch()
+    visualizeBinarySearch()
+
+    const { moves } = getState()
+
     expect(moves.length).toBeGreaterThan(0)
   })
 

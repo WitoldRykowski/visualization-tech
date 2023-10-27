@@ -78,7 +78,7 @@ function animateSelectionSort() {
     handleSwap()
   } else if (animation === 'changeColor') {
     handleChangeColor()
-  } else {
+  } else if (j !== -1) {
     columns[j].jump()
   }
 
@@ -110,6 +110,13 @@ export const SelectionSort: VariantSetup = {
   init: initSelectionSort,
   visualize: visualizeSelectionSort
 }
+
+export const __testing = () => ({
+  getState: () => ({ values, columns, moves }),
+  initSelectionSort,
+  visualizeSelectionSort,
+  animateSelectionSort
+})
 
 type Move = {
   minIndex: number

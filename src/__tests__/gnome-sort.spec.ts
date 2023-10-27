@@ -1,7 +1,6 @@
 import { __testing } from '../services/gnome-sort.service'
-import { generateRandomColumn, isArraySortedAscending, isNotSorted } from '../utils/testUtils'
+import { isArraySortedAscending, isNotSorted } from '../utils/testUtils'
 import { initAnimation } from '../services/SandboxService/sandbox.service'
-import * as ArrayService from '../services/ArrayService/array.service'
 import { convertNamedColorToRGB } from '../utils'
 import { DEFAULT_COLOR } from '../services/SandboxService/elements/Column'
 
@@ -32,12 +31,6 @@ describe('Gnome Sort', () => {
   })
 
   test('should visualize every step correctly', () => {
-    const renderArray = jest.spyOn(ArrayService, 'renderArray')
-
-    renderArray.mockImplementation((values: number[]) => {
-      return values.map((value) => generateRandomColumn({ height: 10 * value }))
-    })
-
     const { getState, animateGnomeSort, initGnomeSort, visualizeGnomeSort } = __testing()
 
     initGnomeSort()

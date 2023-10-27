@@ -1,22 +1,12 @@
 import { __testing } from '../services/bubble-sort.service'
-import * as ArrayService from '../services/ArrayService/array.service'
-import { generateRandomColumn, isArraySortedAscending, isNotSorted } from '../utils/testUtils'
+import { isArraySortedAscending, isNotSorted } from '../utils/testUtils'
 import { initAnimation } from '../services/SandboxService/sandbox.service'
 
 const setup = () => {
   const { initBubbleSort, visualizeBubbleSort } = __testing
 
   initBubbleSort()
-
-  const renderArray = jest.spyOn(ArrayService, 'renderArray')
-
-  renderArray.mockImplementation((values: number[]) => {
-    return values.map((value) => generateRandomColumn({ height: 10 * value }))
-  })
-
   visualizeBubbleSort()
-
-  return { renderArray }
 }
 
 describe('Bubble Sort', () => {

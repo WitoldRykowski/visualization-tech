@@ -1,5 +1,6 @@
 import * as SandboxService from '../services/SandboxService/sandbox.service'
 import * as Column from '../services/SandboxService/elements/Column'
+import * as ArrayService from '../services/ArrayService/array.service'
 import { Noop } from '../types'
 
 beforeEach(() => {
@@ -33,6 +34,21 @@ beforeEach(() => {
         collapse: jest.fn((config) => config),
         changeColor: jest.fn((config) => config)
       }
+    })
+  }
+
+  if (!currentTestName.includes('renderArray')) {
+    const renderArray = jest.spyOn(ArrayService, 'renderArray')
+
+    renderArray.mockImplementation((values: number[]) => {
+      return values.map(() => {
+        return Column.Column({
+          x: 1,
+          y: 1,
+          width: 10,
+          height: 10
+        })
+      })
     })
   }
 

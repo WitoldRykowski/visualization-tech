@@ -1,7 +1,6 @@
 import { __testing } from '../services/insertion-sort.service'
-import { generateRandomColumn, isArraySortedAscending, isNotSorted } from '../utils/testUtils'
+import { isArraySortedAscending, isNotSorted } from '../utils/testUtils'
 import { initAnimation } from '../services/SandboxService/sandbox.service'
-import * as ArrayService from '../services/ArrayService/array.service'
 
 describe('Insertion Sort', () => {
   test('should initialize algorithm sandbox', () => {
@@ -29,12 +28,6 @@ describe('Insertion Sort', () => {
   })
 
   test('should visualize every step correctly', () => {
-    const renderArray = jest.spyOn(ArrayService, 'renderArray')
-
-    renderArray.mockImplementation((values: number[]) => {
-      return values.map((value) => generateRandomColumn({ height: 10 * value }))
-    })
-
     const { getState, animateInsertionSort, initInsertionSort, visualizeInsertionSort } =
       __testing()
 

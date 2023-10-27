@@ -20,7 +20,10 @@ describe('Array Service', () => {
     expect(values).not.toEqual([...values].sort())
   })
 
-  test('should render columns', () => {
+  // ATTENTION!
+  // The "renderArray" in test description is important
+  // because of a condition in Jest's setup file that is based on the test name
+  test('should render columns (renderArray)', () => {
     const values = [1, 2, 3, 4, 5]
     const columns = renderArray(values)
 
