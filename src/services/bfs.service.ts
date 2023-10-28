@@ -3,8 +3,6 @@ import { initAnimation } from '@/services/SandboxService/sandbox.service'
 import { generateRandomArray } from '@/services/ArrayService/array.service'
 import { type Graph, Graph as createGraph } from './SandboxService/elements/Graph'
 import { renderGraph } from '@/services/SandboxService/Creator'
-import { convertNamedColorToRGB } from '@/utils'
-import { colors } from 'quasar'
 
 let moves: Move[] = []
 let values: number[] = []
@@ -15,12 +13,11 @@ const initBfs = () => {
 
   function init() {
     values = generateRandomArray()
+    moves = []
+
     const { points, connections } = renderGraph(values)
 
     graph = createGraph(points, connections)
-
-    console.log(graph)
-    moves = []
   }
 }
 
@@ -34,6 +31,7 @@ function animateBfs() {
   const isChanged = graph.draw()
 
   if (isChanged || !moves.length) return
+  const white = { r: 255, g: 255, b: 255 }
 
   graph.points.forEach((point) => {
     const startAt = graph!.connections[0].startAt
@@ -41,11 +39,11 @@ function animateBfs() {
 
     // TODO better matching
     if (point.x === startAt.x || point.x === finishAt.x) {
-      point.changeColor({ r: 255, g: 0, b: 0 })
+      point.changeColor(white)
     }
   })
 
-  graph.connections[0].changeColor({ r: 255, g: 255, b: 255 })
+  graph.connections[0].changeColor(white)
 }
 
 export const BFS: VariantSetup = {

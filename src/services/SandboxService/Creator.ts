@@ -42,8 +42,8 @@ export const renderGraph = (values: number[]): RenderGraphResponse => {
   const { width, height } = getSandboxSize()
 
   for (let i = 0; i < values.length; i++) {
-    const x = calculateXWithMargin()
-    const y = calculateYWithMargin()
+    const x = Math.random() * (width - MARGIN)
+    const y = Math.random() * (height - MARGIN)
     points.push(createPoint({ x, y }))
   }
 
@@ -51,40 +51,29 @@ export const renderGraph = (values: number[]): RenderGraphResponse => {
   const connections: Connection[] = []
 
   edges.forEach(([start, end]) => {
-    const point1 = createPoint({ x: start.x, y: start.y })
-    const point2 = createPoint({ x: end.x, y: end.y })
+    const startAt = createPoint({ x: start.x, y: start.y })
+    const finishAt = createPoint({ x: end.x, y: end.y })
 
-    const existingConnection = connections.find((connection) => {
-      return (
-        (connection.startAt.x === point1.x &&
-          connection.startAt.y === point1.y &&
-          connection.finishAt.x === point2.x &&
-          connection.finishAt.y === point2.y) ||
-        (connection.startAt.x === point2.x &&
-          connection.startAt.y === point2.y &&
-          connection.finishAt.x === point1.x &&
-          connection.finishAt.y === point1.y)
-      )
+    const hasConnection = connections.some((connection) => {
+      const isPoint1ConnectedToPoint2 =
+        connection.startAt.x === startAt.x &&
+        connection.startAt.y === startAt.y &&
+        connection.finishAt.x === finishAt.x &&
+        connection.finishAt.y === finishAt.y
+
+      const isPoint2ConnectedToPoint1 =
+        connection.startAt.x === finishAt.x &&
+        connection.startAt.y === finishAt.y &&
+        connection.finishAt.x === startAt.x &&
+        connection.finishAt.y === startAt.y
+
+      return isPoint1ConnectedToPoint2 || isPoint2ConnectedToPoint1
     })
 
-    if (!existingConnection) {
-      connections.push(createConnection({ startAt: point1, finishAt: point2 }))
+    if (!hasConnection) {
+      connections.push(createConnection({ startAt, finishAt }))
     }
   })
-
-  function calculateXWithMargin() {
-    const x = Math.random() * width
-    const margin = x > width / 2 ? -MARGIN : MARGIN
-
-    return x + margin
-  }
-
-  function calculateYWithMargin() {
-    const y = Math.random() * height
-    const margin = y > height / 2 ? -MARGIN : MARGIN
-
-    return y + margin
-  }
 
   return { points, connections }
 }

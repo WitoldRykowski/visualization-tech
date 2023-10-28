@@ -1,6 +1,5 @@
 import type { Connection } from '@/services/SandboxService/elements/Connection'
 import type { Point } from '@/services/SandboxService/elements/Point'
-import { getContext, getSandboxSize } from '@/services/SandboxService/sandbox.service'
 
 export const Graph = (points: Point[] = [], connections: Connection[] = []): Graph => {
   return {
