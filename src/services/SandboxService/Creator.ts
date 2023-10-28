@@ -48,10 +48,28 @@ export const renderGraph = (values: number[]): RenderGraphResponse => {
   }
 
   const edges = createEdges(points)
-  const connections: Connection[] = edges.map(([start, end]) => {
+  const connections: Connection[] = []
+
+  edges.forEach(([start, end]) => {
     const point1 = createPoint({ x: start.x, y: start.y })
     const point2 = createPoint({ x: end.x, y: end.y })
-    return createConnection({ startAt: point1, finishAt: point2 })
+
+    const existingConnection = connections.find((connection) => {
+      return (
+        (connection.startAt.x === point1.x &&
+          connection.startAt.y === point1.y &&
+          connection.finishAt.x === point2.x &&
+          connection.finishAt.y === point2.y) ||
+        (connection.startAt.x === point2.x &&
+          connection.startAt.y === point2.y &&
+          connection.finishAt.x === point1.x &&
+          connection.finishAt.y === point1.y)
+      )
+    })
+
+    if (!existingConnection) {
+      connections.push(createConnection({ startAt: point1, finishAt: point2 }))
+    }
   })
 
   function calculateXWithMargin() {

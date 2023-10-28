@@ -22,7 +22,8 @@ const visualize = () => {
   }
 
   isFirstRun.value = false
-  Variants[variant.value].visualize()
+
+  setTimeout(Variants[variant.value].visualize, 300)
 }
 
 const createSandbox = () => {

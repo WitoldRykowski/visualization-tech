@@ -4,7 +4,7 @@ import { generateRandomArray } from '@/services/ArrayService/array.service'
 import { type Graph, Graph as createGraph } from './SandboxService/elements/Graph'
 import { renderGraph } from '@/services/SandboxService/Creator'
 import { convertNamedColorToRGB } from '@/utils'
-import { DEFAULT_COLOR } from '@/services/SandboxService/elements/Connection'
+import { colors } from 'quasar'
 
 let moves: Move[] = []
 let values: number[] = []
@@ -19,6 +19,7 @@ const initBfs = () => {
 
     graph = createGraph(points, connections)
 
+    console.log(graph)
     moves = []
   }
 }
@@ -40,7 +41,7 @@ function animateBfs() {
 
     // TODO better matching
     if (point.x === startAt.x || point.x === finishAt.x) {
-      point.changeColor({ r: 255, g: 255, b: 255 })
+      point.changeColor({ r: 255, g: 0, b: 0 })
     }
   })
 

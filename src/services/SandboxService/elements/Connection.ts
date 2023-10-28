@@ -9,7 +9,6 @@ export const Connection = ({ startAt, finishAt, color }: ConnectionPayload) => {
   const connection: Connection = {
     startAt,
     finishAt,
-    width: 2,
     color: color ?? DEFAULT_COLOR,
     queue: [],
     draw,
@@ -39,14 +38,13 @@ export const Connection = ({ startAt, finishAt, color }: ConnectionPayload) => {
     if (connection.queue.length > 0) {
       const { color } = connection.queue.shift()!
       connection.color = color ?? connection.color
-      connection.width = 4
 
       isChanged = true
     }
 
     const context = getContext()
     context.beginPath()
-    context.lineWidth = connection.width
+    context.lineWidth = 2
     context.strokeStyle = colors.rgbToHex(connection.color)
     context.moveTo(startAt.x, startAt.y)
     context.lineTo(finishAt.x, finishAt.y)
@@ -65,7 +63,6 @@ type ConnectionPayload = {
 export type Connection = {
   queue: Partial<ConnectionPayload>[]
   color: ColorRGBA
-  width: number
   draw: (width?: number) => boolean
   changeColor: (color: ColorRGBA, frameCount?: number) => void
 } & ConnectionPayload

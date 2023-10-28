@@ -1,9 +1,8 @@
 import { getContext } from '@/services/SandboxService/sandbox.service'
 import type { ColorRGBA } from '@/types'
 import { colors } from 'quasar'
-import { convertNamedColorToRGB } from '@/utils'
 
-export const DEFAULT_COLOR: ColorRGBA = convertNamedColorToRGB('primary')
+export const DEFAULT_COLOR: ColorRGBA = { r: 255, g: 255, b: 255 }
 
 export const Point = ({ x, y, value, color }: PointConfig): Point => {
   const point: Point = {
