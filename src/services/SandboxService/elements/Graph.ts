@@ -1,26 +1,32 @@
 import type { Connection } from '@/services/SandboxService/elements/Connection'
 import type { Point } from '@/services/SandboxService/elements/Point'
 
-export const Graph = (points: Point[] = [], connections: Connection[] = []) => {
+export const Graph = (points: Point[] = [], connections: Connection[] = []): Graph => {
   return {
     points,
     connections,
     draw
   }
 
+  draw()
+
   function draw() {
+    let isChanged = false
+
     for (const connection of connections) {
-      connection.draw()
+      isChanged = connection.draw() || isChanged
     }
 
     for (const point of points) {
-      point.draw()
+      isChanged = point.draw() || isChanged
     }
+
+    return isChanged
   }
 }
 
-type Graph = {
+export type Graph = {
   points: Point[]
   connections: Connection[]
-  draw: () => void
+  draw: () => boolean
 }

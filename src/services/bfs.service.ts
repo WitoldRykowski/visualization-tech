@@ -1,40 +1,57 @@
 import type { VariantSetup } from '@/services/SandboxService/types'
 import { initAnimation } from '@/services/SandboxService/sandbox.service'
 import { generateRandomArray } from '@/services/ArrayService/array.service'
-import { type Point } from '@/services/SandboxService/elements/Point'
-import { type Connection } from '@/services/SandboxService/elements/Connection'
-import { Graph } from './SandboxService/elements/Graph'
+import { type Graph, Graph as createGraph } from './SandboxService/elements/Graph'
 import { renderGraph } from '@/services/SandboxService/Creator'
+import { convertNamedColorToRGB } from '@/utils'
+import { DEFAULT_COLOR } from '@/services/SandboxService/elements/Connection'
 
 let moves: Move[] = []
 let values: number[] = []
-let points: Point[] = []
-let connections: Connection[] = []
+let graph: Graph | undefined = undefined
 
 const initBfs = () => {
   initAnimation(init, animateBfs)
 
   function init() {
     values = generateRandomArray()
-    const { points: pointsList, connections: connectionsList } = renderGraph(values)
+    const { points, connections } = renderGraph(values)
 
-    points = pointsList
-    connections = connectionsList
+    graph = createGraph(points, connections)
+
     moves = []
   }
 }
 
+function visualizeBFS() {
+  moves = [{ animation: 'changeColor' }]
+}
+
 function animateBfs() {
-  const graph = Graph(points, connections)
+  if (!graph) return
 
-  graph.draw()
+  const isChanged = graph.draw()
 
-  return moves
+  if (isChanged || !moves.length) return
+
+  graph.points.forEach((point) => {
+    const startAt = graph!.connections[0].startAt
+    const finishAt = graph!.connections[0].finishAt
+
+    // TODO better matching
+    if (point.x === startAt.x || point.x === finishAt.x) {
+      point.changeColor({ r: 255, g: 255, b: 255 })
+    }
+  })
+
+  graph.connections[0].changeColor({ r: 255, g: 255, b: 255 })
 }
 
 export const BFS: VariantSetup = {
   init: initBfs,
-  visualize: () => {}
+  visualize: visualizeBFS
 }
 
-type Move = {}
+type Move = {
+  animation: 'changeColor'
+}

@@ -11,7 +11,7 @@ export const generateSortedArray = (size = DEFAULT_ARRAY_SIZE) => {
   return sortedArray
 }
 
-export const generateRandomArray = (size = DEFAULT_ARRAY_SIZE) => {
+export const generateRandomArray = (size = 10) => {
   const randomArray = []
 
   for (let i = 0; i < size; i++) {
