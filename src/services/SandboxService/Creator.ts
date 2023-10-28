@@ -1,7 +1,10 @@
 import { getSandboxSize } from '@/services/SandboxService/sandbox.service'
 import { Column } from '@/services/SandboxService/elements/Column'
 import { Point as createPoint, type Point } from '@/services/SandboxService/elements/Point'
-import { Segment as createSegment, type Segment } from '@/services/SandboxService/elements/Segment'
+import {
+  Connection as createConnection,
+  type Connection
+} from '@/services/SandboxService/elements/Connection'
 import Delaunator from 'delaunator'
 
 export const renderArray = (values: number[]) => {
@@ -27,7 +30,12 @@ export const renderArray = (values: number[]) => {
   return columns
 }
 
-export const renderGraph = (values: number[]) => {
+type RenderGraphResponse = {
+  points: Point[]
+  connections: Connection[]
+}
+
+export const renderGraph = (values: number[]): RenderGraphResponse => {
   const points: Point[] = []
   const edges = []
 
@@ -41,6 +49,8 @@ export const renderGraph = (values: number[]) => {
   }
 
   // https://github.com/mapbox/delaunator
+  // Library for Delaunay triangulation is implemented to create
+  // non-crossing connections between points in easy way
   const delaunay = Delaunator.from(points.map((point) => [point.x, point.y]))
 
   for (let i = 0; i < delaunay.triangles.length; i += 3) {
@@ -53,9 +63,11 @@ export const renderGraph = (values: number[]) => {
     edges.push([point3, point1])
   }
 
-  const segments: Segment[] = edges.map(([start, end]) =>
-    createSegment(createPoint(start.x, start.y), createPoint(end.x, end.y))
-  )
+  const connections: Connection[] = edges.map(([start, end]) => {
+    const point1 = createPoint(start.x, start.y)
+    const point2 = createPoint(end.x, end.y)
+    return createConnection(point1, point2)
+  })
 
   function calculateXWithMargin() {
     const x = Math.random() * width
@@ -71,5 +83,5 @@ export const renderGraph = (values: number[]) => {
     return y + margin
   }
 
-  return { points, segments }
+  return { points, connections }
 }

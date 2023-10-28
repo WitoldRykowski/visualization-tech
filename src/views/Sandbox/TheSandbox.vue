@@ -7,7 +7,10 @@ import {
   Variants
 } from '@/services/SandboxService/sandbox.service'
 import { AppButton } from '@/components'
+import { useRouter } from 'vue-router'
+import { Main } from '@/router/routes'
 
+const router = useRouter()
 const variant = inject(VariantInjectionKey)
 const isFirstRun = ref(true)
 
@@ -23,6 +26,10 @@ const visualize = () => {
 }
 
 const createSandbox = () => {
+  if (!variant?.value) {
+    router.push(Main)
+  }
+
   initSandbox()
 
   if (!variant?.value) return

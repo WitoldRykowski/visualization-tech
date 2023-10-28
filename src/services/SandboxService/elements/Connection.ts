@@ -2,7 +2,7 @@ import type { Point } from '@/services/SandboxService/elements/Point'
 import { getContext } from '@/services/SandboxService/sandbox.service'
 import { colors } from 'quasar'
 
-export const Segment = (startAt: Point, finishAt: Point) => {
+export const Connection = (startAt: Point, finishAt: Point) => {
   return {
     startAt,
     finishAt,
@@ -20,7 +20,7 @@ export const Segment = (startAt: Point, finishAt: Point) => {
   }
 }
 
-export type Segment = {
+export type Connection = {
   startAt: Point
   finishAt: Point
   draw: (width?: number) => void

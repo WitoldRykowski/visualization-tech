@@ -1,16 +1,16 @@
-import type { Segment } from '@/services/SandboxService/elements/Segment'
+import type { Connection } from '@/services/SandboxService/elements/Connection'
 import type { Point } from '@/services/SandboxService/elements/Point'
 
-export const Graph = (points: Point[] = [], segments: Segment[] = []) => {
+export const Graph = (points: Point[] = [], connections: Connection[] = []) => {
   return {
     points,
-    segments,
+    connections,
     draw
   }
 
   function draw() {
-    for (const segment of segments) {
-      segment.draw()
+    for (const connection of connections) {
+      connection.draw()
     }
 
     for (const point of points) {
@@ -21,6 +21,6 @@ export const Graph = (points: Point[] = [], segments: Segment[] = []) => {
 
 type Graph = {
   points: Point[]
-  segments: Segment[]
+  connections: Connection[]
   draw: () => void
 }

@@ -1,6 +1,5 @@
 import { getContext } from '@/services/SandboxService/sandbox.service'
 import { colors } from 'quasar'
-// import type { Segment } from '@/services/SandboxService/elements/Segment'
 
 export const Point = (x: number, y: number, value = 0): Point => {
   return {
