@@ -1,6 +1,7 @@
 import { getContext } from '@/services/SandboxService/sandbox.service'
 import type { ColorRGBA } from '@/types'
 import { colors } from 'quasar'
+import type { Connection } from '@/services/SandboxService/elements/Connection'
 
 export const DEFAULT_COLOR: ColorRGBA = { r: 255, g: 165, b: 0 }
 
@@ -11,6 +12,7 @@ export const Point = ({ x, y, value, color }: PointConfig): Point => {
     value: value ?? 0,
     color: color ?? DEFAULT_COLOR,
     queue: [],
+    connections: [],
     draw,
     changeColor
   }
@@ -63,6 +65,7 @@ type PointConfig = {
 export type Point = PointConfig & {
   queue: Partial<PointConfig>[]
   color: ColorRGBA
+  connections: Connection[]
   draw: (size?: number) => boolean
   changeColor: (color: ColorRGBA, frameCount?: number) => void
 }

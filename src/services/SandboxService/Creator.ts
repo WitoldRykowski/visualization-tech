@@ -50,30 +50,16 @@ export const renderGraph = (values: number[]): RenderGraphResponse => {
   const edges = createEdges(points)
   const connections: Connection[] = []
 
-  edges.forEach(([start, end]) => {
-    const startAt = createPoint({ x: start.x, y: start.y })
-    const finishAt = createPoint({ x: end.x, y: end.y })
-
-    const hasConnection = connections.some((connection) => {
-      const isPoint1ConnectedToPoint2 =
-        connection.startAt.x === startAt.x &&
-        connection.startAt.y === startAt.y &&
-        connection.finishAt.x === finishAt.x &&
-        connection.finishAt.y === finishAt.y
-
-      const isPoint2ConnectedToPoint1 =
-        connection.startAt.x === finishAt.x &&
-        connection.startAt.y === finishAt.y &&
-        connection.finishAt.x === startAt.x &&
-        connection.finishAt.y === startAt.y
-
-      return isPoint1ConnectedToPoint2 || isPoint2ConnectedToPoint1
-    })
-
-    if (!hasConnection) {
-      connections.push(createConnection({ startAt, finishAt }))
-    }
+  edges.forEach(([startAt, finishAt]) => {
+    const connection = createConnection({ startAt, finishAt })
+    // const opposite = createConnection({ startAt: finishAt, finishAt: startAt })
+    connections.push(connection)
+    // connections.push(opposite)
+    startAt.connections.push(connection)
+    // finishAt.connections.push(opposite)
   })
+
+  console.log(connections)
 
   return { points, connections }
 }
