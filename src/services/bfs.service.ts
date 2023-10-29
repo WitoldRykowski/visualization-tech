@@ -4,6 +4,8 @@ import { generateRandomArray } from '@/services/ArrayService/array.service'
 import { type Graph, Graph as createGraph } from './SandboxService/elements/Graph'
 import { renderGraph } from '@/services/SandboxService/Creator'
 import type { Point } from '@/services/SandboxService/elements/Point'
+import type { MoveAnimation } from '@/services/SandboxService/elements/Column'
+import type { ColorRGBA } from '@/types'
 
 let moves: Move[] = []
 let values: number[] = []
@@ -23,22 +25,22 @@ const initBfs = () => {
 }
 
 function visualizeBFS() {
-  breadthFirstSearch(graph!.points[0])
+  breadthFirstSearch()
 }
 
-function breadthFirstSearch(startNode: Point) {
+function breadthFirstSearch() {
+  const startNode = getStartNode()
+  const endNode = getDestinationNode()
   const visited: Set<Point> = new Set()
-  const queue: Queue[] = []
-  const index = Math.floor(Math.random() * graph!.points.length - 1)
-  const endNode = graph!.points[index]
-  const parents: Map<Point, Parent> = new Map()
+  const parents: Map<Point, Point | null> = new Map()
+  const queue: Point[] = []
 
-  queue.push({ node: startNode, distance: 0 })
+  queue.push(startNode)
   visited.add(startNode)
-  parents.set(startNode, { parent: null, distance: 0 })
+  parents.set(startNode, null)
 
   while (queue.length > 0) {
-    const { node, distance } = queue.shift()!
+    const node = queue.shift()!
 
     if (node === endNode) {
       reconstructPath()
@@ -47,10 +49,11 @@ function breadthFirstSearch(startNode: Point) {
 
     for (const connection of node.connections) {
       const neighbor = connection.finishAt
+
       if (!visited.has(neighbor)) {
-        queue.push({ node: neighbor, distance: distance + connection.weight })
+        queue.push(neighbor)
         visited.add(neighbor)
-        parents.set(neighbor, { parent: node, distance: distance + connection.weight })
+        parents.set(neighbor, node)
       }
 
       moves.push({
@@ -63,13 +66,31 @@ function breadthFirstSearch(startNode: Point) {
     }
   }
 
+  function getStartNode() {
+    return graph!.points[getIndexOfRandomPoint()]
+  }
+
+  function getDestinationNode() {
+    let potentialDestination = graph!.points[getIndexOfRandomPoint()]
+
+    while (potentialDestination === startNode) {
+      potentialDestination = graph!.points[getIndexOfRandomPoint()]
+    }
+
+    return potentialDestination
+  }
+
+  function getIndexOfRandomPoint() {
+    return Math.floor(Math.random() * graph!.points.length - 1)
+  }
+
   function reconstructPath() {
     const path: Point[] = []
     let currentNode: Point | null = endNode
 
     while (currentNode && currentNode !== startNode) {
       path.unshift(currentNode)
-      currentNode = parents.get(currentNode)!.parent
+      currentNode = parents.get(currentNode)!
     }
 
     path.unshift(startNode)
@@ -95,9 +116,9 @@ function animateBfs() {
 
   const move = moves.shift()!
   const { animation, startAt, destination } = move
-  const green = { r: 0, g: 255, b: 0 }
-  const red = { r: 255, g: 0, b: 0 }
-  const white = { r: 255, g: 255, b: 255 }
+  const green: ColorRGBA = { r: 0, g: 255, b: 0 }
+  const red: ColorRGBA = { r: 255, g: 0, b: 0 }
+  const white: ColorRGBA = { r: 255, g: 255, b: 255 }
 
   startAt.changeColor(green)
   destination.changeColor(green)
@@ -113,7 +134,7 @@ function animateBfs() {
   const finishAtConnection = matchConnection(finishAt, current)
 
   if (currentConnection) {
-    currentConnection!.changeColor(color)
+    currentConnection.changeColor(color)
   }
 
   if (finishAtConnection) {
@@ -136,16 +157,9 @@ export const BFS: VariantSetup = {
 }
 
 type Move = {
-  animation: 'changeColor' | 'changeColor-path'
+  animation: MoveAnimation | 'changeColor-path'
   current: Point
   finishAt: Point
   startAt: Point
   destination: Point
-}
-
-type Parent = { parent: Point | null; distance: number }
-
-type Queue = {
-  node: Point
-  distance: number
 }
