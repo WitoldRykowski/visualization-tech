@@ -3,6 +3,8 @@ import * as Column from '../services/SandboxService/elements/Column'
 import * as Creator from '../services/SandboxService/Creator'
 import { Noop } from '../types'
 
+jest.mock('delaunator')
+
 beforeEach(() => {
   const initAnimation = jest.spyOn(SandboxService, 'initAnimation')
 

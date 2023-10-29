@@ -103,7 +103,7 @@ function animateSelectionSort() {
       }
     }
 
-    columns[minIndex].changeColor(convertNamedColorToRGB('negative'))
+    columns[minIndex].changeColor(convertNamedColorToRGB('info'))
   }
 }
 

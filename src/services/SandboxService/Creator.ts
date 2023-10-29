@@ -52,14 +52,11 @@ export const renderGraph = (values: number[]): RenderGraphResponse => {
 
   edges.forEach(([startAt, finishAt]) => {
     const connection = createConnection({ startAt, finishAt })
-    // const opposite = createConnection({ startAt: finishAt, finishAt: startAt })
     connections.push(connection)
-    // connections.push(opposite)
     startAt.connections.push(connection)
-    // finishAt.connections.push(opposite)
   })
 
-  console.log(connections)
+  console.log(connections.length, new Set(connections).size)
 
   return { points, connections }
 }

@@ -4,7 +4,6 @@ import { generateRandomArray } from '@/services/ArrayService/array.service'
 import { type Graph, Graph as createGraph } from './SandboxService/elements/Graph'
 import { renderGraph } from '@/services/SandboxService/Creator'
 import type { Point } from '@/services/SandboxService/elements/Point'
-import type { Connection } from '@/services/SandboxService/elements/Connection'
 
 let moves: Move[] = []
 let values: number[] = []
@@ -29,22 +28,65 @@ function visualizeBFS() {
 
 function breadthFirstSearch(startNode: Point) {
   const visited: Set<Point> = new Set()
-  const queue: Point[] = []
+  const queue: Queue[] = []
+  const index = Math.floor(Math.random() * graph!.points.length - 1)
+  const endNode = graph!.points[index]
+  const parents: Map<Point, Parent> = new Map()
 
-  queue.push(startNode)
+  queue.push({ node: startNode, distance: 0 })
   visited.add(startNode)
+  parents.set(startNode, { parent: null, distance: 0 })
 
   while (queue.length > 0) {
-    const currentNode = queue.shift()!
+    const { node, distance } = queue.shift()!
 
-    for (const connection of currentNode.connections) {
+    if (node === endNode) {
+      reconstructPath()
+      return
+    }
+
+    for (const connection of node.connections) {
       const neighbor = connection.finishAt
       if (!visited.has(neighbor)) {
-        queue.push(neighbor)
+        queue.push({ node: neighbor, distance: distance + connection.weight })
         visited.add(neighbor)
+
+        parents.set(neighbor, { parent: node, distance: distance + connection.weight })
       }
 
-      moves.push({ animation: 'changeColor', current: currentNode, finishAt: neighbor })
+      moves.push({
+        animation: 'changeColor',
+        current: node,
+        finishAt: neighbor,
+        startAt: startNode,
+        destination: endNode
+      })
+    }
+  }
+
+  function reconstructPath() {
+    const { node } = queue.shift()!
+
+    if (node === endNode) {
+      const path: Point[] = []
+      let currentNode: Point | null = endNode
+
+      while (currentNode && currentNode !== startNode) {
+        path.unshift(currentNode)
+        currentNode = parents.get(currentNode)!.parent
+      }
+
+      path.unshift(startNode)
+
+      for (let i = 0; i <= path.length - 2; i++) {
+        moves.push({
+          animation: 'changeColor-path',
+          current: path[i],
+          finishAt: path[i + 1],
+          startAt: startNode,
+          destination: endNode
+        })
+      }
     }
   }
 }
@@ -55,33 +97,41 @@ function animateBfs() {
   const isChanged = graph.draw()
 
   if (isChanged || !moves.length) return
-  console.log(moves)
 
+  const move = moves.shift()!
+  const { animation, startAt, destination } = move
+  const green = { r: 0, g: 255, b: 0 }
+  const red = { r: 255, g: 0, b: 0 }
   const white = { r: 255, g: 255, b: 255 }
 
-  const { finishAt, current } = moves.shift()!
+  startAt.changeColor(green)
+  destination.changeColor(green)
 
-  current.changeColor(white)
+  const color = animation === 'changeColor' ? white : red
+  const { finishAt, current } = move
 
-  const currentConnection = current.connections.find((connection) => {
-    const isXMatched = connection.finishAt.x === finishAt.x && connection.startAt.x === current.x
-    const isYMatched = connection.finishAt.y === finishAt.y && connection.startAt.y === current.y
+  if (current !== startAt) {
+    current.changeColor(color)
+  }
 
-    return isXMatched && isYMatched
-  })
+  const currentConnection = matchConnection(current, finishAt)
+  const finishAtConnection = matchConnection(finishAt, current)
 
-  currentConnection!.changeColor(white)
-
-  const finishAtConnection = finishAt.connections.find((connection) => {
-    const isXMatched = connection.finishAt.x === current.x && connection.startAt.x === finishAt.x
-    const isYMatched = connection.finishAt.y === current.y && connection.startAt.y === finishAt.y
-
-    return isXMatched && isYMatched
-  })
+  if (currentConnection) {
+    currentConnection!.changeColor(color)
+  }
 
   if (finishAtConnection) {
-    finishAtConnection.changeColor(white)
-    finishAt.changeColor({ r: 255, g: 0, b: 0 })
+    finishAtConnection.changeColor(color)
+  }
+
+  function matchConnection(start: Point, destination: Point) {
+    return start.connections.find((connection) => {
+      const isXMatched = connection.finishAt.x === destination.x && connection.startAt.x === start.x
+      const isYMatched = connection.finishAt.y === destination.y && connection.startAt.y === start.y
+
+      return isXMatched && isYMatched
+    })
   }
 }
 
@@ -91,7 +141,16 @@ export const BFS: VariantSetup = {
 }
 
 type Move = {
-  animation: 'changeColor'
+  animation: 'changeColor' | 'changeColor-path'
   current: Point
   finishAt: Point
+  startAt: Point
+  destination: Point
+}
+
+type Parent = { parent: Point | null; distance: number }
+
+type Queue = {
+  node: Point
+  distance: number
 }

@@ -5,11 +5,10 @@ import type { Connection } from '@/services/SandboxService/elements/Connection'
 
 export const DEFAULT_COLOR: ColorRGBA = { r: 255, g: 165, b: 0 }
 
-export const Point = ({ x, y, value, color }: PointConfig): Point => {
+export const Point = ({ x, y, color }: PointConfig): Point => {
   const point: Point = {
     x,
     y,
-    value: value ?? 0,
     color: color ?? DEFAULT_COLOR,
     queue: [],
     connections: [],
@@ -19,7 +18,7 @@ export const Point = ({ x, y, value, color }: PointConfig): Point => {
 
   return point
 
-  function changeColor(color: ColorRGBA, frameCount = 15) {
+  function changeColor(color: ColorRGBA, frameCount = 2) {
     const { r: basicR, g: basicG, b: basicB } = point.color
     const { r: targetR, g: targetG, b: targetB } = color
     const rStep = (targetR - basicR) / frameCount
@@ -58,7 +57,6 @@ export const Point = ({ x, y, value, color }: PointConfig): Point => {
 type PointConfig = {
   x: number
   y: number
-  value?: number
   color?: ColorRGBA
 }
 

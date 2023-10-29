@@ -9,15 +9,20 @@ export const Connection = ({ startAt, finishAt, color }: ConnectionPayload) => {
   const connection: Connection = {
     startAt,
     finishAt,
+    weight: 0,
     color: color ?? DEFAULT_COLOR,
     queue: [],
     draw,
     changeColor
   }
 
+  const dx = Math.abs(finishAt.x - startAt.x)
+  const dy = Math.abs(finishAt.y - startAt.y)
+  connection.weight = Math.sqrt(dx * dx + dy * dy)
+
   return connection
 
-  function changeColor(color: ColorRGBA, frameCount = 15) {
+  function changeColor(color: ColorRGBA, frameCount = 2) {
     const { r: basicR, g: basicG, b: basicB } = connection.color
     const { r: targetR, g: targetG, b: targetB } = color
     const rStep = (targetR - basicR) / frameCount
@@ -63,6 +68,7 @@ type ConnectionPayload = {
 export type Connection = {
   queue: Partial<ConnectionPayload>[]
   color: ColorRGBA
+  weight: number
   draw: (width?: number) => boolean
   changeColor: (color: ColorRGBA, frameCount?: number) => void
 } & ConnectionPayload
