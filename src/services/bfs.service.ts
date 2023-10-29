@@ -50,7 +50,6 @@ function breadthFirstSearch(startNode: Point) {
       if (!visited.has(neighbor)) {
         queue.push({ node: neighbor, distance: distance + connection.weight })
         visited.add(neighbor)
-
         parents.set(neighbor, { parent: node, distance: distance + connection.weight })
       }
 
@@ -65,28 +64,24 @@ function breadthFirstSearch(startNode: Point) {
   }
 
   function reconstructPath() {
-    const { node } = queue.shift()!
+    const path: Point[] = []
+    let currentNode: Point | null = endNode
 
-    if (node === endNode) {
-      const path: Point[] = []
-      let currentNode: Point | null = endNode
+    while (currentNode && currentNode !== startNode) {
+      path.unshift(currentNode)
+      currentNode = parents.get(currentNode)!.parent
+    }
 
-      while (currentNode && currentNode !== startNode) {
-        path.unshift(currentNode)
-        currentNode = parents.get(currentNode)!.parent
-      }
+    path.unshift(startNode)
 
-      path.unshift(startNode)
-
-      for (let i = 0; i <= path.length - 2; i++) {
-        moves.push({
-          animation: 'changeColor-path',
-          current: path[i],
-          finishAt: path[i + 1],
-          startAt: startNode,
-          destination: endNode
-        })
-      }
+    for (let i = 0; i <= path.length - 2; i++) {
+      moves.push({
+        animation: 'changeColor-path',
+        current: path[i],
+        finishAt: path[i + 1],
+        startAt: startNode,
+        destination: endNode
+      })
     }
   }
 }
