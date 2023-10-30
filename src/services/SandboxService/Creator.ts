@@ -35,15 +35,23 @@ type RenderGraphResponse = {
   connections: Connection[]
 }
 
-export const renderGraph = (values: number[]): RenderGraphResponse => {
+export const renderGraph = (values: number[], undirected = false): RenderGraphResponse => {
   const points: Point[] = []
-
-  const MARGIN = 20
+  const MARGIN = 40
   const { width, height } = getSandboxSize()
 
   for (let i = 0; i < values.length; i++) {
-    const x = Math.random() * (width - MARGIN)
-    const y = Math.random() * (height - MARGIN)
+    let x = generateRandomX()
+    let y = generateRandomY()
+    let validPoint = validatePoint({ x, y })
+
+    while (!validPoint) {
+      x = generateRandomX()
+      y = generateRandomY()
+
+      validPoint = validatePoint({ x, y })
+    }
+
     points.push(createPoint({ x, y }))
   }
 
@@ -52,11 +60,35 @@ export const renderGraph = (values: number[]): RenderGraphResponse => {
 
   edges.forEach(([startAt, finishAt]) => {
     const connection = createConnection({ startAt, finishAt })
+    if (undirected) {
+      const connection = createConnection({ startAt: finishAt, finishAt: startAt })
+      connections.push(connection)
+      finishAt.connections.push(connection)
+    }
+
     connections.push(connection)
     startAt.connections.push(connection)
   })
 
-  console.log(connections.length, new Set(connections).size)
-
   return { points, connections }
+
+  function generateRandomX() {
+    return Math.random() * (width - MARGIN)
+  }
+
+  function generateRandomY() {
+    return Math.random() * (height - MARGIN)
+  }
+
+  function validatePoint({ x, y }: Pick<Point, 'x' | 'y'>) {
+    const MARGIN = 25
+
+    return points.every((point) => {
+      return calculateDistance(point, { x, y }) >= MARGIN
+    })
+
+    function calculateDistance(pointA: Point, pointB: Pick<Point, 'x' | 'y'>) {
+      return Math.sqrt((pointA.x - pointB.x) ** 2 + (pointA.y - pointB.y) ** 2)
+    }
+  }
 }
