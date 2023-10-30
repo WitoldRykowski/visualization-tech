@@ -2,8 +2,9 @@ import type { Point } from '@/services/SandboxService/elements/Point'
 import { getContext } from '@/services/SandboxService/sandbox.service'
 import type { ColorRGBA } from '@/types'
 import { colors } from 'quasar'
+import { convertNamedColorToRGB } from '@/utils'
 
-export const DEFAULT_COLOR: ColorRGBA = { r: 255, g: 165, b: 0 }
+export const DEFAULT_COLOR = convertNamedColorToRGB('primary')
 
 export const Connection = ({ startAt, finishAt, color }: ConnectionPayload) => {
   const connection: Connection = {
@@ -49,7 +50,7 @@ export const Connection = ({ startAt, finishAt, color }: ConnectionPayload) => {
 
     const context = getContext()
     context.beginPath()
-    context.lineWidth = 2
+    context.lineWidth = 1
     context.strokeStyle = colors.rgbToHex(connection.color)
     context.moveTo(startAt.x, startAt.y)
     context.lineTo(finishAt.x, finishAt.y)

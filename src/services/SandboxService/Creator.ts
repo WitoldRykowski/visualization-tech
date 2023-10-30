@@ -37,19 +37,16 @@ type RenderGraphResponse = {
 
 export const renderGraph = (values: number[], undirected = false): RenderGraphResponse => {
   const points: Point[] = []
-  const MARGIN = 40
+
   const { width, height } = getSandboxSize()
 
   for (let i = 0; i < values.length; i++) {
     let x = generateRandomX()
     let y = generateRandomY()
-    let validPoint = validatePoint({ x, y })
 
-    while (!validPoint) {
+    while (!validatePoint({ x, y })) {
       x = generateRandomX()
       y = generateRandomY()
-
-      validPoint = validatePoint({ x, y })
     }
 
     points.push(createPoint({ x, y }))
@@ -73,22 +70,14 @@ export const renderGraph = (values: number[], undirected = false): RenderGraphRe
   return { points, connections }
 
   function generateRandomX() {
-    return Math.random() * (width - MARGIN)
+    return Math.random() * width
   }
 
   function generateRandomY() {
-    return Math.random() * (height - MARGIN)
+    return Math.random() * height
   }
 
   function validatePoint({ x, y }: Pick<Point, 'x' | 'y'>) {
-    const MARGIN = 25
-
-    return points.every((point) => {
-      return calculateDistance(point, { x, y }) >= MARGIN
-    })
-
-    function calculateDistance(pointA: Point, pointB: Pick<Point, 'x' | 'y'>) {
-      return Math.sqrt((pointA.x - pointB.x) ** 2 + (pointA.y - pointB.y) ** 2)
-    }
+    return points.every((point) => point.validatePoint({ x, y }))
   }
 }

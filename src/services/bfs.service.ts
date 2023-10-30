@@ -5,7 +5,7 @@ import { type Graph, Graph as createGraph } from './SandboxService/elements/Grap
 import { renderGraph } from '@/services/SandboxService/Creator'
 import type { Point } from '@/services/SandboxService/elements/Point'
 import type { MoveAnimation } from '@/services/SandboxService/elements/Column'
-import type { ColorRGBA } from '@/types'
+import { convertNamedColorToRGB } from '@/utils'
 
 let moves: Move[] = []
 let values: number[] = []
@@ -116,14 +116,17 @@ function animateBfs() {
 
   const move = moves.shift()!
   const { animation, startAt, destination } = move
-  const green: ColorRGBA = { r: 0, g: 255, b: 0 }
-  const red: ColorRGBA = { r: 255, g: 0, b: 0 }
-  const white: ColorRGBA = { r: 255, g: 255, b: 255 }
+  const info = convertNamedColorToRGB('info')
+  const warning = convertNamedColorToRGB('warning')
+  const white = convertNamedColorToRGB('grey-4')
+  const isPathAnimation = animation === 'changeColor-path'
 
-  startAt.changeColor(green)
-  destination.changeColor(green)
+  startAt.changeColor(info)
+  destination.changeColor(info)
+  startAt.isPulsing = !isPathAnimation
+  destination.isPulsing = !isPathAnimation
 
-  const color = animation === 'changeColor' ? white : red
+  const color = !isPathAnimation ? white : warning
   const { finishAt, current } = move
 
   if (current !== startAt) {
@@ -139,6 +142,11 @@ function animateBfs() {
 
   if (finishAtConnection) {
     finishAtConnection.changeColor(color)
+  }
+
+  if (!moves.length) {
+    startAt.changeColor(color)
+    destination.changeColor(color)
   }
 
   function matchConnection(start: Point, destination: Point) {
