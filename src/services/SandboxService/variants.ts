@@ -6,7 +6,7 @@ import { QuickSort } from '@/services/quick-sort.service'
 import { SelectionSort } from '@/services/selection-sort.service'
 import { InsertionSort } from '@/services/insertion-sort.service'
 import { GnomeSort } from '@/services/gnome-sort.service'
-import { BFS } from '@/services/bfs.service'
+import { BFS as BreadthFirstSearch } from '@/services/bfs.service'
 
 export const Variants: Record<NonNullable<VariantName>, VariantSetup> = {
   BubbleSort,
@@ -15,5 +15,5 @@ export const Variants: Record<NonNullable<VariantName>, VariantSetup> = {
   InsertionSort,
   SelectionSort,
   QuickSort,
-  BFS
+  BreadthFirstSearch
 }

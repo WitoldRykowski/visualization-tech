@@ -17,7 +17,7 @@ export const renderArray = (values: number[]) => {
   for (let i = 0; i < valuesSize; i++) {
     const xAxis = i * spacing + spacing / 2 + MARGIN
     const yAxis = height - MARGIN - i * 3
-    const columnHeight = 400 * values[i]
+    const columnHeight = height * 0.75 * values[i]
 
     columns[i] = Column({
       x: xAxis,
@@ -35,6 +35,8 @@ type RenderGraphResponse = {
   connections: Connection[]
 }
 
+// Graph always will be non directed so every connection
+// connect point A to point B and point B to point A (two-way binding)
 export const renderGraph = (values: number[]): RenderGraphResponse => {
   const points: Point[] = []
 

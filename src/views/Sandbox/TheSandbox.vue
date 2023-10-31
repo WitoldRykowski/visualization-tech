@@ -45,7 +45,7 @@ onBeforeUnmount(stopAnimation)
 <template>
   <canvas id="sandbox" />
   <Teleport to="#app-toolbar-actions">
-    <AppButton @click="visualize" label="Visualize" />
+    <AppButton @click="visualize" label="Visualize" id="visualize-button" />
   </Teleport>
 </template>
 
@@ -53,5 +53,9 @@ onBeforeUnmount(stopAnimation)
 .actions-delays {
   @include flex-row();
   gap: 0.25rem;
+}
+
+#visualize-button {
+  min-width: 300px;
 }
 </style>

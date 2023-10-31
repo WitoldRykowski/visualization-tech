@@ -9,7 +9,7 @@ export const convertNamedColorToRGB = (color: NamedColor): ColorRGBA => {
   return colors.textToRgb(colors.getPaletteColor(color))
 }
 
-export const getRandomValueGivenArray = <T>(values: T[]) => {
+export const getRandomValueFromGivenArray = <T>(values: T[]) => {
   const lastArrayIndex = values.length - 1
   const index = Math.floor(Math.random() * lastArrayIndex)
 

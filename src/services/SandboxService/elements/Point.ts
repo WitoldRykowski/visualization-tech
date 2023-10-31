@@ -21,7 +21,8 @@ export const Point = ({ x, y, color }: PointConfig): Point => {
     draw,
     changeColor,
     validatePoint,
-    matchConnection
+    matchConnection,
+    matchTwoWayConnection
   }
 
   return point
@@ -76,11 +77,15 @@ export const Point = ({ x, y, color }: PointConfig): Point => {
     return point.connections.find((connection) => {
       const isXMatched = connection.finishAt.x === destination.x && connection.startAt.x === point.x
       const isYMatched = connection.finishAt.y === destination.y && connection.startAt.y === point.y
-      const test = connection.finishAt.x === point.x && connection.startAt.x === destination.x
-      const test2 = connection.finishAt.y === point.y && connection.startAt.y === destination.y
 
-      return (isXMatched && isYMatched) || (test && test2)
+      return isXMatched && isYMatched
     })
+  }
+
+  function matchTwoWayConnection(destination: Point): Connection[] {
+    const result = [matchConnection(destination), destination.matchConnection(point)]
+
+    return result.filter((connection) => !!connection) as Connection[]
   }
 
   function draw(size = 10) {
@@ -132,4 +137,5 @@ export type Point = PointConfig & {
   changeColor: (color: ColorRGBA, frameCount?: number) => void
   validatePoint: (payload: Pick<Point, 'x' | 'y'>) => boolean
   matchConnection: (destination: Point) => Connection | undefined
+  matchTwoWayConnection: (destination: Point) => Connection[]
 }

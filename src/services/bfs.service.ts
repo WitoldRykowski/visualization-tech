@@ -5,7 +5,7 @@ import { type Graph, Graph as createGraph } from './SandboxService/elements/Grap
 import { renderGraph } from '@/services/SandboxService/Creator'
 import type { Point } from '@/services/SandboxService/elements/Point'
 import type { MoveAnimation } from '@/services/SandboxService/elements/Column'
-import { getRandomValueGivenArray, RGBColors } from '@/utils'
+import { getRandomValueFromGivenArray, RGBColors } from '@/utils'
 
 let moves: Move[] = []
 let values: number[] = []
@@ -71,14 +71,14 @@ function breadthFirstSearch() {
   }
 
   function getStartNode() {
-    return getRandomValueGivenArray(graph!.points)
+    return getRandomValueFromGivenArray(graph!.points)
   }
 
   function getDestinationNode() {
-    let potentialDestination = getRandomValueGivenArray(graph!.points)
+    let potentialDestination = getRandomValueFromGivenArray(graph!.points)
 
     while (potentialDestination === startNode) {
-      potentialDestination = getRandomValueGivenArray(graph!.points)
+      potentialDestination = getRandomValueFromGivenArray(graph!.points)
     }
 
     return potentialDestination
@@ -128,16 +128,9 @@ function animateBfs() {
     current.changeColor(color)
   }
 
-  const currentConnection = current.matchConnection(finishAt)
-  const destinationConnection = finishAt.matchConnection(current)
+  const connections = current.matchTwoWayConnection(finishAt)
 
-  if (currentConnection) {
-    currentConnection.changeColor(color)
-  }
-
-  if (destinationConnection) {
-    destinationConnection.changeColor(color)
-  }
+  connections.forEach((connection) => connection.changeColor(color))
 
   if (!moves.length) {
     begin.changeColor(color)
