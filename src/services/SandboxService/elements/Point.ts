@@ -76,8 +76,10 @@ export const Point = ({ x, y, color }: PointConfig): Point => {
     return point.connections.find((connection) => {
       const isXMatched = connection.finishAt.x === destination.x && connection.startAt.x === point.x
       const isYMatched = connection.finishAt.y === destination.y && connection.startAt.y === point.y
+      const test = connection.finishAt.x === point.x && connection.startAt.x === destination.x
+      const test2 = connection.finishAt.y === point.y && connection.startAt.y === destination.y
 
-      return isXMatched && isYMatched
+      return (isXMatched && isYMatched) || (test && test2)
     })
   }
 

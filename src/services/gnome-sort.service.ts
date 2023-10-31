@@ -6,7 +6,7 @@ import {
 import { generateNonSortedArray } from '@/services/ArrayService/array.service'
 import { renderArray } from '@/services/SandboxService/Creator'
 import { drawColumns, initAnimation } from './/SandboxService/sandbox.service'
-import { convertNamedColorToRGB } from '@/utils'
+import { RGBColors } from '@/utils'
 import type { VariantSetup } from '@/services/SandboxService/types'
 
 let moves: Move[] = []
@@ -67,7 +67,7 @@ function animateGnomeSort() {
   const { animation, left, right } = moves.shift()!
 
   if (animation === 'touch') {
-    const color = convertNamedColorToRGB('light-blue-5')
+    const color = RGBColors.lightBlue
     if (left !== -1) {
       columns[left].changeColor(color)
     }

@@ -1,4 +1,4 @@
-import { convertNamedColorToRGB, lerp } from '@/utils'
+import { lerp, RGBColors } from '@/utils'
 import { getContext } from '@/services/SandboxService/sandbox.service'
 import type {
   MoveToAnimationConfig,
@@ -11,7 +11,7 @@ import {
   getMoveToAnimationConfig
 } from '@/services/AnimationService/animation.service'
 
-export const DEFAULT_COLOR = convertNamedColorToRGB('pink-6')
+export const DEFAULT_COLOR = RGBColors.pink
 export const COLLAPSED_COLUMN_HEIGHT = 2
 
 export const Column = (columnConfig: ColumnConfig): Column => {
@@ -36,7 +36,7 @@ export const Column = (columnConfig: ColumnConfig): Column => {
   ) {
     const { keepColor, frameCount, yOffset } = getMoveToAnimationConfig(config)
 
-    changeColor(convertNamedColorToRGB('green-13'))
+    changeColor(RGBColors.green)
 
     for (let i = 0; i <= frameCount; i++) {
       const tickRate = i / frameCount
@@ -53,7 +53,7 @@ export const Column = (columnConfig: ColumnConfig): Column => {
 
   function jump(config?: Partial<AnimationConfig>) {
     const { keepColor, frameCount } = getAnimationConfig(config)
-    const color = convertNamedColorToRGB('warning')
+    const color = RGBColors.warning
     const baseY = column.y
 
     if (color && color !== column.color) {

@@ -1,4 +1,4 @@
-import { lerp, convertNamedColorToRGB } from '../utils'
+import { lerp } from '../utils'
 
 describe('Utils', () => {
   test('should calculate linear interpolation', () => {

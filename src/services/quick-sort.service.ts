@@ -2,9 +2,9 @@ import type { Column, MoveAnimation } from '@/services/SandboxService/elements/C
 import { generateNonSortedArray } from '@/services/ArrayService/array.service'
 import { renderArray } from '@/services/SandboxService/Creator'
 import { drawColumns, initAnimation } from '@/services/SandboxService/sandbox.service'
-import { convertNamedColorToRGB } from '@/utils'
 import type { ColorRGBA } from '@/types'
 import type { VariantSetup } from '@/services/SandboxService/types'
+import { RGBColors } from '@/utils'
 
 let moves: Move[] = []
 let values: number[] = []
@@ -99,10 +99,6 @@ function animateQuickSort() {
 
   const { left, right, pivotIndex, animation, indexes } = moves.shift()!
   const [i, j] = indexes
-  const grey = convertNamedColorToRGB('grey-1')
-  const primary = convertNamedColorToRGB('primary')
-  const negative = convertNamedColorToRGB('negative')
-  const warning = convertNamedColorToRGB('warning')
 
   if (animation.startsWith('changeColor')) {
     changeColumnColor()
@@ -114,7 +110,7 @@ function animateQuickSort() {
 
   if (!moves.length) {
     for (let i = 0; i < columns.length; i++) {
-      columns[i].changeColor(primary)
+      columns[i].changeColor(RGBColors.primary)
     }
   }
 
@@ -133,23 +129,23 @@ function animateQuickSort() {
     ;[columns[i], columns[j]] = [columns[j], columns[i]]
 
     if (i === pivotIndex || j === pivotIndex) {
-      columns[pivotIndex].changeColor(negative)
+      columns[pivotIndex].changeColor(RGBColors.negative)
     }
   }
 
   function touch() {
-    changeColor(columns[i], warning)
+    changeColor(columns[i], RGBColors.warning)
 
     if (i > 0) {
-      changeColor(columns[i - 1], primary)
+      changeColor(columns[i - 1], RGBColors.primary)
     }
 
     if (!animation.endsWith('j')) return
 
-    changeColor(columns[j], warning)
+    changeColor(columns[j], RGBColors.warning)
 
     if (j < values.length - 1) {
-      changeColor(columns[j + 1], primary)
+      changeColor(columns[j + 1], RGBColors.primary)
     }
 
     function changeColor(column: Column, RGBColor: ColorRGBA) {
@@ -160,13 +156,13 @@ function animateQuickSort() {
   function changeColumnColor() {
     for (let i = 0; i < columns.length; i++) {
       const isInRange = i >= left && i <= right
-      const color = isInRange ? primary : grey
+      const color = isInRange ? RGBColors.primary : RGBColors.grey
 
       columns[i].changeColor(color)
     }
 
     if (moves.length) {
-      columns[pivotIndex].changeColor(negative)
+      columns[pivotIndex].changeColor(RGBColors.info)
     }
   }
 }

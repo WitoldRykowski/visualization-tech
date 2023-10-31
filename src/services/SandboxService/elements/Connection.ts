@@ -2,9 +2,9 @@ import type { Point } from '@/services/SandboxService/elements/Point'
 import { getContext } from '@/services/SandboxService/sandbox.service'
 import type { ColorRGBA } from '@/types'
 import { colors } from 'quasar'
-import { convertNamedColorToRGB } from '@/utils'
+import { RGBColors } from '@/utils'
 
-export const DEFAULT_COLOR = convertNamedColorToRGB('primary')
+export const DEFAULT_COLOR = RGBColors.primary
 
 export const Connection = ({ startAt, finishAt, color }: ConnectionPayload) => {
   const connection: Connection = {
@@ -17,9 +17,10 @@ export const Connection = ({ startAt, finishAt, color }: ConnectionPayload) => {
     changeColor
   }
 
-  const dx = Math.abs(finishAt.x - startAt.x)
-  const dy = Math.abs(finishAt.y - startAt.y)
-  connection.weight = Math.sqrt(dx * dx + dy * dy)
+  // Euclidean distance between two points in a Cartesian coordinate system.
+  const x = Math.abs(finishAt.x - startAt.x)
+  const y = Math.abs(finishAt.y - startAt.y)
+  connection.weight = Math.sqrt(x ** 2 + y ** 2)
 
   return connection
 

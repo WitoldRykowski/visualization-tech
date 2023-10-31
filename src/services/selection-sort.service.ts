@@ -2,7 +2,7 @@ import type { Column, MoveAnimation } from './SandboxService/elements/Column'
 import { generateNonSortedArray } from './ArrayService/array.service'
 import { renderArray } from '@/services/SandboxService/Creator'
 import { drawColumns, initAnimation } from './SandboxService/sandbox.service'
-import { convertNamedColorToRGB } from '@/utils'
+import { RGBColors } from '@/utils'
 import { DEFAULT_COLOR } from './SandboxService/elements/Column'
 import type { VariantSetup } from '@/services/SandboxService/types'
 
@@ -97,13 +97,13 @@ function animateSelectionSort() {
   function handleChangeColor() {
     if (lastMinIndex !== minIndex) {
       if (lastMinIndex === i && j !== -1) {
-        columns[i].changeColor(convertNamedColorToRGB('warning'))
+        columns[i].changeColor(RGBColors.warning)
       } else {
         columns[lastMinIndex].changeColor(DEFAULT_COLOR)
       }
     }
 
-    columns[minIndex].changeColor(convertNamedColorToRGB('info'))
+    columns[minIndex].changeColor(RGBColors.info)
   }
 }
 

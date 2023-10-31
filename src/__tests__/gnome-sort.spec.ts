@@ -1,8 +1,8 @@
 import { __testing } from '../services/gnome-sort.service'
 import { isArraySortedAscending, isNotSorted } from '../utils/testUtils'
 import { initAnimation } from '../services/SandboxService/sandbox.service'
-import { convertNamedColorToRGB } from '../utils'
 import { DEFAULT_COLOR } from '../services/SandboxService/elements/Column'
+import { RGBColors } from '../utils'
 
 describe('Gnome Sort', () => {
   test('should initialize algorithm sandbox', () => {
@@ -46,7 +46,7 @@ describe('Gnome Sort', () => {
       animateGnomeSort()
 
       if (animation === 'touch') {
-        const color = convertNamedColorToRGB('light-blue-5')
+        const color = RGBColors.lightBlue
         if (left !== -1) {
           expect(columns[left].changeColor).toHaveBeenCalledWith(color)
         }

@@ -1,7 +1,6 @@
 import type { ComputedRef, InjectionKey } from 'vue'
 import type { Noop } from '@/types'
 import type { Column } from '@/services/SandboxService/elements/Column'
-import { BFS } from '@/services/bfs.service'
 
 let _animationFrameId = -1
 

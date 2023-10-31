@@ -7,8 +7,8 @@ import {
 import { generateSortedArray } from '@/services/ArrayService/array.service'
 import { renderArray } from '@/services/SandboxService/Creator'
 import { drawColumns, initAnimation } from '@/services/SandboxService/sandbox.service'
-import { convertNamedColorToRGB } from '@/utils'
 import type { VariantSetup } from '@/services/SandboxService/types'
+import { RGBColors } from '@/utils'
 
 export const COLLAPSE_DELAY = 15
 
@@ -91,7 +91,7 @@ const animateBinarySearch = () => {
     columns[guess].jump({ keepColor: true })
 
     if (values[guess] === target) {
-      columns[guess].changeColor(convertNamedColorToRGB('positive'))
+      columns[guess].changeColor(RGBColors.positive)
     }
   } else if (animation === 'collapse') {
     for (let i = 0; i < min; i++) {

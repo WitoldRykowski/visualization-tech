@@ -5,7 +5,7 @@ import { type Graph, Graph as createGraph } from './SandboxService/elements/Grap
 import { renderGraph } from '@/services/SandboxService/Creator'
 import type { Point } from '@/services/SandboxService/elements/Point'
 import type { MoveAnimation } from '@/services/SandboxService/elements/Column'
-import { convertNamedColorToRGB } from '@/utils'
+import { getRandomValueGivenArray, RGBColors } from '@/utils'
 
 let moves: Move[] = []
 let values: number[] = []
@@ -28,19 +28,22 @@ function visualizeBFS() {
   breadthFirstSearch()
 }
 
+type QueueItem = { node: Point; distance: number }
+
 function breadthFirstSearch() {
   const startNode = getStartNode()
   const endNode = getDestinationNode()
   const visited: Set<Point> = new Set()
   const parents: Map<Point, Point | null> = new Map()
-  const queue: Point[] = []
+  const queue: QueueItem[] = []
 
-  queue.push(startNode)
+  queue.push({ node: startNode, distance: 0 })
   visited.add(startNode)
   parents.set(startNode, null)
 
   while (queue.length > 0) {
-    const node = queue.shift()!
+    queue.sort((a, b) => a.distance - b.distance)
+    const { node, distance } = queue.shift()!
 
     if (node === endNode) {
       reconstructPath()
@@ -49,9 +52,10 @@ function breadthFirstSearch() {
 
     for (const connection of node.connections) {
       const neighbor = connection.finishAt
+      const weight = connection.weight
 
       if (!visited.has(neighbor)) {
-        queue.push(neighbor)
+        queue.push({ node: neighbor, distance: distance + weight })
         visited.add(neighbor)
         parents.set(neighbor, node)
       }
@@ -60,47 +64,41 @@ function breadthFirstSearch() {
         animation: 'changeColor',
         current: node,
         finishAt: neighbor,
-        startAt: startNode,
+        begin: startNode,
         destination: endNode
       })
     }
   }
 
   function getStartNode() {
-    return graph!.points[getIndexOfRandomPoint()]
+    return getRandomValueGivenArray(graph!.points)
   }
 
   function getDestinationNode() {
-    let potentialDestination = graph!.points[getIndexOfRandomPoint()]
+    let potentialDestination = getRandomValueGivenArray(graph!.points)
 
     while (potentialDestination === startNode) {
-      potentialDestination = graph!.points[getIndexOfRandomPoint()]
+      potentialDestination = getRandomValueGivenArray(graph!.points)
     }
 
     return potentialDestination
   }
 
-  function getIndexOfRandomPoint() {
-    return Math.floor(Math.random() * graph!.points.length - 1)
-  }
-
   function reconstructPath() {
     const path: Point[] = []
-    let currentNode: Point | null = endNode
+    let currentNode: Point | undefined | null = endNode
 
-    while (currentNode && currentNode !== startNode) {
+    while (currentNode) {
       path.unshift(currentNode)
-      currentNode = parents.get(currentNode)!
+      currentNode = parents.get(currentNode)
     }
-
-    path.unshift(startNode)
 
     for (let i = 0; i <= path.length - 2; i++) {
       moves.push({
         animation: 'changeColor-path',
         current: path[i],
         finishAt: path[i + 1],
-        startAt: startNode,
+        begin: startNode,
         destination: endNode
       })
     }
@@ -115,32 +113,34 @@ function animateBfs() {
   if (isChanged || !moves.length) return
 
   const move = moves.shift()!
-  const { animation, startAt, destination } = move
-  const info = convertNamedColorToRGB('info')
-  const warning = convertNamedColorToRGB('warning')
-  const white = convertNamedColorToRGB('grey-4')
+  const { animation, begin, destination } = move
   const isPathAnimation = animation === 'changeColor-path'
 
-  startAt.changeColor(info)
-  destination.changeColor(info)
-  startAt.isPulsing = !isPathAnimation
+  begin.changeColor(RGBColors.info)
+  destination.changeColor(RGBColors.info)
+  begin.isPulsing = !isPathAnimation
   destination.isPulsing = !isPathAnimation
 
-  const color = !isPathAnimation ? white : warning
+  const color = !isPathAnimation ? RGBColors.grey4 : RGBColors.warning
   const { finishAt, current } = move
 
-  if (current !== startAt) {
+  if (current !== begin) {
     current.changeColor(color)
   }
 
   const currentConnection = current.matchConnection(finishAt)
+  const destinationConnection = finishAt.matchConnection(current)
 
   if (currentConnection) {
     currentConnection.changeColor(color)
   }
 
+  if (destinationConnection) {
+    destinationConnection.changeColor(color)
+  }
+
   if (!moves.length) {
-    startAt.changeColor(color)
+    begin.changeColor(color)
     destination.changeColor(color)
   }
 }
@@ -154,6 +154,6 @@ type Move = {
   animation: MoveAnimation | 'changeColor-path'
   current: Point
   finishAt: Point
-  startAt: Point
+  begin: Point
   destination: Point
 }

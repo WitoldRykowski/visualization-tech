@@ -35,7 +35,7 @@ type RenderGraphResponse = {
   connections: Connection[]
 }
 
-export const renderGraph = (values: number[], undirected = false): RenderGraphResponse => {
+export const renderGraph = (values: number[]): RenderGraphResponse => {
   const points: Point[] = []
 
   const { width, height } = getSandboxSize()
@@ -60,11 +60,9 @@ export const renderGraph = (values: number[], undirected = false): RenderGraphRe
     connections.push(connection)
     startAt.connections.push(connection)
 
-    if (undirected) {
-      const connection = createConnection({ startAt: finishAt, finishAt: startAt })
-      connections.push(connection)
-      finishAt.connections.push(connection)
-    }
+    const reverseConnection = createConnection({ startAt: finishAt, finishAt: startAt })
+    connections.push(reverseConnection)
+    finishAt.connections.push(reverseConnection)
   })
 
   return { points, connections }
