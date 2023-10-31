@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { QInput, QToolbar, QToolbarTitle } from 'quasar'
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 import { useMainStore } from '@/stores/main'
 import AppButton from '@/components/AppButton/AppButton.vue'
 import { Main } from '@/router/routes'
+import { VariantInjectionKey } from '@/services/SandboxService/sandbox.service'
 
 const mainStore = useMainStore()
+const variant = inject(VariantInjectionKey)
 
 const search = computed({
   get: () => mainStore.state.search,
@@ -20,7 +22,7 @@ const search = computed({
     </QToolbarTitle>
 
     <div id="app-toolbar-actions"></div>
-    <QInput v-model="search" outlined dense label="Search" />
+    <QInput v-if="!variant" v-model="search" outlined dense label="Search" />
   </QToolbar>
 </template>
 

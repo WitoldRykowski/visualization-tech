@@ -27,7 +27,7 @@ export const Point = ({ x, y, color }: PointConfig): Point => {
 
   return point
 
-  function changeColor(color: ColorRGBA, frameCount = 2) {
+  function changeColor(color: ColorRGBA, frameCount = 1) {
     const { r: basicR, g: basicG, b: basicB } = point.color
     const { r: targetR, g: targetG, b: targetB } = color
     const rStep = (targetR - basicR) / frameCount

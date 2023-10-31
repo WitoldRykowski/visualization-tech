@@ -24,7 +24,7 @@ export const Connection = ({ startAt, finishAt, color }: ConnectionPayload) => {
 
   return connection
 
-  function changeColor(color: ColorRGBA, frameCount = 2) {
+  function changeColor(color: ColorRGBA, frameCount = 1) {
     const { r: basicR, g: basicG, b: basicB } = connection.color
     const { r: targetR, g: targetG, b: targetB } = color
     const rStep = (targetR - basicR) / frameCount
