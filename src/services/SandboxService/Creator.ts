@@ -57,14 +57,14 @@ export const renderGraph = (values: number[], undirected = false): RenderGraphRe
 
   edges.forEach(([startAt, finishAt]) => {
     const connection = createConnection({ startAt, finishAt })
+    connections.push(connection)
+    startAt.connections.push(connection)
+
     if (undirected) {
       const connection = createConnection({ startAt: finishAt, finishAt: startAt })
       connections.push(connection)
       finishAt.connections.push(connection)
     }
-
-    connections.push(connection)
-    startAt.connections.push(connection)
   })
 
   return { points, connections }

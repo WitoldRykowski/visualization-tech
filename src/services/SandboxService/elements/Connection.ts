@@ -50,7 +50,7 @@ export const Connection = ({ startAt, finishAt, color }: ConnectionPayload) => {
 
     const context = getContext()
     context.beginPath()
-    context.lineWidth = 1
+    context.lineWidth = 2
     context.strokeStyle = colors.rgbToHex(connection.color)
     context.moveTo(startAt.x, startAt.y)
     context.lineTo(finishAt.x, finishAt.y)

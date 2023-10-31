@@ -12,6 +12,7 @@ export const Point = ({ x, y, color }: PointConfig): Point => {
   const point: Point = {
     x,
     y,
+    size: 10,
     pulseRadius: 0,
     isPulsing: false,
     color: color ?? DEFAULT_COLOR,
@@ -19,7 +20,8 @@ export const Point = ({ x, y, color }: PointConfig): Point => {
     connections: [],
     draw,
     changeColor,
-    validatePoint
+    validatePoint,
+    matchConnection
   }
 
   return point
@@ -57,7 +59,7 @@ export const Point = ({ x, y, color }: PointConfig): Point => {
 
   function validatePoint({ x, y }: Pick<Point, 'x' | 'y'>) {
     const { width, height } = getSandboxSize()
-    const MARGIN = 20
+    const MARGIN = point.size * 2 + 5
 
     if (x < MARGIN || x > width - MARGIN || y < MARGIN || y > height - MARGIN) {
       return false
@@ -70,8 +72,18 @@ export const Point = ({ x, y, color }: PointConfig): Point => {
     }
   }
 
-  function draw(size = 8) {
+  function matchConnection(destination: Point) {
+    return point.connections.find((connection) => {
+      const isXMatched = connection.finishAt.x === destination.x && connection.startAt.x === point.x
+      const isYMatched = connection.finishAt.y === destination.y && connection.startAt.y === point.y
+
+      return isXMatched && isYMatched
+    })
+  }
+
+  function draw(size = 10) {
     let isChanged = false
+    point.size = size
 
     if (point.queue.length > 0) {
       const { color } = point.queue.shift()!
@@ -111,9 +123,11 @@ export type Point = PointConfig & {
   queue: Partial<PointConfig & { pulseRadius: number }>[]
   color: ColorRGBA
   pulseRadius: number
+  size: number
   isPulsing: boolean
   connections: Connection[]
   draw: (size?: number) => boolean
   changeColor: (color: ColorRGBA, frameCount?: number) => void
   validatePoint: (payload: Pick<Point, 'x' | 'y'>) => boolean
+  matchConnection: (destination: Point) => Connection | undefined
 }

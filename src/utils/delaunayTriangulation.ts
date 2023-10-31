@@ -10,14 +10,32 @@ export const createEdges = (points: Point[]) => {
   const delaunay = Delaunator.from(points.map((point) => [point.x, point.y]))
 
   for (let i = 0; i < delaunay.triangles.length; i += 3) {
-    const point1 = points[delaunay.triangles[i]]
-    const point2 = points[delaunay.triangles[i + 1]]
-    const point3 = points[delaunay.triangles[i + 2]]
+    const pointIndices = [
+      delaunay.triangles[i],
+      delaunay.triangles[i + 1],
+      delaunay.triangles[i + 2]
+    ]
 
-    edges.push([point1, point2])
-    edges.push([point2, point3])
-    edges.push([point3, point1])
+    pointIndices.sort((a, b) => a - b)
+
+    for (let j = 0; j < 3; j++) {
+      const startIdx = pointIndices[j]
+      const endIdx = pointIndices[(j + 1) % 3]
+      const start = points[startIdx]
+      const end = points[endIdx]
+      edges.push([start, end])
+    }
   }
 
-  return edges
+  // In the Delaunay triangulation, each edge is added three times,
+  // resulting in the duplicated connections, so we have to remove duplicates
+  return edges.filter(
+    (edge, index, self) =>
+      index ===
+      self.findIndex(
+        (otherEdge) =>
+          (otherEdge[0] === edge[0] && otherEdge[1] === edge[1]) ||
+          (otherEdge[0] === edge[1] && otherEdge[1] === edge[0])
+      )
+  )
 }

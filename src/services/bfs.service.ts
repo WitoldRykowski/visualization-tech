@@ -133,29 +133,15 @@ function animateBfs() {
     current.changeColor(color)
   }
 
-  const currentConnection = matchConnection(current, finishAt)
-  const finishAtConnection = matchConnection(finishAt, current)
+  const currentConnection = current.matchConnection(finishAt)
 
   if (currentConnection) {
     currentConnection.changeColor(color)
   }
 
-  if (finishAtConnection) {
-    finishAtConnection.changeColor(color)
-  }
-
   if (!moves.length) {
     startAt.changeColor(color)
     destination.changeColor(color)
-  }
-
-  function matchConnection(start: Point, destination: Point) {
-    return start.connections.find((connection) => {
-      const isXMatched = connection.finishAt.x === destination.x && connection.startAt.x === start.x
-      const isYMatched = connection.finishAt.y === destination.y && connection.startAt.y === start.y
-
-      return isXMatched && isYMatched
-    })
   }
 }
 
