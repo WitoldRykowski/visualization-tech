@@ -1,4 +1,4 @@
-import { generateNonSortedArray, generateSortedArray } from '../services/ArrayService/array.service'
+import { generateNonSortedArray, generateSortedArray } from '../services/Array/array.service'
 import { isArraySortedAscending } from '../utils/testUtils'
 
 describe('Array Service', () => {

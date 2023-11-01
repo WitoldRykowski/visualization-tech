@@ -1,13 +1,10 @@
-import {
-  Column,
-  DEFAULT_COLOR,
-  type MoveAnimation
-} from '@/services/SandboxService/elements/Column'
-import { generateNonSortedArray } from '@/services/ArrayService/array.service'
-import { renderArray } from '@/services/SandboxService/Creator'
-import { drawColumns, initAnimation } from './/SandboxService/sandbox.service'
+import { Column, DEFAULT_COLOR } from '@/services/Sandbox/elements/Column'
+import { generateNonSortedArray } from '@/services/Array/array.service'
+import { renderArray } from '@/services/Sandbox/Creator'
+import { drawColumns, initAnimation } from '@/services/Sandbox/sandbox.service'
 import { RGBColors } from '@/utils'
-import type { VariantSetup } from '@/services/SandboxService/types'
+import type { VariantSetup } from '@/services/Sandbox/types'
+import type { MoveAnimation } from '@/services/Animation/animation.service'
 
 let moves: Move[] = []
 let values: number[] = []
@@ -24,7 +21,7 @@ const initGnomeSort = () => {
 }
 
 const visualizeGnomeSort = () => {
-  moves = gnomeSort(values)
+  gnomeSort(values)
 }
 
 function gnomeSort(values: number[]) {
@@ -55,8 +52,6 @@ function gnomeSort(values: number[]) {
   }
 
   moves.push({ animation: 'finish', left: -1, right: -1 })
-
-  return moves
 }
 
 function animateGnomeSort() {

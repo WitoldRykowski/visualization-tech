@@ -3,7 +3,7 @@ import { AppToolbar } from '@/components'
 import { QPageContainer, QPage, QHeader, QLayout } from 'quasar'
 import { useMainStore } from '@/stores/main'
 import { computed, provide } from 'vue'
-import { VariantInjectionKey } from '@/services/SandboxService/sandbox.service'
+import { VariantInjectionKey } from '@/services/Sandbox/sandbox.service'
 
 const store = useMainStore()
 

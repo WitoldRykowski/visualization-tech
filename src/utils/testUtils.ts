@@ -1,4 +1,4 @@
-import { Column, type ColumnConfig } from '@/services/SandboxService/elements/Column'
+import { Column, type ColumnConfig } from '@/services/Sandbox/elements/Column'
 
 export function isArraySortedAscending(values: number[]) {
   for (let i = values.length - 1; i >= 1; i--) {

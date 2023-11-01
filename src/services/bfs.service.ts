@@ -1,11 +1,16 @@
-import type { VariantSetup } from '@/services/SandboxService/types'
-import { initAnimation } from '@/services/SandboxService/sandbox.service'
-import { generateRandomArray } from '@/services/ArrayService/array.service'
-import { type Graph, Graph as createGraph } from './SandboxService/elements/Graph'
-import { renderGraph } from '@/services/SandboxService/Creator'
-import type { Point } from '@/services/SandboxService/elements/Point'
-import type { MoveAnimation } from '@/services/SandboxService/elements/Column'
-import { getRandomValueFromGivenArray, RGBColors } from '@/utils'
+import type { VariantSetup } from '@/services/Sandbox/types'
+import { initAnimation } from '@/services/Sandbox/sandbox.service'
+import { generateRandomArray } from '@/services/Array/array.service'
+import { type Graph, Graph as createGraph } from '@/services/Sandbox/elements/Graph'
+import { renderGraph } from '@/services/Sandbox/Creator'
+import type { Point } from '@/services/Sandbox/elements/Point'
+import type { MoveAnimation } from '@/services/Animation/animation.service'
+import {
+  getPointInGraphExcludingPoint,
+  getRandomPointInGraph,
+  getRandomValueFromGivenArray,
+  RGBColors
+} from '@/utils'
 
 let moves: Move[] = []
 let values: number[] = []
@@ -24,15 +29,15 @@ const initBfs = () => {
   }
 }
 
-function visualizeBFS() {
+const visualizeBFS = () => {
   breadthFirstSearch()
 }
 
 type QueueItem = { node: Point; distance: number }
 
 function breadthFirstSearch() {
-  const startNode = getStartNode()
-  const endNode = getDestinationNode()
+  const startNode = getRandomPointInGraph(graph!.points)
+  const endNode = getPointInGraphExcludingPoint(graph!.points, startNode)
   const visited: Set<Point> = new Set()
   const parents: Map<Point, Point | null> = new Map()
   const queue: QueueItem[] = []
@@ -68,20 +73,6 @@ function breadthFirstSearch() {
         destination: endNode
       })
     }
-  }
-
-  function getStartNode() {
-    return getRandomValueFromGivenArray(graph!.points)
-  }
-
-  function getDestinationNode() {
-    let potentialDestination = getRandomValueFromGivenArray(graph!.points)
-
-    while (potentialDestination === startNode) {
-      potentialDestination = getRandomValueFromGivenArray(graph!.points)
-    }
-
-    return potentialDestination
   }
 
   function reconstructPath() {

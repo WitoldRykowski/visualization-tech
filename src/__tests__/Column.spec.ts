@@ -1,4 +1,4 @@
-import { Column } from '../services/SandboxService/elements/Column'
+import { Column } from '../services/Sandbox/elements/Column'
 
 // ATTENTION!
 // The "Column" in each test description is important

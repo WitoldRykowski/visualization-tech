@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { AppCard } from '@/components'
 import { useMainStore } from '@/stores/main'
-import type { Variant } from '@/services/SandboxService/sandbox.service'
+import type { Variant } from '@/services/Sandbox/sandbox.service'
 import { useRouter } from 'vue-router'
 import { computed } from 'vue'
 import { QChip } from 'quasar'

@@ -1,5 +1,6 @@
 import { colors, type NamedColor } from 'quasar'
 import type { ColorRGBA } from '@/types'
+import type { Point } from '@/services/Sandbox/elements/Point'
 
 export const lerp = (a: number, b: number, t: number) => {
   return a + (b - a) * t
@@ -14,6 +15,20 @@ export const getRandomValueFromGivenArray = <T>(values: T[]) => {
   const index = Math.floor(Math.random() * lastArrayIndex)
 
   return values[index]
+}
+
+export const getRandomPointInGraph = (points: Point[]) => {
+  return getRandomValueFromGivenArray(points)
+}
+
+export const getPointInGraphExcludingPoint = (points: Point[], exclude: Point) => {
+  let point = getRandomValueFromGivenArray(points)
+
+  while (point === exclude) {
+    point = getRandomValueFromGivenArray(points)
+  }
+
+  return point
 }
 
 export const RGBColors = {

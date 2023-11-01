@@ -22,3 +22,5 @@ export type AnimationConfig = {
 }
 
 export type MoveToAnimationConfig = AnimationConfig & { yOffset: number }
+
+export type MoveAnimation = 'swap' | 'jump' | 'collapse' | 'changeColor' | 'move' | 'touch'

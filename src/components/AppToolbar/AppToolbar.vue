@@ -4,7 +4,7 @@ import { computed, inject } from 'vue'
 import { useMainStore } from '@/stores/main'
 import AppButton from '@/components/AppButton/AppButton.vue'
 import { Main } from '@/router/routes'
-import { VariantInjectionKey } from '@/services/SandboxService/sandbox.service'
+import { VariantInjectionKey } from '@/services/Sandbox/sandbox.service'
 
 const mainStore = useMainStore()
 const variant = inject(VariantInjectionKey)

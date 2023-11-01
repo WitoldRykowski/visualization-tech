@@ -1,5 +1,5 @@
-import { renderArray } from '../services/SandboxService/Creator'
-import { Column } from '../services/SandboxService/elements/Column'
+import { renderArray } from '../services/Sandbox/Creator'
+import { Column } from '../services/Sandbox/elements/Column'
 
 describe('Renderer', () => {
   // ATTENTION!

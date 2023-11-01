@@ -1,4 +1,4 @@
-import type { Point } from '@/services/SandboxService/elements/Point'
+import type { Point } from '@/services/Sandbox/elements/Point'
 // https://github.com/mapbox/delaunator
 // https://en.wikipedia.org/wiki/Delaunay_triangulation
 // Library for Delaunay triangulation is implemented to create

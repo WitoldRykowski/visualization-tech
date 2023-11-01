@@ -1,10 +1,11 @@
-import type { Column, MoveAnimation } from './SandboxService/elements/Column'
-import { generateNonSortedArray } from './ArrayService/array.service'
-import { renderArray } from '@/services/SandboxService/Creator'
-import { drawColumns, initAnimation } from './SandboxService/sandbox.service'
+import type { Column } from '@/services/Sandbox/elements/Column'
+import { generateNonSortedArray } from '@/services/Array/array.service'
+import { renderArray } from '@/services/Sandbox/Creator'
+import { drawColumns, initAnimation } from '@/services/Sandbox/sandbox.service'
 import { RGBColors } from '@/utils'
-import { DEFAULT_COLOR } from './SandboxService/elements/Column'
-import type { VariantSetup } from '@/services/SandboxService/types'
+import { DEFAULT_COLOR } from '@/services/Sandbox/elements/Column'
+import type { VariantSetup } from '@/services/Sandbox/types'
+import type { MoveAnimation } from '@/services/Animation/animation.service'
 
 let moves: Move[] = []
 let values: number[] = []
@@ -21,7 +22,7 @@ const initSelectionSort = () => {
 }
 
 const visualizeSelectionSort = () => {
-  moves = selectionSort(values)
+  selectionSort(values)
 }
 
 function selectionSort(values: number[]) {
@@ -63,8 +64,6 @@ function selectionSort(values: number[]) {
     })
     ;[values[minIndex], values[i]] = [values[i], values[minIndex]]
   }
-
-  return moves
 }
 
 function animateSelectionSort() {

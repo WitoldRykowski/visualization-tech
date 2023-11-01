@@ -1,6 +1,6 @@
 import type { ComputedRef, InjectionKey } from 'vue'
 import type { Noop } from '@/types'
-import type { Column } from '@/services/SandboxService/elements/Column'
+import type { Column } from '@/services/Sandbox/elements/Column'
 
 let _animationFrameId = -1
 
@@ -75,6 +75,7 @@ export const ALGORITHMS: readonly Variant[] = [
   { name: 'BinarySearch', tags: ['searching'] },
   { name: 'BreadthFirstSearch', tags: ['searching', 'graph'] },
   { name: 'BubbleSort', tags: ['sorting'] },
+  { name: 'DepthFirstSearch', tags: ['searching', 'graph'] },
   { name: 'GnomeSort', tags: ['sorting'] },
   { name: 'InsertionSort', tags: ['sorting'] },
   { name: 'SelectionSort', tags: ['sorting'] },

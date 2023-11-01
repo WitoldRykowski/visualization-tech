@@ -1,5 +1,5 @@
-import type { Connection } from '@/services/SandboxService/elements/Connection'
-import type { Point } from '@/services/SandboxService/elements/Point'
+import type { Connection } from '@/services/Sandbox/elements/Connection'
+import type { Point } from '@/services/Sandbox/elements/Point'
 
 export const Graph = (points: Point[] = [], connections: Connection[] = []): Graph => {
   return {

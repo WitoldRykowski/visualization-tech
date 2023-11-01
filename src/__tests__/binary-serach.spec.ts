@@ -1,7 +1,7 @@
 import { __testing, COLLAPSE_DELAY } from '../services/binary-search.service'
 import { isArraySortedAscending } from '../utils/testUtils'
-import { initAnimation } from '../services/SandboxService/sandbox.service'
-import { COLLAPSED_COLUMN_HEIGHT } from '../services/SandboxService/elements/Column'
+import { initAnimation } from '../services/Sandbox/sandbox.service'
+import { COLLAPSED_COLUMN_HEIGHT } from '../services/Sandbox/elements/Column'
 
 const setup = () => {
   const { initBinarySearch, visualizeBinarySearch } = __testing()

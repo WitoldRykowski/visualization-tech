@@ -1,10 +1,11 @@
-import type { Column, MoveAnimation } from '@/services/SandboxService/elements/Column'
-import { generateNonSortedArray } from '@/services/ArrayService/array.service'
-import { renderArray } from '@/services/SandboxService/Creator'
-import { drawColumns, initAnimation } from '@/services/SandboxService/sandbox.service'
+import type { Column } from '@/services/Sandbox/elements/Column'
+import { generateNonSortedArray } from '@/services/Array/array.service'
+import { renderArray } from '@/services/Sandbox/Creator'
+import { drawColumns, initAnimation } from '@/services/Sandbox/sandbox.service'
 import type { ColorRGBA } from '@/types'
-import type { VariantSetup } from '@/services/SandboxService/types'
+import type { VariantSetup } from '@/services/Sandbox/types'
 import { RGBColors } from '@/utils'
+import type { MoveAnimation } from '@/services/Animation/animation.service'
 
 let moves: Move[] = []
 let values: number[] = []
@@ -21,7 +22,7 @@ const initQuickSort = () => {
 }
 
 const visualizeQuickSort = () => {
-  moves = quickSort(values, 0, values.length - 1)
+  quickSort(values, 0, values.length - 1)
 }
 
 function quickSort(values: number[], left: number, right: number) {
@@ -32,8 +33,6 @@ function quickSort(values: number[], left: number, right: number) {
 
     if (index < right) quickSort(values, index, right)
   }
-
-  return moves
 
   function partition(array: number[], left: number, right: number) {
     const middle = Math.floor((right + left) / 2)

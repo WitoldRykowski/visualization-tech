@@ -5,13 +5,15 @@ import {
   stopAnimation,
   VariantInjectionKey,
   Variants
-} from '@/services/SandboxService/sandbox.service'
+} from '@/services/Sandbox/sandbox.service'
 import { AppButton } from '@/components'
 import { useRouter } from 'vue-router'
 import { Main } from '@/router/routes'
 
 const router = useRouter()
 const variant = inject(VariantInjectionKey)
+
+// TODO fix visualization
 
 const visualize = () => {
   if (!variant?.value) return

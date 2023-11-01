@@ -1,6 +1,6 @@
-import * as SandboxService from '../services/SandboxService/sandbox.service'
-import * as Column from '../services/SandboxService/elements/Column'
-import * as Creator from '../services/SandboxService/Creator'
+import * as SandboxService from '../services/Sandbox/sandbox.service'
+import * as Column from '../services/Sandbox/elements/Column'
+import * as Creator from '../services/Sandbox/Creator'
 import { Noop } from '../types'
 
 jest.mock('delaunator')

@@ -1,14 +1,10 @@
-import {
-  COLLAPSED_COLUMN_HEIGHT,
-  Column,
-  DEFAULT_COLOR,
-  type MoveAnimation
-} from '@/services/SandboxService/elements/Column'
-import { generateSortedArray } from '@/services/ArrayService/array.service'
-import { renderArray } from '@/services/SandboxService/Creator'
-import { drawColumns, initAnimation } from '@/services/SandboxService/sandbox.service'
-import type { VariantSetup } from '@/services/SandboxService/types'
+import { COLLAPSED_COLUMN_HEIGHT, Column, DEFAULT_COLOR } from '@/services/Sandbox/elements/Column'
+import { generateSortedArray } from '@/services/Array/array.service'
+import { renderArray } from '@/services/Sandbox/Creator'
+import { drawColumns, initAnimation } from '@/services/Sandbox/sandbox.service'
+import type { VariantSetup } from '@/services/Sandbox/types'
 import { RGBColors } from '@/utils'
+import type { MoveAnimation } from '@/services/Animation/animation.service'
 
 export const COLLAPSE_DELAY = 15
 
@@ -29,7 +25,7 @@ const initBinarySearch = () => {
 const visualizeBinarySearch = () => {
   columns = renderArray(values)
 
-  moves = binarySearch(values)
+  binarySearch(values)
 }
 
 const binarySearch = (values: number[]) => {
@@ -75,8 +71,6 @@ const binarySearch = (values: number[]) => {
       animation: 'collapse'
     })
   }
-
-  return moves
 }
 
 const animateBinarySearch = () => {

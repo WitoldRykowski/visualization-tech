@@ -1,10 +1,10 @@
-import { getContext, getSandboxSize } from '@/services/SandboxService/sandbox.service'
+import { getContext, getSandboxSize } from '@/services/Sandbox/sandbox.service'
 import type { ColorRGBA } from '@/types'
 import { colors } from 'quasar'
 import {
   type Connection,
   DEFAULT_COLOR as connectionColor
-} from '@/services/SandboxService/elements/Connection'
+} from '@/services/Sandbox/elements/Connection'
 
 export const DEFAULT_COLOR = connectionColor
 

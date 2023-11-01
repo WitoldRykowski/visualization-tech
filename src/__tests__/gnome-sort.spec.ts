@@ -1,7 +1,7 @@
 import { __testing } from '../services/gnome-sort.service'
 import { isArraySortedAscending, isNotSorted } from '../utils/testUtils'
-import { initAnimation } from '../services/SandboxService/sandbox.service'
-import { DEFAULT_COLOR } from '../services/SandboxService/elements/Column'
+import { initAnimation } from '../services/Sandbox/sandbox.service'
+import { DEFAULT_COLOR } from '../services/Sandbox/elements/Column'
 import { RGBColors } from '../utils'
 
 describe('Gnome Sort', () => {

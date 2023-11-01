@@ -1,5 +1,5 @@
-import type { Point } from '@/services/SandboxService/elements/Point'
-import { getContext } from '@/services/SandboxService/sandbox.service'
+import type { Point } from '@/services/Sandbox/elements/Point'
+import { getContext } from '@/services/Sandbox/sandbox.service'
 import type { ColorRGBA } from '@/types'
 import { colors } from 'quasar'
 import { RGBColors } from '@/utils'

@@ -1,6 +1,6 @@
 import { __testing } from '../services/selection-sort.service'
 import { isArraySortedAscending, isNotSorted } from '../utils/testUtils'
-import { initAnimation } from '../services/SandboxService/sandbox.service'
+import { initAnimation } from '../services/Sandbox/sandbox.service'
 
 describe('', () => {
   test('should initialize algorithm sandbox', () => {

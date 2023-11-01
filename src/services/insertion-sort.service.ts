@@ -1,8 +1,9 @@
-import { generateNonSortedArray } from './ArrayService/array.service'
-import { renderArray } from '@/services/SandboxService/Creator'
-import type { Column, MoveAnimation } from './SandboxService/elements/Column'
-import { drawColumns, initAnimation } from './SandboxService/sandbox.service'
-import type { VariantSetup } from '@/services/SandboxService/types'
+import { generateNonSortedArray } from '@/services/Array/array.service'
+import { renderArray } from '@/services/Sandbox/Creator'
+import type { Column } from '@/services/Sandbox/elements/Column'
+import { drawColumns, initAnimation } from '@/services/Sandbox/sandbox.service'
+import type { VariantSetup } from '@/services/Sandbox/types'
+import type { MoveAnimation } from '@/services/Animation/animation.service'
 
 let moves: Move[] = []
 let values: number[] = []
@@ -19,7 +20,7 @@ const initInsertionSort = () => {
 }
 
 const visualizeInsertionSort = () => {
-  moves = insertionSort(values)
+  insertionSort(values)
 }
 
 function insertionSort(values: number[]) {
@@ -39,8 +40,6 @@ function insertionSort(values: number[]) {
 
     values[j + 1] = key
   }
-
-  return moves
 }
 
 function animateInsertionSort() {

@@ -1,10 +1,10 @@
-import { getSandboxSize } from '@/services/SandboxService/sandbox.service'
-import { Column } from '@/services/SandboxService/elements/Column'
-import { Point as createPoint, type Point } from '@/services/SandboxService/elements/Point'
+import { getSandboxSize } from '@/services/Sandbox/sandbox.service'
+import { Column } from '@/services/Sandbox/elements/Column'
+import { Point as createPoint, type Point } from '@/services/Sandbox/elements/Point'
 import {
   Connection as createConnection,
   type Connection
-} from '@/services/SandboxService/elements/Connection'
+} from '@/services/Sandbox/elements/Connection'
 import { createEdges } from '@/utils/delaunayTriangulation'
 
 export const renderArray = (values: number[]) => {
