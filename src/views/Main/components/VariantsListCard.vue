@@ -30,7 +30,7 @@ const variantName = computed(() => {
     <span class="variant-name">{{ variantName }}</span>
 
     <div class="tags">
-      <QChip class="tag" v-for="tag in variant.tags" :key="tag" :label="`#${tag}`" />
+      <QChip dense class="tag" v-for="tag in variant.tags" :key="tag" :label="`#${tag}`" />
     </div>
   </AppCard>
 </template>
@@ -39,7 +39,7 @@ const variantName = computed(() => {
 $transition: 0.3s;
 
 .app-list-card {
-  min-width: calc(20% - 1rem);
+  width: calc(25% - 1rem);
   cursor: pointer;
   transition: $transition;
 }

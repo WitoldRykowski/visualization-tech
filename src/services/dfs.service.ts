@@ -1,21 +1,20 @@
 import { Graph as createGraph, type Graph } from '@/services/Sandbox/elements/Graph'
 import { initAnimation } from '@/services/Sandbox/sandbox.service'
-import { generateRandomArray } from '@/services/Array/array.service'
+import { generateFilledArray } from '@/services/Array/array.service'
 import { renderGraph } from '@/services/Sandbox/Creator'
 import { type VariantSetup } from '@/services/Sandbox/types'
 import type { Point } from '@/services/Sandbox/elements/Point'
 import { getPointInGraphExcludingPoint, getRandomPointInGraph, RGBColors } from '@/utils'
 import type { MoveAnimation } from '@/services/Animation/animation.service'
 
+const values = generateFilledArray()
 let moves: Move[] = []
-let values: number[] = []
 let graph: Graph | undefined = undefined
 
 const initDfs = () => {
   initAnimation(init, animateDfs)
 
   function init() {
-    values = generateRandomArray()
     moves = []
 
     const { points, connections } = renderGraph(values)

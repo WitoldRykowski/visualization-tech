@@ -60,7 +60,7 @@ export const initAnimation = (callback: Noop, animation: Noop) => {
   animate()
 }
 
-const POSSIBLE_TAGS = ['sorting', 'searching', 'graph'] as const
+const POSSIBLE_TAGS = ['sorting', 'searching', 'graph', 'shortest-path'] as const
 
 type PossibleTags = readonly (typeof POSSIBLE_TAGS)[number][]
 
@@ -73,9 +73,10 @@ export type Variant = {
 
 export const ALGORITHMS: readonly Variant[] = [
   { name: 'BinarySearch', tags: ['searching'] },
-  { name: 'BreadthFirstSearch', tags: ['searching', 'graph'] },
+  { name: 'BreadthFirstSearch', tags: ['searching', 'graph', 'shortest-path'] },
   { name: 'BubbleSort', tags: ['sorting'] },
   { name: 'DepthFirstSearch', tags: ['searching', 'graph'] },
+  { name: 'Dijkstra', tags: ['searching', 'graph', 'shortest-path'] },
   { name: 'GnomeSort', tags: ['sorting'] },
   { name: 'InsertionSort', tags: ['sorting'] },
   { name: 'SelectionSort', tags: ['sorting'] },

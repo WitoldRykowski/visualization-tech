@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, onBeforeUnmount, onMounted } from 'vue'
+import { inject, onBeforeUnmount, onMounted, ref } from 'vue'
 import {
   initSandbox,
   stopAnimation,
@@ -12,17 +12,24 @@ import { Main } from '@/router/routes'
 
 const router = useRouter()
 const variant = inject(VariantInjectionKey)
-
-// TODO fix visualization
+const isFirstRun = ref(true)
 
 const visualize = () => {
   if (!variant?.value) return
+
+  if (!isFirstRun.value) {
+    generateSandbox()
+  }
+
+  isFirstRun.value = false
 
   setTimeout(Variants[variant.value].visualize, 300)
 }
 
 const generateSandbox = () => {
   if (!variant?.value) return
+
+  isFirstRun.value = true
 
   Variants[variant.value].init()
 }

@@ -11,14 +11,11 @@ export const generateSortedArray = (size = DEFAULT_ARRAY_SIZE) => {
   return sortedArray
 }
 
-export const generateRandomArray = (size = 100) => {
-  const randomArray = []
+export const generateFilledArray = (size = 100) => {
+  const values = new Array(size)
+  values.fill(0)
 
-  for (let i = 0; i < size; i++) {
-    randomArray.push(Math.floor(Math.random()))
-  }
-
-  return randomArray
+  return values
 }
 
 export const generateNonSortedArray = (size = DEFAULT_ARRAY_SIZE) => {
