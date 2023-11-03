@@ -9,7 +9,7 @@ import type { MoveAnimation } from '@/services/Animation/animation.service'
 
 const values = generateFilledArray()
 let moves: Move[] = []
-let graph: Graph | undefined = undefined
+let graph: Graph
 
 const initDijkstra = () => {
   initAnimation(init, animateDijkstra)
@@ -28,7 +28,6 @@ const visualizeDijkstra = () => {
 }
 
 function dijkstra() {
-  if (!graph) return
   const start = getRandomPointInGraph(graph.points)
   const end = getPointInGraphExcludingPoint(graph.points, start)
   const distances: Record<string, number> = {}
@@ -52,6 +51,10 @@ function dijkstra() {
     })
 
     unvisitedPoints.splice(unvisitedPoints.indexOf(currentPoint), 1)
+
+    if (currentPoint === end) {
+      break
+    }
 
     // Update distances and previous vertices for neighboring points
     for (const connection of currentPoint.connections) {
@@ -96,7 +99,6 @@ function dijkstra() {
 }
 
 function animateDijkstra() {
-  if (!graph) return
   const isChanged = graph.draw()
 
   if (isChanged || !moves.length) return

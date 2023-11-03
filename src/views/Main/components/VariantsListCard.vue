@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router'
 import { computed } from 'vue'
 import { QChip } from 'quasar'
 import { Sandbox } from '@/router/routes'
+import { convertCamelCaseToText } from '@/utils'
 
 const store = useMainStore()
 const router = useRouter()
@@ -21,7 +22,7 @@ const setVariant = () => {
 }
 
 const variantName = computed(() => {
-  return props.variant.name.replace(/([a-z])([A-Z])/g, '$1 $2')
+  return convertCamelCaseToText(props.variant.name)
 })
 </script>
 

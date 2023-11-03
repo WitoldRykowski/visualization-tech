@@ -6,7 +6,7 @@ import type { Point } from '@/services/Sandbox/elements/Point'
 import Delaunator from 'delaunator'
 
 export const createEdges = (points: Point[]) => {
-  const edges = []
+  const edges: Point[][] = []
   const delaunay = Delaunator.from(points.map((point) => [point.x, point.y]))
 
   for (let i = 0; i < delaunay.triangles.length; i += 3) {
@@ -29,13 +29,17 @@ export const createEdges = (points: Point[]) => {
 
   // In the Delaunay triangulation, each edge is added three times,
   // resulting in the duplicated connections, so we have to remove duplicates
-  return edges.filter(
-    (edge, index, self) =>
-      index ===
-      self.findIndex(
+  return removeDuplicateEdges()
+
+  function removeDuplicateEdges() {
+    return edges.filter((edge, index, self) => {
+      const indexOfDuplicatedEdge = self.findIndex(
         (otherEdge) =>
           (otherEdge[0] === edge[0] && otherEdge[1] === edge[1]) ||
           (otherEdge[0] === edge[1] && otherEdge[1] === edge[0])
       )
-  )
+
+      return index === indexOfDuplicatedEdge
+    })
+  }
 }

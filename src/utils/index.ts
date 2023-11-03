@@ -31,6 +31,10 @@ export const getPointInGraphExcludingPoint = (points: Point[], exclude: Point) =
   return point
 }
 
+export const convertCamelCaseToText = (text: string) => {
+  return text.replace(/([a-z])([A-Z])/g, '$1 $2')
+}
+
 export const RGBColors = {
   primary: convertNamedColorToRGB('primary'),
   positive: convertNamedColorToRGB('positive'),
