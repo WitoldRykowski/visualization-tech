@@ -1,7 +1,7 @@
 import type { Column } from '@/services/Sandbox/elements/Column'
 import { drawColumns, initAnimation } from '@/services/Sandbox/sandbox.service'
 import { generateNonSortedArray } from '@/services/Array/array.service'
-import { renderArray } from '@/services/Sandbox/Creator'
+import { getColumns } from '@/services/Sandbox/Creator'
 import type { VariantSetup } from '@/services/Sandbox/types'
 import type { MoveAnimation } from '@/services/Animation/animation.service'
 
@@ -14,7 +14,7 @@ const initMergeSort = () => {
 
   function init() {
     values = generateNonSortedArray()
-    columns = renderArray(values)
+    columns = getColumns(values)
     moves = []
   }
 }

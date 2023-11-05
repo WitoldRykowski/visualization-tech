@@ -2,7 +2,7 @@ import type { VariantSetup } from '@/services/Sandbox/types'
 import { initAnimation } from '@/services/Sandbox/sandbox.service'
 import { generateFilledArray } from '@/services/Array/array.service'
 import { type Graph, Graph as createGraph } from '@/services/Sandbox/elements/Graph'
-import { renderGraph } from '@/services/Sandbox/Creator'
+import { getGraphStructure } from '@/services/Sandbox/Creator'
 import type { Point } from '@/services/Sandbox/elements/Point'
 import type { MoveAnimation } from '@/services/Animation/animation.service'
 import { getPointInGraphExcludingPoint, getRandomPointInGraph, RGBColors } from '@/utils'
@@ -17,7 +17,7 @@ const initBfs = () => {
   function init() {
     moves = []
 
-    const { points, connections } = renderGraph(values)
+    const { points, connections } = getGraphStructure(values)
 
     graph = createGraph(points, connections)
   }

@@ -10,6 +10,7 @@ import { BFS as BreadthFirstSearch } from '@/services/bfs.service'
 import { DFS as DepthFirstSearch } from '@/services/dfs.service'
 import { Dijkstra } from '@/services/dijkstra.service'
 import { MergeSort } from '@/services/merge-sort.service'
+import { HeapSort } from '@/services/heap-sort.service'
 
 export const Variants: Record<NonNullable<VariantName>, VariantSetup> = {
   BubbleSort,
@@ -18,6 +19,7 @@ export const Variants: Record<NonNullable<VariantName>, VariantSetup> = {
   InsertionSort,
   SelectionSort,
   QuickSort,
+  HeapSort,
   MergeSort,
   BreadthFirstSearch,
   DepthFirstSearch,

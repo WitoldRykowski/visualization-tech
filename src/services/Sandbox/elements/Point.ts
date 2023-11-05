@@ -8,10 +8,11 @@ import {
 
 export const DEFAULT_COLOR = connectionColor
 
-export const Point = ({ x, y, color }: PointConfig): Point => {
+export const Point = ({ x, y, color, value }: PointConfig): Point => {
   const point: Point = {
     x,
     y,
+    value: value ?? -1,
     size: 10,
     pulseRadius: 0,
     isPulsing: false,
@@ -131,12 +132,14 @@ type PointConfig = {
   x: number
   y: number
   color?: ColorRGBA
+  value?: number
 }
 
 export type Point = PointConfig & {
   queue: Partial<PointConfig & { pulseRadius: number }>[]
   color: ColorRGBA
   pulseRadius: number
+  value: number
   size: number
   isPulsing: boolean
   connections: Connection[]

@@ -39,10 +39,10 @@ beforeEach(() => {
     })
   }
 
-  if (!currentTestName.includes('renderArray')) {
-    const renderArray = jest.spyOn(Creator, 'renderArray')
+  if (!currentTestName.includes('getColumns')) {
+    const getColumns = jest.spyOn(Creator, 'getColumns')
 
-    renderArray.mockImplementation((values: number[]) => {
+    getColumns.mockImplementation((values: number[]) => {
       return values.map(() => {
         return Column.Column({
           x: 1,

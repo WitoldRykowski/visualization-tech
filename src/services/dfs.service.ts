@@ -1,7 +1,7 @@
 import { Graph as createGraph, type Graph } from '@/services/Sandbox/elements/Graph'
 import { initAnimation } from '@/services/Sandbox/sandbox.service'
 import { generateFilledArray } from '@/services/Array/array.service'
-import { renderGraph } from '@/services/Sandbox/Creator'
+import { getGraphStructure } from '@/services/Sandbox/Creator'
 import { type VariantSetup } from '@/services/Sandbox/types'
 import type { Point } from '@/services/Sandbox/elements/Point'
 import { getPointInGraphExcludingPoint, getRandomPointInGraph, RGBColors } from '@/utils'
@@ -17,7 +17,7 @@ const initDfs = () => {
   function init() {
     moves = []
 
-    const { points, connections } = renderGraph(values)
+    const { points, connections } = getGraphStructure(values)
 
     graph = createGraph(points, connections)
   }

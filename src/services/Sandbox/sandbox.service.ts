@@ -61,7 +61,7 @@ export const initAnimation = (callback: Noop, animation: Noop) => {
   animate()
 }
 
-export const POSSIBLE_TAGS = ['sorting', 'searching', 'graph', 'shortest-path'] as const
+export const POSSIBLE_TAGS = ['sorting', 'searching', 'graph', 'shortest-path', 'heap'] as const
 
 export type Tag = (typeof POSSIBLE_TAGS)[number]
 
@@ -79,6 +79,7 @@ export const ALGORITHMS: readonly Variant[] = [
   { name: 'DepthFirstSearch', tags: ['searching', 'graph'] },
   { name: 'Dijkstra', tags: ['graph', 'shortest-path'] },
   { name: 'GnomeSort', tags: ['sorting'] },
+  { name: 'HeapSort', tags: ['sorting', 'heap'] },
   { name: 'InsertionSort', tags: ['sorting'] },
   // { name: 'MergeSort', tags: ['sorting'] }, TODO Think how to visualize
   { name: 'SelectionSort', tags: ['sorting'] },

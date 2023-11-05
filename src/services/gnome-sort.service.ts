@@ -1,6 +1,6 @@
 import { Column, DEFAULT_COLOR } from '@/services/Sandbox/elements/Column'
 import { generateNonSortedArray } from '@/services/Array/array.service'
-import { renderArray } from '@/services/Sandbox/Creator'
+import { getColumns } from '@/services/Sandbox/Creator'
 import { drawColumns, initAnimation } from '@/services/Sandbox/sandbox.service'
 import { RGBColors } from '@/utils'
 import type { VariantSetup } from '@/services/Sandbox/types'
@@ -15,7 +15,7 @@ const initGnomeSort = () => {
 
   function init() {
     values = generateNonSortedArray()
-    columns = renderArray(values)
+    columns = getColumns(values)
     moves = []
   }
 }

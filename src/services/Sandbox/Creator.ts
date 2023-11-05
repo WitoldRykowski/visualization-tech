@@ -7,7 +7,7 @@ import {
 } from '@/services/Sandbox/elements/Connection'
 import { createEdges } from '@/utils/delaunayTriangulation'
 
-export const renderArray = (values: number[]) => {
+export const getColumns = (values: number[]) => {
   const MARGIN = 30
   const { width, height } = getSandboxSize()
   const valuesSize = values.length
@@ -30,16 +30,15 @@ export const renderArray = (values: number[]) => {
   return columns
 }
 
-type RenderGraphResponse = {
+type getGraphStructureResponse = {
   points: Point[]
   connections: Connection[]
 }
 
 // Graph always will be non directed so every connection
 // connect point A to point B and point B to point A (two-way binding)
-export const renderGraph = (values: number[]): RenderGraphResponse => {
+export const getGraphStructure = (values: number[]): getGraphStructureResponse => {
   const points: Point[] = []
-
   const { width, height } = getSandboxSize()
 
   for (let i = 0; i < values.length; i++) {
@@ -80,4 +79,14 @@ export const renderGraph = (values: number[]): RenderGraphResponse => {
   function validatePoint({ x, y }: Pick<Point, 'x' | 'y'>) {
     return points.every((point) => point.validatePoint({ x, y }))
   }
+}
+
+export const getHeapStructure = (values: number[]) => {
+  const points: Point[] = []
+  const { width } = getSandboxSize()
+
+  // TODO draw heap
+
+  console.log(points)
+  return points
 }

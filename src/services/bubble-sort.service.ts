@@ -1,5 +1,5 @@
 import { generateNonSortedArray } from '@/services/Array/array.service'
-import { renderArray } from '@/services/Sandbox/Creator'
+import { getColumns } from '@/services/Sandbox/Creator'
 import type { Column } from '@/services/Sandbox/elements/Column'
 import { drawColumns, initAnimation } from '@/services/Sandbox/sandbox.service'
 import type { VariantSetup } from '@/services/Sandbox/types'
@@ -14,7 +14,7 @@ const initBubbleSort = () => {
 
   function init() {
     values = generateNonSortedArray()
-    columns = renderArray(values)
+    columns = getColumns(values)
     moves = []
   }
 }

@@ -1,6 +1,6 @@
 import { COLLAPSED_COLUMN_HEIGHT, Column, DEFAULT_COLOR } from '@/services/Sandbox/elements/Column'
 import { generateSortedArray } from '@/services/Array/array.service'
-import { renderArray } from '@/services/Sandbox/Creator'
+import { getColumns } from '@/services/Sandbox/Creator'
 import { drawColumns, initAnimation } from '@/services/Sandbox/sandbox.service'
 import type { VariantSetup } from '@/services/Sandbox/types'
 import { RGBColors } from '@/utils'
@@ -17,13 +17,13 @@ const initBinarySearch = () => {
 
   function init() {
     values = generateSortedArray()
-    columns = renderArray(values)
+    columns = getColumns(values)
     moves = []
   }
 }
 
 const visualizeBinarySearch = () => {
-  columns = renderArray(values)
+  columns = getColumns(values)
 
   binarySearch(values)
 }
