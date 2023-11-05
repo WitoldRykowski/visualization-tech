@@ -9,6 +9,7 @@ import { GnomeSort } from '@/services/gnome-sort.service'
 import { BFS as BreadthFirstSearch } from '@/services/bfs.service'
 import { DFS as DepthFirstSearch } from '@/services/dfs.service'
 import { Dijkstra } from '@/services/dijkstra.service'
+import { MergeSort } from '@/services/merge-sort.service'
 
 export const Variants: Record<NonNullable<VariantName>, VariantSetup> = {
   BubbleSort,
@@ -17,6 +18,7 @@ export const Variants: Record<NonNullable<VariantName>, VariantSetup> = {
   InsertionSort,
   SelectionSort,
   QuickSort,
+  MergeSort,
   BreadthFirstSearch,
   DepthFirstSearch,
   Dijkstra

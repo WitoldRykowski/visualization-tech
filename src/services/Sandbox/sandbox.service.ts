@@ -1,6 +1,7 @@
 import type { ComputedRef, InjectionKey } from 'vue'
 import type { Noop } from '@/types'
 import type { Column } from '@/services/Sandbox/elements/Column'
+import { MergeSort } from '@/services/merge-sort.service'
 
 let _animationFrameId = -1
 
@@ -79,6 +80,7 @@ export const ALGORITHMS: readonly Variant[] = [
   { name: 'Dijkstra', tags: ['graph', 'shortest-path'] },
   { name: 'GnomeSort', tags: ['sorting'] },
   { name: 'InsertionSort', tags: ['sorting'] },
+  { name: 'MergeSort', tags: ['sorting'] },
   { name: 'SelectionSort', tags: ['sorting'] },
   { name: 'QuickSort', tags: ['sorting'] }
 ]
