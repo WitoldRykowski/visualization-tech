@@ -80,7 +80,7 @@ export const ALGORITHMS: readonly Variant[] = [
   { name: 'Dijkstra', tags: ['graph', 'shortest-path'] },
   { name: 'GnomeSort', tags: ['sorting'] },
   { name: 'InsertionSort', tags: ['sorting'] },
-  { name: 'MergeSort', tags: ['sorting'] },
+  // { name: 'MergeSort', tags: ['sorting'] }, TODO Think how to visualize
   { name: 'SelectionSort', tags: ['sorting'] },
   { name: 'QuickSort', tags: ['sorting'] }
 ]
