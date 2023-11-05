@@ -1,15 +1,6 @@
 <script setup lang="ts">
 import { AppToolbar } from '@/components'
 import { QPageContainer, QPage, QHeader, QLayout } from 'quasar'
-import { useMainStore } from '@/stores/main'
-import { computed, provide } from 'vue'
-import { VariantInjectionKey } from '@/services/Sandbox/sandbox.service'
-
-const store = useMainStore()
-
-const variant = computed(() => store.state.variant)
-
-provide(VariantInjectionKey, variant)
 </script>
 
 <template>

@@ -1,19 +1,17 @@
 <script setup lang="ts">
-import { computed, inject, onBeforeUnmount, onMounted, ref } from 'vue'
-import {
-  initSandbox,
-  stopAnimation,
-  VariantInjectionKey,
-  Variants
-} from '@/services/Sandbox/sandbox.service'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { initSandbox, stopAnimation, Variants } from '@/services/Sandbox/sandbox.service'
 import { AppButton } from '@/components'
 import { useRouter } from 'vue-router'
 import { Main } from '@/router/routes'
 import { convertCamelCaseToText } from '@/utils'
+import { useMainStore } from '@/stores/main'
 
 const router = useRouter()
-const variant = inject(VariantInjectionKey)
+const store = useMainStore()
 const isFirstRun = ref(true)
+
+const variant = computed(() => store.state.variant)
 
 const visualize = () => {
   if (!variant?.value) return

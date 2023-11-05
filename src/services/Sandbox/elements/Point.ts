@@ -42,19 +42,26 @@ export const Point = ({ x, y, color }: PointConfig): Point => {
     }
   }
 
-  function pulse() {
+  function pulse(size: number) {
     point.isPulsing = true
+    const MAX_PULSE_RADIUS = 8
 
-    if (point.pulseRadius >= 6) {
+    if (point.pulseRadius >= MAX_PULSE_RADIUS) {
       point.pulseRadius = 0
     }
 
-    if (point.pulseRadius >= 2) {
-      point.pulseRadius += 0.05
-    } else if (point.pulseRadius >= 4) {
-      point.pulseRadius += 0.03
-    } else {
-      point.pulseRadius += 0.1
+    point.pulseRadius += calculateSpeed()
+
+    function calculateSpeed() {
+      const radius = size / 2
+
+      const minSpeed = 0.1
+      const maxSpeed = 0.2
+      const rangeFactor = (radius + point.pulseRadius) / MAX_PULSE_RADIUS + radius
+
+      const speed = minSpeed + (maxSpeed - minSpeed) * (1 - rangeFactor)
+
+      return Math.max(speed, minSpeed)
     }
   }
 
@@ -88,7 +95,7 @@ export const Point = ({ x, y, color }: PointConfig): Point => {
     return result.filter((connection) => !!connection) as Connection[]
   }
 
-  function draw(size = 10) {
+  function draw(size = point.size) {
     let isChanged = false
     point.size = size
 
@@ -100,7 +107,7 @@ export const Point = ({ x, y, color }: PointConfig): Point => {
     }
 
     const context = getContext()
-    const radius = size / 2
+    const radius = point.size / 2
     context.beginPath()
     context.fillStyle = colors.rgbToHex(point.color)
     context.arc(x, y, radius, 0, Math.PI * 2)
@@ -108,7 +115,7 @@ export const Point = ({ x, y, color }: PointConfig): Point => {
     context.closePath()
 
     if (point.isPulsing) {
-      pulse()
+      pulse(point.size)
 
       context.beginPath()
       context.strokeStyle = colors.rgbToHex(point.color)

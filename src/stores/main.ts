@@ -3,19 +3,13 @@ import { defineStore } from 'pinia'
 import type { VariantName } from '@/services/Sandbox/sandbox.service'
 
 export type MainState = {
-  search: string
   variant: VariantName
 }
 
 export const useMainStore = defineStore('main', () => {
   const state = reactive<MainState>({
-    search: '',
     variant: undefined
   })
-
-  const setSearch = (value: string) => {
-    state.search = value
-  }
 
   const setVariant = (variant: VariantName) => {
     state.variant = variant
@@ -23,7 +17,6 @@ export const useMainStore = defineStore('main', () => {
 
   return {
     state: readonly(state),
-    setSearch,
     setVariant
   }
 })

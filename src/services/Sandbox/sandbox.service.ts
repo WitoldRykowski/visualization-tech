@@ -60,15 +60,15 @@ export const initAnimation = (callback: Noop, animation: Noop) => {
   animate()
 }
 
-const POSSIBLE_TAGS = ['sorting', 'searching', 'graph', 'shortest-path'] as const
+export const POSSIBLE_TAGS = ['sorting', 'searching', 'graph', 'shortest-path'] as const
 
-type PossibleTags = readonly (typeof POSSIBLE_TAGS)[number][]
+export type Tag = (typeof POSSIBLE_TAGS)[number]
 
 export type VariantName = (typeof ALGORITHMS)[number]['name'] | undefined
 
 export type Variant = {
   name: string
-  tags: PossibleTags
+  tags: readonly Tag[]
 }
 
 export const ALGORITHMS: readonly Variant[] = [
@@ -76,13 +76,11 @@ export const ALGORITHMS: readonly Variant[] = [
   { name: 'BreadthFirstSearch', tags: ['searching', 'graph', 'shortest-path'] },
   { name: 'BubbleSort', tags: ['sorting'] },
   { name: 'DepthFirstSearch', tags: ['searching', 'graph'] },
-  { name: 'Dijkstra', tags: ['searching', 'graph', 'shortest-path'] },
+  { name: 'Dijkstra', tags: ['graph', 'shortest-path'] },
   { name: 'GnomeSort', tags: ['sorting'] },
   { name: 'InsertionSort', tags: ['sorting'] },
   { name: 'SelectionSort', tags: ['sorting'] },
   { name: 'QuickSort', tags: ['sorting'] }
 ]
-
-export const VariantInjectionKey = Symbol() as InjectionKey<ComputedRef<VariantName>>
 
 export * from './variants'

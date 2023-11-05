@@ -56,7 +56,8 @@ function dijkstra() {
       break
     }
 
-    // Update distances and previous vertices for neighboring points
+    const key = generatePointKey(currentPoint)
+
     for (const connection of currentPoint.connections) {
       moves.push({
         animation: 'changeColor',
@@ -67,7 +68,6 @@ function dijkstra() {
       })
 
       const neighbor = connection.finishAt
-      const key = generatePointKey(currentPoint)
       const neighborKey = generatePointKey(neighbor)
 
       const potentialDistance = distances[key] + connection.weight

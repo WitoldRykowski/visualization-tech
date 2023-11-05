@@ -7,6 +7,7 @@ import { computed } from 'vue'
 import { QChip } from 'quasar'
 import { Sandbox } from '@/router/routes'
 import { convertCamelCaseToText } from '@/utils'
+import AppTag from '@/components/AppTag/AppTag.vue'
 
 const store = useMainStore()
 const router = useRouter()
@@ -31,7 +32,7 @@ const variantName = computed(() => {
     <span class="variant-name">{{ variantName }}</span>
 
     <div class="tags">
-      <QChip dense class="tag" v-for="tag in variant.tags" :key="tag" :label="`#${tag}`" />
+      <AppTag v-for="tag in variant.tags" :key="tag" :tag="tag" />
     </div>
   </AppCard>
 </template>
@@ -40,14 +41,15 @@ const variantName = computed(() => {
 $transition: 0.3s;
 
 .app-list-card {
-  width: calc(25% - 1rem);
+  height: 150px;
   cursor: pointer;
   transition: $transition;
 }
 
 :deep(.q-card__section) {
-  @include flex-column(start, center);
+  @include flex-column(center, center);
   gap: 1rem;
+  height: 100%;
 }
 
 .app-list-card:hover {
@@ -64,9 +66,7 @@ $transition: 0.3s;
   gap: 0.5rem;
 }
 
-.tag {
-  background: $primary;
-  color: white;
+:deep(.tag) {
   transition: $transition;
 }
 
