@@ -1,27 +1,25 @@
 import type { Column } from '@/services/Sandbox/elements/Column'
 import { initAnimation } from '@/services/Sandbox/sandbox.service'
 import { generateNonSortedArray } from '@/services/Array/array.service'
-import { getColumns, getHeapStructure } from '@/services/Sandbox/Creator'
+import { getColumns } from '@/services/Sandbox/Creator'
 import type { VariantSetup } from '@/services/Sandbox/types'
-import { Graph as createGraph, type Graph } from '@/services/Sandbox/elements/Graph'
+import { Heap, type HeapInstance } from '@/services/Sandbox/elements/Heap'
 
 let moves: Move[] = []
 let values: number[] = []
 let columns: Column[] = []
-let graph: Graph | undefined = undefined
+let heap: HeapInstance | undefined = undefined
 
 const initHeapSort = () => {
   initAnimation(init, animateHeapSort)
 
   function init() {
-    values = generateNonSortedArray()
+    values = generateNonSortedArray(30)
     columns = getColumns(values)
     moves = []
   }
 
-  const points = getHeapStructure([4, 2, 6, 1, 6, 7, 1, 9, 0, 2])
-
-  graph = createGraph(points, [])
+  heap = Heap(values)
 }
 
 const visualizeHeapSort = () => {
@@ -31,9 +29,9 @@ const visualizeHeapSort = () => {
 function heapSort() {}
 
 function animateHeapSort() {
-  if (!graph) return
+  if (!heap) return
 
-  const isChanged = graph.draw()
+  const isChanged = heap.draw()
 
   if (isChanged || !moves.length) return
 }
