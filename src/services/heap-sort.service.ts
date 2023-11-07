@@ -14,7 +14,7 @@ const initHeapSort = () => {
   initAnimation(init, animateHeapSort)
 
   function init() {
-    values = generateNonSortedArray(30)
+    values = generateNonSortedArray(10)
     columns = getColumns(values)
     moves = []
   }
