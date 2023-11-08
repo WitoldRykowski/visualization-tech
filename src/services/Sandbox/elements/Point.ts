@@ -1,10 +1,7 @@
 import { getContext, getSandboxSize } from '@/services/Sandbox/sandbox.service'
 import type { ColorRGBA } from '@/types'
 import { colors } from 'quasar'
-import {
-  type Connection,
-  DEFAULT_COLOR as connectionColor
-} from '@/services/Sandbox/elements/Connection'
+import { DEFAULT_COLOR as connectionColor } from '@/services/Sandbox/elements/Connection'
 import { RGBColors } from '@/utils'
 
 export const DEFAULT_COLOR = connectionColor
@@ -19,11 +16,10 @@ export const Point = ({ x, y, color, value }: PointConfig): Point => {
     isPulsing: false,
     color: color ?? DEFAULT_COLOR,
     queue: [],
-    connections: [],
+    connections: new Map(),
     draw,
     changeColor,
     validatePoint,
-    matchConnection,
     matchTwoWayConnection
   }
 
@@ -82,19 +78,9 @@ export const Point = ({ x, y, color, value }: PointConfig): Point => {
     }
   }
 
-  function matchConnection(destination: Point) {
-    return point.connections.find((connection) => {
-      const isXMatched = connection.finishAt.x === destination.x && connection.startAt.x === point.x
-      const isYMatched = connection.finishAt.y === destination.y && connection.startAt.y === point.y
-
-      return isXMatched && isYMatched
-    })
-  }
-
-  function matchTwoWayConnection(destination: Point): Connection[] {
-    const result = [matchConnection(destination), destination.matchConnection(point)]
-
-    return result.filter((connection) => !!connection) as Connection[]
+  function matchTwoWayConnection(destination: Point): number[] {
+    // @ts-ignore
+    return [destination.connections.get(point), point.connections.get(destination)]
   }
 
   function draw(size = point.size) {
@@ -150,10 +136,9 @@ export type Point = {
   value: number | null
   size: number
   isPulsing: boolean
-  connections: Connection[]
+  connections: Map<Point, number>
   draw: (size?: number) => boolean
   changeColor: (color: ColorRGBA, frameCount?: number) => void
   validatePoint: (payload: Pick<Point, 'x' | 'y'>) => boolean
-  matchConnection: (destination: Point) => Connection | undefined
-  matchTwoWayConnection: (destination: Point) => Connection[]
+  matchTwoWayConnection: (destination: Point) => number[]
 }

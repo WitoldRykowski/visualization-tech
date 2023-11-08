@@ -33,11 +33,11 @@ export const Graph = (values: number[]): Graph => {
   edges.forEach(([startAt, finishAt]) => {
     const connection = createConnection({ startAt, finishAt })
     graph.connections.push(connection)
-    startAt.connections.push(connection)
+    startAt.connections.set(finishAt, graph.connections.length - 1)
 
     const reverseConnection = createConnection({ startAt: finishAt, finishAt: startAt })
     graph.connections.push(reverseConnection)
-    finishAt.connections.push(reverseConnection)
+    finishAt.connections.set(startAt, graph.connections.length - 1)
   })
 
   return graph

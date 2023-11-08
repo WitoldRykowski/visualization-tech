@@ -42,13 +42,14 @@ function breadthFirstSearch() {
     const { node, distance } = queue.shift()!
 
     if (node === endNode) {
+      console.log(queue)
       reconstructPath()
       return
     }
 
-    for (const connection of node.connections) {
-      const neighbor = connection.finishAt
-      const weight = connection.weight
+    for (const connection of node.connections.values()) {
+      const neighbor = graph!.connections[connection].finishAt
+      const weight = graph!.connections[connection].weight
 
       if (!visited.has(neighbor)) {
         queue.push({ node: neighbor, distance: distance + weight })
@@ -111,8 +112,7 @@ function animateBfs() {
   }
 
   const connections = current.matchTwoWayConnection(finishAt)
-
-  connections.forEach((connection) => connection.changeColor(color))
+  connections.forEach((connection) => graph!.connections[connection].changeColor(color))
 
   if (!moves.length) {
     begin.changeColor(color)

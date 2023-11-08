@@ -49,17 +49,19 @@ function runDFS() {
 
     visited.add(node)
 
-    for (const connection of node.connections) {
+    for (const connection of node.connections.values()) {
+      const finishAt = graph!.connections[connection].finishAt
+
       moves.push({
         animation: 'changeColor',
         destination,
         begin: start,
         current: node,
-        finishAt: connection.finishAt
+        finishAt
       })
 
-      if (!visited.has(connection.finishAt)) {
-        const path = depthFirstSearch(connection.finishAt, visited)
+      if (!visited.has(finishAt)) {
+        const path = depthFirstSearch(finishAt, visited)
 
         if (path.length > 0) {
           return [node, ...path]
@@ -95,7 +97,7 @@ function animateDfs() {
   }
 
   const connections = current.matchTwoWayConnection(finishAt)
-  connections.forEach((connection) => connection.changeColor(color))
+  connections.forEach((connection) => graph!.connections[connection].changeColor(color))
 
   if (!moves.length) {
     begin.changeColor(color)
