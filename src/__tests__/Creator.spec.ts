@@ -1,12 +1,12 @@
 import { getColumns } from '../services/Sandbox/Creator'
 import { Column } from '../services/Sandbox/elements/Column'
 
-describe('Renderer', () => {
+describe('Creator', () => {
   // ATTENTION!
   // The "getColumns" in test description is important
   // because of a condition in Jest's setup file that is based on the test name
 
-  test('should getColumns', () => {
+  test('should draw columns', () => {
     const values = [1, 2, 3, 4, 5]
     const columns = getColumns(values)
 

@@ -20,39 +20,33 @@ export const Heap = (values: number[]): HeapInstance => {
   const levels = Math.ceil(Math.log2(values.length + 1))
 
   for (let level = 1; level < levels; level++) {
-    const nodesAtLevel = 2 ** level
-    const xIncrease = width / 2 / nodesAtLevel
+    let nodesAtLevel = 2 ** level
+    const pointsSpacing = width / 2 / nodesAtLevel
+    let parent: Point | undefined = undefined
 
-    // if (valuesCopy.length < nodesAtLevel) {
-    //   nodesAtLevel = valuesCopy.length
-    // }
-
-    for (let node = 1; node < nodesAtLevel; node += 2) {
-      const parent = queue.shift()!
-      const left = addNode(parent, -xIncrease)
-
-      queue.push(left)
-      if (!valuesCopy.length) break
-
-      const right = addNode(parent, xIncrease)
-      queue.push(right)
+    if (valuesCopy.length < nodesAtLevel) {
+      nodesAtLevel = valuesCopy.length
     }
-  }
 
-  function addNode(parent: Point, xModifier: number) {
-    const levelsSpacing = (height - 2 * SPACING_Y) / levels
-    const node = Point({
-      x: parent.x + xModifier,
-      y: parent.y + levelsSpacing,
-      value: valuesCopy.shift()
-    })
+    for (let node = 1; node <= nodesAtLevel; node++) {
+      const levelsSpacing = (height - 2 * SPACING_Y) / levels
+      const isEven = node % 2 === 0
+      parent = isEven ? parent : queue.shift()
+      const xModifier = isEven ? pointsSpacing : -pointsSpacing
 
-    heap.points.push(node)
-    const leftConnection = Connection({ startAt: parent, finishAt: node })
-    node.connections.push(leftConnection)
-    heap.connections.push(leftConnection)
+      const point = Point({
+        x: parent!.x + xModifier,
+        y: parent!.y + levelsSpacing,
+        value: valuesCopy.shift()
+      })
 
-    return node
+      heap.points.push(point)
+      queue.push(point)
+
+      const leftConnection = Connection({ startAt: parent!, finishAt: point })
+      point.connections.push(leftConnection)
+      heap.connections.push(leftConnection)
+    }
   }
 
   draw()
