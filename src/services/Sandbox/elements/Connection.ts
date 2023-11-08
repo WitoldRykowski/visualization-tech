@@ -61,16 +61,16 @@ export const Connection = ({ startAt, finishAt, color }: ConnectionPayload) => {
   }
 }
 
-type ConnectionPayload = {
-  startAt: Point
-  finishAt: Point
+type ConnectionPayload = Pick<Connection, 'startAt' | 'finishAt'> & {
   color?: ColorRGBA
 }
 
 export type Connection = {
+  startAt: Point
+  finishAt: Point
   queue: Partial<ConnectionPayload>[]
   color: ColorRGBA
   weight: number
   draw: (width?: number) => boolean
   changeColor: (color: ColorRGBA, frameCount?: number) => void
-} & ConnectionPayload
+}

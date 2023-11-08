@@ -5,6 +5,7 @@ import {
   type Connection,
   DEFAULT_COLOR as connectionColor
 } from '@/services/Sandbox/elements/Connection'
+import { RGBColors } from '@/utils'
 
 export const DEFAULT_COLOR = connectionColor
 
@@ -12,7 +13,7 @@ export const Point = ({ x, y, color, value }: PointConfig): Point => {
   const point: Point = {
     x,
     y,
-    value: value ?? -1,
+    value: value ?? null,
     size: 10,
     pulseRadius: 0,
     isPulsing: false,
@@ -115,6 +116,13 @@ export const Point = ({ x, y, color, value }: PointConfig): Point => {
     context.fill()
     context.closePath()
 
+    if (point.value !== null) {
+      context.fillStyle = colors.rgbToHex(RGBColors.grey)
+      context.textAlign = 'center'
+      context.font = '14px Arial'
+      context.fillText(`${point.value}`, x, y + 5)
+    }
+
     if (point.isPulsing) {
       pulse(point.size)
 
@@ -128,18 +136,18 @@ export const Point = ({ x, y, color, value }: PointConfig): Point => {
   }
 }
 
-type PointConfig = {
-  x: number
-  y: number
+type PointConfig = Pick<Point, 'x' | 'y'> & {
   color?: ColorRGBA
   value?: number
 }
 
-export type Point = PointConfig & {
+export type Point = {
+  x: number
+  y: number
   queue: Partial<PointConfig & { pulseRadius: number }>[]
   color: ColorRGBA
   pulseRadius: number
-  value: number
+  value: number | null
   size: number
   isPulsing: boolean
   connections: Connection[]

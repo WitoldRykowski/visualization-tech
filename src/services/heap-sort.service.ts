@@ -6,13 +6,16 @@ import { Heap, type HeapInstance } from '@/services/Sandbox/elements/Heap'
 let moves: Move[] = []
 let values: number[] = []
 let heap: HeapInstance | undefined = undefined
+const SAFE_ARRAY_SIZE = 30
 
 const initHeapSort = () => {
   initAnimation(init, animateHeapSort)
 
   function init() {
-    values = generateNonSortedArray(30)
     moves = []
+    values = generateNonSortedArray(SAFE_ARRAY_SIZE).map((value) => {
+      return Math.floor(value * 50)
+    })
   }
 
   heap = Heap(values)

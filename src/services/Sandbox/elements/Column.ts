@@ -135,20 +135,20 @@ export const Column = (columnConfig: ColumnConfig): Column => {
   }
 }
 
-export type Column = ColumnConfig & {
+export type Column = {
+  x: number
+  y: number
+  width: number
+  height: number
   queue: Partial<ColumnConfig>[]
   color: ColorRGBA
   draw: () => boolean
-  moveTo: (location: Pick<ColumnConfig, 'x' | 'y'>, config?: Partial<MoveToAnimationConfig>) => void
+  moveTo: (location: Pick<Column, 'x' | 'y'>, config?: Partial<MoveToAnimationConfig>) => void
   jump: (config?: Partial<AnimationConfig>) => void
   collapse: (config?: Partial<AnimationConfig>) => void
   changeColor: (color: ColorRGBA, frameCount?: number) => void
 }
 
-export type ColumnConfig = {
-  x: number
-  y: number
-  width: number
-  height: number
+export type ColumnConfig = Pick<Column, 'x' | 'y' | 'width' | 'height'> & {
   color?: ColorRGBA
 }
