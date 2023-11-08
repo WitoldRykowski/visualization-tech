@@ -57,15 +57,6 @@ export const Connection = ({ startAt, finishAt, color }: ConnectionPayload) => {
     context.lineTo(finishAt.x, finishAt.y)
     context.stroke()
 
-    context.fillStyle = 'red'
-    context.textAlign = 'center'
-    context.font = '10px Arial'
-    context.fillText(
-      `${Math.floor(connection.weight)}`,
-      (startAt.x + finishAt.x) / 2,
-      (startAt.y + finishAt.y) / 2
-    )
-
     return isChanged
   }
 }
