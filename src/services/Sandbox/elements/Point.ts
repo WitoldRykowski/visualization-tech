@@ -2,7 +2,7 @@ import { getContext, getSandboxSize } from '@/services/Sandbox/sandbox.service'
 import type { ColorRGBA } from '@/types'
 import { colors } from 'quasar'
 import { DEFAULT_COLOR as connectionColor } from '@/services/Sandbox/elements/Connection'
-import { RGBColors } from '@/utils'
+import { lerp, RGBColors } from '@/utils'
 
 export const DEFAULT_COLOR = connectionColor
 
@@ -18,6 +18,7 @@ export const Point = ({ x, y, color, value }: PointConfig): Point => {
     queue: [],
     connections: new Map(),
     draw,
+    moveTo,
     changeColor,
     validatePoint,
     matchTwoWayConnection
@@ -79,8 +80,18 @@ export const Point = ({ x, y, color, value }: PointConfig): Point => {
   }
 
   function matchTwoWayConnection(destination: Point): number[] {
-    // @ts-ignore
-    return [destination.connections.get(point), point.connections.get(destination)]
+    return [destination.connections.get(point)!, point.connections.get(destination)!]
+  }
+
+  function moveTo(location: Pick<Point, 'x' | 'y'>, frameCount = 30) {
+    for (let i = 0; i <= frameCount; i++) {
+      const tickRate = i / frameCount
+
+      point.queue.push({
+        x: lerp(point.x, location.x, tickRate),
+        y: lerp(point.y, location.y, tickRate)
+      })
+    }
   }
 
   function draw(size = point.size) {
@@ -88,8 +99,10 @@ export const Point = ({ x, y, color, value }: PointConfig): Point => {
     point.size = size
 
     if (point.queue.length > 0) {
-      const { color } = point.queue.shift()!
+      const { color, x, y } = point.queue.shift()!
       point.color = color ?? point.color
+      point.x = x ?? point.x
+      point.y = y ?? point.y
 
       isChanged = true
     }
@@ -98,7 +111,7 @@ export const Point = ({ x, y, color, value }: PointConfig): Point => {
     const radius = point.size / 2
     context.beginPath()
     context.fillStyle = colors.rgbToHex(point.color)
-    context.arc(x, y, radius, 0, Math.PI * 2)
+    context.arc(point.x, point.y, radius, 0, Math.PI * 2)
     context.fill()
     context.closePath()
 
@@ -106,7 +119,7 @@ export const Point = ({ x, y, color, value }: PointConfig): Point => {
       context.fillStyle = colors.rgbToHex(RGBColors.grey)
       context.textAlign = 'center'
       context.font = '14px Arial'
-      context.fillText(`${point.value}`, x, y + 5)
+      context.fillText(`${point.value}`, point.x, point.y + 5)
     }
 
     if (point.isPulsing) {
@@ -114,7 +127,7 @@ export const Point = ({ x, y, color, value }: PointConfig): Point => {
 
       context.beginPath()
       context.strokeStyle = colors.rgbToHex(point.color)
-      context.arc(x, y, radius + point.pulseRadius, 0, Math.PI * 2)
+      context.arc(point.x, point.y, radius + point.pulseRadius, 0, Math.PI * 2)
       context.stroke()
     }
 
@@ -139,6 +152,7 @@ export type Point = {
   connections: Map<Point, number>
   draw: (size?: number) => boolean
   changeColor: (color: ColorRGBA, frameCount?: number) => void
+  moveTo: (location: Pick<Point, 'x' | 'y'>, frameCount?: number) => void
   validatePoint: (payload: Pick<Point, 'x' | 'y'>) => boolean
   matchTwoWayConnection: (destination: Point) => number[]
 }

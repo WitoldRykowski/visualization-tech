@@ -43,8 +43,8 @@ export const Heap = (values: number[]): HeapInstance => {
       heap.points.push(point)
       queue.push(point)
 
-      const leftConnection = Connection({ startAt: parent!, finishAt: point })
-      heap.connections.push(leftConnection)
+      const connection = Connection({ startAt: parent!, finishAt: point })
+      heap.connections.push(connection)
       point.connections.set(parent!, heap.connections.length - 1)
     }
   }
