@@ -1,20 +1,19 @@
 import { generateNonSortedArray } from '@/services/Array/array.service'
-import { getColumns } from '@/services/Sandbox/Creator'
-import type { Column } from '@/services/Sandbox/elements/Column'
 import { drawColumns, initAnimation } from '@/services/Sandbox/sandbox.service'
 import type { VariantSetup } from '@/services/Sandbox/types'
 import type { MoveAnimation } from '@/services/Animation/animation.service'
+import { Array as createArray, type ArrayInstance } from '@/services/Sandbox/elements/Array'
 
 let moves: Move[] = []
 let values: number[] = []
-let columns: Column[] = []
+let Array: ArrayInstance | undefined = undefined
 
 const initInsertionSort = () => {
   initAnimation(init, animateInsertionSort)
 
   function init() {
     values = generateNonSortedArray()
-    columns = getColumns(values)
+    Array = createArray(values)
     moves = []
   }
 }
@@ -43,7 +42,8 @@ function insertionSort(values: number[]) {
 }
 
 function animateInsertionSort() {
-  const isChanged = drawColumns(columns)
+  if (!Array) return
+  const isChanged = drawColumns(Array.columns)
 
   if (isChanged || !moves.length) return
 
@@ -51,12 +51,12 @@ function animateInsertionSort() {
   const [i, j] = indexes
 
   if (animation === 'swap') {
-    columns[i].jump()
-    columns[j].jump()
+    Array.columns[i].jump()
+    Array.columns[j].jump()
 
-    columns[i].moveTo(columns[j])
-    columns[j].moveTo(columns[i], { yOffset: -1 })
-    ;[columns[i], columns[j]] = [columns[j], columns[i]]
+    Array.columns[i].moveTo(Array.columns[j])
+    Array.columns[j].moveTo(Array.columns[i], { yOffset: -1 })
+    ;[Array.columns[i], Array.columns[j]] = [Array.columns[j], Array.columns[i]]
   }
 }
 
@@ -66,7 +66,7 @@ export const InsertionSort: VariantSetup = {
 }
 
 export const __testing = () => ({
-  getState: () => ({ moves, columns, values }),
+  getState: () => ({ moves, columns: Array?.columns ?? [], values }),
   animateInsertionSort,
   initInsertionSort,
   visualizeInsertionSort

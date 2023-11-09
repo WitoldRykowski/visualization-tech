@@ -1,11 +1,15 @@
 import { getSandboxSize } from '@/services/Sandbox/sandbox.service'
 import { Column } from '@/services/Sandbox/elements/Column'
 
-export const getColumns = (values: number[]) => {
+export const Array = (values: number[]): ArrayInstance => {
+  const array: ArrayInstance = {
+    columns: [],
+    draw
+  }
+
   const MARGIN = 30
   const { width, height } = getSandboxSize()
   const valuesSize = values.length
-  const columns: Column[] = []
   const spacing = (width - MARGIN * 2) / valuesSize
 
   for (let i = 0; i < valuesSize; i++) {
@@ -13,7 +17,7 @@ export const getColumns = (values: number[]) => {
     const yAxis = height - MARGIN - i * 3
     const columnHeight = height * 0.75 * values[i]
 
-    columns[i] = Column({
+    array.columns[i] = Column({
       x: xAxis,
       y: yAxis,
       width: spacing - 4,
@@ -21,5 +25,22 @@ export const getColumns = (values: number[]) => {
     })
   }
 
-  return columns
+  draw()
+
+  return array
+
+  function draw() {
+    let isChanged = false
+
+    for (const column of array.columns) {
+      isChanged = column.draw() || isChanged
+    }
+
+    return isChanged
+  }
+}
+
+export type ArrayInstance = {
+  columns: Column[]
+  draw: () => boolean
 }

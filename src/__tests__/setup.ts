@@ -1,6 +1,5 @@
 import * as SandboxService from '../services/Sandbox/sandbox.service'
 import * as Column from '../services/Sandbox/elements/Column'
-import * as Creator from '../services/Sandbox/Creator'
 import { Noop } from '../types'
 
 jest.mock('delaunator')
@@ -36,21 +35,6 @@ beforeEach(() => {
         collapse: jest.fn((config) => config),
         changeColor: jest.fn((config) => config)
       }
-    })
-  }
-
-  if (!currentTestName.includes('getColumns')) {
-    const getColumns = jest.spyOn(Creator, 'getColumns')
-
-    getColumns.mockImplementation((values: number[]) => {
-      return values.map(() => {
-        return Column.Column({
-          x: 1,
-          y: 1,
-          width: 10,
-          height: 10
-        })
-      })
     })
   }
 

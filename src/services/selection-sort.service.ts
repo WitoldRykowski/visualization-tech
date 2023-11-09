@@ -1,22 +1,21 @@
-import type { Column } from '@/services/Sandbox/elements/Column'
 import { generateNonSortedArray } from '@/services/Array/array.service'
-import { getColumns } from '@/services/Sandbox/Creator'
-import { drawColumns, initAnimation } from '@/services/Sandbox/sandbox.service'
+import { initAnimation } from '@/services/Sandbox/sandbox.service'
 import { RGBColors } from '@/utils'
 import { DEFAULT_COLOR } from '@/services/Sandbox/elements/Column'
 import type { VariantSetup } from '@/services/Sandbox/types'
 import type { MoveAnimation } from '@/services/Animation/animation.service'
+import { Array as createArray, type ArrayInstance } from '@/services/Sandbox/elements/Array'
 
 let moves: Move[] = []
 let values: number[] = []
-let columns: Column[] = []
+let Array: ArrayInstance | undefined = undefined
 
 const initSelectionSort = () => {
   initAnimation(init, animateSelectionSort)
 
   function init() {
     values = generateNonSortedArray()
-    columns = getColumns(values)
+    Array = createArray(values)
     moves = []
   }
 }
@@ -67,7 +66,9 @@ function selectionSort(values: number[]) {
 }
 
 function animateSelectionSort() {
-  const isChanged = drawColumns(columns)
+  if (!Array) return
+
+  const isChanged = Array.draw()
 
   if (isChanged || !moves.length) return
 
@@ -79,30 +80,34 @@ function animateSelectionSort() {
   } else if (animation === 'changeColor') {
     handleChangeColor()
   } else if (j !== -1) {
-    columns[j].jump()
+    Array.columns[j].jump()
   }
 
   function handleSwap() {
+    if (!Array) return
+
     const frameCount = 40
 
-    columns[minIndex].jump()
-    columns[i].jump()
+    Array.columns[minIndex].jump()
+    Array.columns[i].jump()
 
-    columns[minIndex].moveTo(columns[i], { frameCount })
-    columns[i].moveTo(columns[minIndex], { yOffset: -1, frameCount })
-    ;[columns[minIndex], columns[i]] = [columns[i], columns[minIndex]]
+    Array.columns[minIndex].moveTo(Array.columns[i], { frameCount })
+    Array.columns[i].moveTo(Array.columns[minIndex], { yOffset: -1, frameCount })
+    ;[Array.columns[minIndex], Array.columns[i]] = [Array.columns[i], Array.columns[minIndex]]
   }
 
   function handleChangeColor() {
+    if (!Array) return
+
     if (lastMinIndex !== minIndex) {
       if (lastMinIndex === i && j !== -1) {
-        columns[i].changeColor(RGBColors.warning)
+        Array.columns[i].changeColor(RGBColors.warning)
       } else {
-        columns[lastMinIndex].changeColor(DEFAULT_COLOR)
+        Array.columns[lastMinIndex].changeColor(DEFAULT_COLOR)
       }
     }
 
-    columns[minIndex].changeColor(RGBColors.info)
+    Array.columns[minIndex].changeColor(RGBColors.info)
   }
 }
 
@@ -112,7 +117,7 @@ export const SelectionSort: VariantSetup = {
 }
 
 export const __testing = () => ({
-  getState: () => ({ values, columns, moves }),
+  getState: () => ({ values, columns: Array?.columns ?? [], moves }),
   initSelectionSort,
   visualizeSelectionSort,
   animateSelectionSort
