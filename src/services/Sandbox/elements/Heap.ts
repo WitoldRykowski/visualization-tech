@@ -13,11 +13,12 @@ export const Heap = (values: number[]): HeapInstance => {
   const SPACING_Y = 50
   const queue: Point[] = []
   const valuesCopy = [...values]
-  const root = Point({ x: width / 2 - 10, y: SPACING_Y, value: valuesCopy.shift() })
+  const root = Point({ x: width / 2 - 10, y: SPACING_Y, value: valuesCopy.shift(), id: 1 })
 
   heap.points.push(root)
   queue.push(root)
   const levels = Math.ceil(Math.log2(values.length + 1))
+  let pointId = root.id + 1
 
   for (let level = 1; level < levels; level++) {
     let nodesAtLevel = 2 ** level
@@ -35,17 +36,20 @@ export const Heap = (values: number[]): HeapInstance => {
       const xModifier = isEven ? pointsSpacing : -pointsSpacing
 
       const point = Point({
+        id: pointId,
         x: parent!.x + xModifier,
         y: parent!.y + levelsSpacing,
         value: valuesCopy.shift()
       })
+
+      pointId++
 
       heap.points.push(point)
       queue.push(point)
 
       const connection = Connection({ startAt: parent!, finishAt: point })
       heap.connections.push(connection)
-      point.connections.set(parent!, heap.connections.length - 1)
+      point.connections.set(parent!.id, heap.connections.length - 1)
     }
   }
 

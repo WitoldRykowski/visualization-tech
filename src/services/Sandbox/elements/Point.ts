@@ -6,8 +6,9 @@ import { lerp, RGBColors } from '@/utils'
 
 export const DEFAULT_COLOR = connectionColor
 
-export const Point = ({ x, y, color, value }: PointConfig): Point => {
+export const Point = ({ x, y, color, value, id }: PointConfig): Point => {
   const point: Point = {
+    id,
     x,
     y,
     value: value ?? null,
@@ -80,7 +81,7 @@ export const Point = ({ x, y, color, value }: PointConfig): Point => {
   }
 
   function matchTwoWayConnection(destination: Point): number[] {
-    return [destination.connections.get(point)!, point.connections.get(destination)!]
+    return [destination.connections.get(point.id)!, point.connections.get(destination.id)!]
   }
 
   function moveTo(location: Pick<Point, 'x' | 'y'>, frameCount = 30) {
@@ -135,12 +136,13 @@ export const Point = ({ x, y, color, value }: PointConfig): Point => {
   }
 }
 
-type PointConfig = Pick<Point, 'x' | 'y'> & {
+type PointConfig = Pick<Point, 'x' | 'y' | 'id'> & {
   color?: ColorRGBA
   value?: number
 }
 
 export type Point = {
+  id: number
   x: number
   y: number
   queue: Partial<PointConfig & { pulseRadius: number }>[]
@@ -149,7 +151,7 @@ export type Point = {
   value: number | null
   size: number
   isPulsing: boolean
-  connections: Map<Point, number>
+  connections: Map<number, number>
   draw: (size?: number) => boolean
   changeColor: (color: ColorRGBA, frameCount?: number) => void
   moveTo: (location: Pick<Point, 'x' | 'y'>, frameCount?: number) => void

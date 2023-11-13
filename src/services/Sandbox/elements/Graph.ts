@@ -23,7 +23,7 @@ export const Graph = (values: number[]): Graph => {
       y = generateRandomY()
     }
 
-    graph.points.push(createPoint({ x, y }))
+    graph.points.push(createPoint({ x, y, id: i + 1 }))
   }
 
   const edges = createEdges(graph.points)
@@ -33,11 +33,11 @@ export const Graph = (values: number[]): Graph => {
   edges.forEach(([startAt, finishAt]) => {
     const connection = createConnection({ startAt, finishAt })
     graph.connections.push(connection)
-    startAt.connections.set(finishAt, graph.connections.length - 1)
+    startAt.connections.set(finishAt.id, graph.connections.length - 1)
 
     const reverseConnection = createConnection({ startAt: finishAt, finishAt: startAt })
     graph.connections.push(reverseConnection)
-    finishAt.connections.set(startAt, graph.connections.length - 1)
+    finishAt.connections.set(startAt.id, graph.connections.length - 1)
   })
 
   return graph
