@@ -3,11 +3,12 @@ import { generateNonSortedArray } from '@/services/Array/array.service'
 import type { VariantSetup } from '@/services/Sandbox/types'
 import { Heap, type HeapInstance } from '@/services/Sandbox/elements/Heap'
 import type { MoveAnimation } from '@/services/Animation/animation.service'
+import { Connection } from '@/services/Sandbox/elements/Connection'
 
 let moves: Move[] = []
 let values: number[] = []
 let heap: HeapInstance | undefined = undefined
-const SAFE_ARRAY_SIZE = 4 //30
+const SAFE_ARRAY_SIZE = 10 //30
 
 const initHeapSort = () => {
   initAnimation(init, animateHeapSort)
@@ -108,35 +109,38 @@ function animateHeapSort() {
 
     heap.points[parent].moveTo({ x: connectionMiddleXAxis, y: connectionMiddleYAxis })
     heap.points[node].moveTo({ x: connectionMiddleXAxis, y: connectionMiddleYAxis })
-    // TODO we should map points by unique id or name field, because
-    // TODO there is no way to handle connections matching by x and y coordinates
-    // TODO generally it is possible but will generate big mess in code
+  } else {
+    const grandparent = heap!.getPointParent(heap.points[parent])
 
-    const parentIndex = Array.from(heap.points[parent].connections.values())[0]
-    const index = heap.points[node].connections.get(heap.points[parent].id)!
-    heap.connections[index].startAt = heap.points[node]
-    heap.connections[index].finishAt = heap.points[parent]
-    heap.points[node].connections = new Map()
-    heap.points[parent].connections = new Map([[heap.points[node].id, index]])
+    for (let i = 0; i < heap.connections.length; i++) {
+      const connection = heap.connections[i]
 
-    if (heap.points[neighbor]) {
-      const index2 = heap.points[neighbor].connections.get(heap.points[parent].id)!
-      heap.connections[index2].startAt = heap.points[node]
-      heap.points[neighbor].connections = new Map([[heap.points[node].id, index2]])
+      if (connection.startAt.id === grandparent?.id) {
+        if (connection.finishAt.id === heap.points[parent].id) {
+          heap.connections[i] = Connection({
+            startAt: heap.connections[i].startAt,
+            finishAt: heap.points[node]
+          })
+        }
+      } else if (connection.startAt.id === heap.points[node].id) {
+        heap.connections[i] = Connection({
+          startAt: heap.points[parent],
+          finishAt: heap.connections[i].finishAt
+        })
+      } else if (connection.startAt.id === heap.points[parent].id) {
+        const isNode = connection.finishAt.id === heap.points[node].id
+        const finishAt = isNode ? heap.points[parent] : heap.connections[i].finishAt
+
+        heap.connections[i] = Connection({
+          startAt: heap.points[node],
+          finishAt
+        })
+      }
     }
 
-    if (parentIndex) {
-      heap.connections[parentIndex].finishAt = heap.points[node]
-      heap.points[node].connections.set(heap.connections[parentIndex].startAt.id, parentIndex)
-    }
-  } else if (animation === 'swap') {
     heap.points[parent].moveTo({ x: originalCoordinates.node.x, y: originalCoordinates.node.y })
     heap.points[node].moveTo({ x: originalCoordinates.parent.x, y: originalCoordinates.parent.y })
-    ;[heap.points[parent], heap.points[node]] = [heap.points[node], heap.points[parent]]
-
-    console.log(heap.points, 'swap')
-
-    // console.log(heap.connections)
+    ;[heap.points[node], heap.points[parent]] = [heap.points[parent], heap.points[node]]
   }
 }
 

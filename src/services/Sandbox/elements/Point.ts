@@ -17,12 +17,10 @@ export const Point = ({ x, y, color, value, id }: PointConfig): Point => {
     isPulsing: false,
     color: color ?? DEFAULT_COLOR,
     queue: [],
-    connections: new Map(),
     draw,
     moveTo,
     changeColor,
-    validatePoint,
-    matchTwoWayConnection
+    validatePoint
   }
 
   return point
@@ -78,10 +76,6 @@ export const Point = ({ x, y, color, value, id }: PointConfig): Point => {
     function calculateDistance(pointA: Point, pointB: Pick<Point, 'x' | 'y'>) {
       return Math.sqrt((pointA.x - pointB.x) ** 2 + (pointA.y - pointB.y) ** 2)
     }
-  }
-
-  function matchTwoWayConnection(destination: Point): number[] {
-    return [destination.connections.get(point.id)!, point.connections.get(destination.id)!]
   }
 
   function moveTo(location: Pick<Point, 'x' | 'y'>, frameCount = 30) {
@@ -151,10 +145,8 @@ export type Point = {
   value: number | null
   size: number
   isPulsing: boolean
-  connections: Map<number, number>
   draw: (size?: number) => boolean
   changeColor: (color: ColorRGBA, frameCount?: number) => void
   moveTo: (location: Pick<Point, 'x' | 'y'>, frameCount?: number) => void
   validatePoint: (payload: Pick<Point, 'x' | 'y'>) => boolean
-  matchTwoWayConnection: (destination: Point) => number[]
 }

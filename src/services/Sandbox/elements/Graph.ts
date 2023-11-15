@@ -9,7 +9,9 @@ export const Graph = (values: number[]): Graph => {
   const graph: Graph = {
     points: [],
     connections: [],
-    draw
+    draw,
+    getPointConnections,
+    getConnectionsBetweenPoints
   }
 
   const { width, height } = getSandboxSize()
@@ -33,16 +35,27 @@ export const Graph = (values: number[]): Graph => {
   edges.forEach(([startAt, finishAt]) => {
     const connection = createConnection({ startAt, finishAt })
     graph.connections.push(connection)
-    startAt.connections.set(finishAt.id, graph.connections.length - 1)
 
     const reverseConnection = createConnection({ startAt: finishAt, finishAt: startAt })
     graph.connections.push(reverseConnection)
-    finishAt.connections.set(startAt.id, graph.connections.length - 1)
   })
 
   return graph
 
   draw()
+
+  function getPointConnections(point: Point) {
+    return graph.connections.filter(({ startAt }) => startAt.id === point.id)
+  }
+
+  function getConnectionsBetweenPoints(start: Point, destination: Point) {
+    return graph.connections.filter(({ startAt, finishAt }) => {
+      const isMatched = startAt.id === start.id && finishAt.id === destination.id
+      const isMatchedReverse = startAt.id === destination.id && finishAt.id === start.id
+
+      return isMatched || isMatchedReverse
+    })
+  }
 
   function draw() {
     let isChanged = false
@@ -74,5 +87,7 @@ export const Graph = (values: number[]): Graph => {
 export type Graph = {
   points: Point[]
   connections: Connection[]
+  getPointConnections: (point: Point) => Connection[]
+  getConnectionsBetweenPoints: (start: Point, destination: Point) => Connection[]
   draw: () => boolean
 }

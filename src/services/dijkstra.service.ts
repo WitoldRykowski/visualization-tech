@@ -55,8 +55,8 @@ function dijkstra() {
 
     const key = generatePointKey(currentPoint)
 
-    for (const connection of currentPoint.connections.values()) {
-      const neighbor = graph!.connections[connection].finishAt
+    for (const connection of graph.getPointConnections(currentPoint)) {
+      const neighbor = connection.finishAt
       const neighborKey = generatePointKey(neighbor)
 
       moves.push({
@@ -67,7 +67,7 @@ function dijkstra() {
         finishAt: neighbor
       })
 
-      const potentialDistance = distances[key] + graph!.connections[connection].weight
+      const potentialDistance = distances[key] + connection.weight
       if (potentialDistance < distances[neighborKey]) {
         distances[neighborKey] = potentialDistance
         previous[neighborKey] = currentPoint
@@ -115,9 +115,9 @@ function animateDijkstra() {
   }
 
   if (finishAt) {
-    const connections = current.matchTwoWayConnection(finishAt)
+    const connections = graph.getConnectionsBetweenPoints(current, finishAt)
 
-    connections.forEach((connection) => graph!.connections[connection].changeColor(color))
+    connections.forEach((connection) => connection.changeColor(color))
   }
 
   if (!moves.length) {

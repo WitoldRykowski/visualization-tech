@@ -43,25 +43,27 @@ function runDFS() {
   }
 
   function depthFirstSearch(node: Point, visited: Set<Point> = new Set()): Point[] {
+    if (!graph) {
+      throw Error('Graph is undefined!')
+    }
+
     if (node === destination) {
       return [node]
     }
 
     visited.add(node)
 
-    for (const connection of node.connections.values()) {
-      const finishAt = graph!.connections[connection].finishAt
-
+    for (const connection of graph.getPointConnections(node)) {
       moves.push({
         animation: 'changeColor',
         destination,
         begin: start,
         current: node,
-        finishAt
+        finishAt: connection.finishAt
       })
 
-      if (!visited.has(finishAt)) {
-        const path = depthFirstSearch(finishAt, visited)
+      if (!visited.has(connection.finishAt)) {
+        const path = depthFirstSearch(connection.finishAt, visited)
 
         if (path.length > 0) {
           return [node, ...path]
@@ -96,8 +98,8 @@ function animateDfs() {
     current.changeColor(color)
   }
 
-  const connections = current.matchTwoWayConnection(finishAt)
-  connections.forEach((connection) => graph!.connections[connection].changeColor(color))
+  const connections = graph.getConnectionsBetweenPoints(current, finishAt)
+  connections.forEach((connection) => connection.changeColor(color))
 
   if (!moves.length) {
     begin.changeColor(color)

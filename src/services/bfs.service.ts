@@ -27,8 +27,10 @@ const visualizeBFS = () => {
 type QueueItem = { node: Point; distance: number }
 
 function breadthFirstSearch() {
-  const startNode = getRandomPointInGraph(graph!.points)
-  const endNode = getPointInGraphExcludingPoint(graph!.points, startNode)
+  if (!graph) return
+
+  const startNode = getRandomPointInGraph(graph.points)
+  const endNode = getPointInGraphExcludingPoint(graph.points, startNode)
   const visited: Set<Point> = new Set()
   const parents: Map<Point, Point | null> = new Map()
   const queue: QueueItem[] = []
@@ -42,14 +44,13 @@ function breadthFirstSearch() {
     const { node, distance } = queue.shift()!
 
     if (node === endNode) {
-      console.log(queue)
       reconstructPath()
       return
     }
 
-    for (const connection of node.connections.values()) {
-      const neighbor = graph!.connections[connection].finishAt
-      const weight = graph!.connections[connection].weight
+    for (const connection of graph.getPointConnections(node)) {
+      const neighbor = connection.finishAt
+      const weight = connection.weight
 
       if (!visited.has(neighbor)) {
         queue.push({ node: neighbor, distance: distance + weight })
@@ -111,8 +112,8 @@ function animateBfs() {
     current.changeColor(color)
   }
 
-  const connections = current.matchTwoWayConnection(finishAt)
-  connections.forEach((connection) => graph!.connections[connection].changeColor(color))
+  const connections = graph.getConnectionsBetweenPoints(current, finishAt)
+  connections.forEach((connection) => connection.changeColor(color))
 
   if (!moves.length) {
     begin.changeColor(color)

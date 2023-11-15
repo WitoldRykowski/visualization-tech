@@ -6,7 +6,9 @@ export const Heap = (values: number[]): HeapInstance => {
   const heap: HeapInstance = {
     points: [],
     connections: [],
-    draw
+    draw,
+    getPointConnections,
+    getPointParent
   }
 
   const { width, height } = getSandboxSize()
@@ -49,13 +51,24 @@ export const Heap = (values: number[]): HeapInstance => {
 
       const connection = Connection({ startAt: parent!, finishAt: point })
       heap.connections.push(connection)
-      point.connections.set(parent!.id, heap.connections.length - 1)
     }
   }
 
   draw()
 
   return heap
+
+  function getPointConnections(point: Point) {
+    return heap.connections.filter(({ startAt }) => startAt.id === point.id)
+  }
+
+  function getPointParent(point: Point) {
+    const connection = heap.connections.find(({ finishAt }) => {
+      return point.id === finishAt.id
+    })
+
+    return connection?.startAt
+  }
 
   function draw() {
     let isChanged = false
@@ -75,5 +88,7 @@ export const Heap = (values: number[]): HeapInstance => {
 export type HeapInstance = {
   points: Point[]
   connections: Connection[]
+  getPointConnections: (point: Point) => Connection[]
+  getPointParent: (point: Point) => Point | undefined
   draw: () => boolean
 }
