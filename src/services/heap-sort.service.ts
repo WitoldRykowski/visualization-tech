@@ -4,13 +4,19 @@ import type { VariantSetup } from '@/services/Sandbox/types'
 import { Heap, type HeapInstance } from '@/services/Sandbox/elements/Heap'
 import type { MoveAnimation } from '@/services/Animation/animation.service'
 import { Connection } from '@/services/Sandbox/elements/Connection'
+import { Array as createArray, type ArrayInstance } from '@/services/Sandbox/elements/Array'
 
 let moves: Move[] = []
 let values: number[] = []
 let heap: HeapInstance | undefined = undefined
-const SAFE_ARRAY_SIZE = 10 //30
+let Array: ArrayInstance | undefined = undefined
+let finished = false
+const SAFE_ARRAY_SIZE = 30
 
 const initHeapSort = () => {
+  heap = Heap(values)
+  Array = undefined
+
   initAnimation(init, animateHeapSort)
 
   function init() {
@@ -19,55 +25,51 @@ const initHeapSort = () => {
       return Math.floor(value * 50)
     })
   }
-
-  heap = Heap(values)
 }
 
 const visualizeHeapSort = () => {
   heapSort()
+  finished = true
 }
 
 function heapSort() {
-  let test = false
   for (let i = Math.floor(values.length / 2) - 1; i >= 0; i--) {
     heapify(values.length, i)
   }
 
-  test = true
+  Array = createArray(values.map((value) => value / 100))
 
-  console.log(values)
-
-  // Extract elements one by one
   for (let i = values.length - 1; i > 0; i--) {
-    ;[values[i], values[0]] = [values[0], values[i]] // Swap the root (maximum element) with the last element
-    heapify(i, 0) // Call max heapify on the reduced heap
+    ;[values[i], values[0]] = [values[0], values[i]]
+
+    moves.push({
+      animation: 'swap',
+      indexes: [i, 0]
+    })
+
+    heapify(i, 0)
   }
 
   function heapify(n: number, i: number) {
     let largest = i
-    let largestNeighbor = -1
     const left = 2 * i + 1
     const right = 2 * i + 2
 
     if (left < n && values[left] > values[largest]) {
       largest = left
-      largestNeighbor = right
     }
 
-    // If the right child is larger than the largest so far
     if (right < n && values[right] > values[largest]) {
       largest = right
-      largestNeighbor = left
     }
 
-    // If the largest element is not the root
     if (largest !== i) {
-      ;[values[i], values[largest]] = [values[largest], values[i]] // Swap them
+      ;[values[i], values[largest]] = [values[largest], values[i]]
 
-      if (!test) {
+      if (!Array) {
         moves.push({
           animation: 'move',
-          indexes: [i, largest, largestNeighbor],
+          indexes: [i, largest],
           originalCoordinates: {
             parent: { x: heap!.points[i].x, y: heap!.points[i].y },
             node: { x: heap!.points[largest].x, y: heap!.points[largest].y }
@@ -76,71 +78,112 @@ function heapSort() {
 
         moves.push({
           animation: 'swap',
-          indexes: [i, largest, largestNeighbor],
+          indexes: [i, largest],
           originalCoordinates: {
             parent: { x: heap!.points[i].x, y: heap!.points[i].y },
             node: { x: heap!.points[largest].x, y: heap!.points[largest].y }
           }
         })
+      } else {
+        moves.push({
+          animation: 'swap',
+          indexes: [i, largest]
+        })
       }
 
-      // Recursively heapify the affected sub-tree
       heapify(n, largest)
     }
   }
 }
 
-function animateHeapSort() {
-  if (!heap) return
+let view = 'graph'
 
-  const isChanged = heap.draw()
+function animateHeapSort() {
+  const isArrayView =
+    (finished &&
+      moves.every((move) => {
+        return !('originalCoordinates' in move)
+      })) ||
+    view === 'array'
+
+  if (isArrayView) {
+    view = 'array'
+    //   TODO add delay here 300ms
+  }
+
+  const draw = isArrayView ? Array!.draw : heap!.draw
+
+  const isChanged = draw()
 
   if (isChanged || !moves.length) return
 
-  const {
-    animation,
-    indexes: [parent, node, neighbor],
-    originalCoordinates
-  } = moves.shift()!
+  const move = moves.shift()!
 
-  if (animation === 'move') {
-    const connectionMiddleXAxis = (heap.points[parent].x + heap.points[node].x) / 2
-    const connectionMiddleYAxis = (heap.points[parent].y + heap.points[node].y) / 2
+  if (view === 'array' && Array) {
+    const {
+      indexes: [i, j]
+    } = move
 
-    heap.points[parent].moveTo({ x: connectionMiddleXAxis, y: connectionMiddleYAxis })
-    heap.points[node].moveTo({ x: connectionMiddleXAxis, y: connectionMiddleYAxis })
+    Array.columns[i].moveTo(Array.columns[j])
+    Array.columns[j].moveTo(Array.columns[i], { yOffset: -1 })
+    ;[Array.columns[i], Array.columns[j]] = [Array.columns[j], Array.columns[i]]
   } else {
-    const grandparent = heap!.getPointParent(heap.points[parent])
+    moveNode(move as GraphMove)
+  }
 
-    for (let i = 0; i < heap.connections.length; i++) {
-      const connection = heap.connections[i]
-
-      if (connection.startAt.id === grandparent?.id) {
-        if (connection.finishAt.id === heap.points[parent].id) {
-          heap.connections[i] = Connection({
-            startAt: heap.connections[i].startAt,
-            finishAt: heap.points[node]
-          })
-        }
-      } else if (connection.startAt.id === heap.points[node].id) {
-        heap.connections[i] = Connection({
-          startAt: heap.points[parent],
-          finishAt: heap.connections[i].finishAt
-        })
-      } else if (connection.startAt.id === heap.points[parent].id) {
-        const isNode = connection.finishAt.id === heap.points[node].id
-        const finishAt = isNode ? heap.points[parent] : heap.connections[i].finishAt
-
-        heap.connections[i] = Connection({
-          startAt: heap.points[node],
-          finishAt
-        })
-      }
+  function moveNode(move: GraphMove) {
+    if (!heap) {
+      throw Error('Heap does not exist!')
     }
 
-    heap.points[parent].moveTo({ x: originalCoordinates.node.x, y: originalCoordinates.node.y })
-    heap.points[node].moveTo({ x: originalCoordinates.parent.x, y: originalCoordinates.parent.y })
-    ;[heap.points[node], heap.points[parent]] = [heap.points[parent], heap.points[node]]
+    const {
+      animation,
+      indexes: [i, j],
+      originalCoordinates
+    } = move
+
+    const parent = heap.points[i]
+    const node = heap.points[j]
+
+    if (animation === 'move') {
+      const connectionMiddleXAxis = (parent.x + node.x) / 2
+      const connectionMiddleYAxis = (parent.y + node.y) / 2
+
+      parent.moveTo({ x: connectionMiddleXAxis, y: connectionMiddleYAxis })
+      node.moveTo({ x: connectionMiddleXAxis, y: connectionMiddleYAxis })
+    } else {
+      const grandparent = heap!.getPointParent(parent)
+
+      for (let i = 0; i < heap.connections.length; i++) {
+        const connection = heap.connections[i]
+        const startId = connection.startAt.id
+        const finishId = connection.finishAt.id
+
+        if (startId === grandparent?.id && finishId === parent.id) {
+          heap.connections[i] = Connection({
+            startAt: heap.connections[i].startAt,
+            finishAt: node
+          })
+        } else if (startId === node.id) {
+          heap.connections[i] = Connection({
+            startAt: parent,
+            finishAt: heap.connections[i].finishAt
+          })
+        } else if (startId === parent.id) {
+          const isNode = finishId === node.id
+          const finishAt = isNode ? parent : heap.connections[i].finishAt
+
+          heap.connections[i] = Connection({
+            startAt: node,
+            finishAt
+          })
+        }
+      }
+
+      parent.moveTo({ x: originalCoordinates.node.x, y: originalCoordinates.node.y })
+      node.moveTo({ x: originalCoordinates.parent.x, y: originalCoordinates.parent.y })
+      ;[heap.points[j], heap.points[i]] = [heap.points[i], heap.points[j]]
+    }
   }
 }
 
@@ -149,11 +192,18 @@ export const HeapSort: VariantSetup = {
   visualize: visualizeHeapSort
 }
 
-export type Move = {
+export type Move = GraphMove | ArrayMove
+
+type GraphMove = {
   animation: MoveAnimation
-  indexes: [number, number, number]
+  indexes: [number, number]
   originalCoordinates: {
     parent: { x: number; y: number }
     node: { x: number; y: number }
   }
+}
+
+type ArrayMove = {
+  animation: MoveAnimation
+  indexes: [number, number]
 }

@@ -123,6 +123,7 @@ export const Column = (columnConfig: ColumnConfig): Column => {
 
     context.beginPath()
     context.fillStyle = colors.rgbToHex(color)
+    context.strokeStyle = colors.rgbToHex(RGBColors.dark)
     context.moveTo(left, top)
     context.lineTo(left, y)
     context.ellipse(x, y, width / 2, width / 4, 0, Math.PI, Math.PI * 2, true)
