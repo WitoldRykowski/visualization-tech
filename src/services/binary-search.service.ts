@@ -13,13 +13,11 @@ let values: number[] = []
 let Array: ArrayInstance | undefined = undefined
 
 const initBinarySearch = () => {
-  initAnimation(init, animateBinarySearch)
+  values = generateSortedArray()
+  Array = createArray(values)
+  moves = []
 
-  function init() {
-    values = generateSortedArray()
-    Array = createArray(values)
-    moves = []
-  }
+  initAnimation(animateBinarySearch)
 }
 
 const visualizeBinarySearch = () => {

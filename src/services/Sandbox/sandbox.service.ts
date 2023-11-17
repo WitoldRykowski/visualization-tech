@@ -57,8 +57,7 @@ export const startAnimation = (animation: Noop) => {
   animate()
 }
 
-export const initAnimation = (callback: Noop, animation: Noop) => {
-  callback()
+export const initAnimation = (animation: Noop) => {
   stopAnimation()
   startAnimation(animation)
 }

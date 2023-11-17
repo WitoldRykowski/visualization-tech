@@ -7,8 +7,7 @@ jest.mock('delaunator')
 beforeEach(() => {
   const initAnimation = jest.spyOn(SandboxService, 'initAnimation')
 
-  initAnimation.mockImplementationOnce((callback: Noop, animation: Noop) => {
-    callback()
+  initAnimation.mockImplementationOnce((animation: Noop) => {
     animation()
     return 1
   })

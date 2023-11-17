@@ -13,7 +13,7 @@ describe('Insertion Sort', () => {
     expect(columns.length).toBe(values.length)
     expect(isNotSorted(values)).toBe(true)
     expect(initAnimation).toHaveBeenCalledTimes(1)
-    expect(initAnimation).toHaveBeenCalledWith(expect.anything(), animateInsertionSort)
+    expect(initAnimation).toHaveBeenCalledWith(animateInsertionSort)
   })
 
   test('should start visualizing algorithm', () => {

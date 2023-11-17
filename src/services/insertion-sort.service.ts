@@ -9,13 +9,11 @@ let values: number[] = []
 let Array: ArrayInstance | undefined = undefined
 
 const initInsertionSort = () => {
-  initAnimation(init, animateInsertionSort)
+  values = generateNonSortedArray()
+  Array = createArray(values)
+  moves = []
 
-  function init() {
-    values = generateNonSortedArray()
-    Array = createArray(values)
-    moves = []
-  }
+  initAnimation(animateInsertionSort)
 }
 
 const visualizeInsertionSort = () => {

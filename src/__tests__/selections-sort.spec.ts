@@ -13,7 +13,7 @@ describe('', () => {
     expect(columns.length).toBe(values.length)
     expect(isNotSorted(values)).toBe(true)
     expect(initAnimation).toHaveBeenCalledTimes(1)
-    expect(initAnimation).toHaveBeenCalledWith(expect.anything(), animateSelectionSort)
+    expect(initAnimation).toHaveBeenCalledWith(animateSelectionSort)
   })
 
   test('should start visualizing sandbox', () => {

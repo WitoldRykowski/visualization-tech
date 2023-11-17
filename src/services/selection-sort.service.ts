@@ -11,13 +11,11 @@ let values: number[] = []
 let Array: ArrayInstance | undefined = undefined
 
 const initSelectionSort = () => {
-  initAnimation(init, animateSelectionSort)
+  values = generateNonSortedArray()
+  Array = createArray(values)
+  moves = []
 
-  function init() {
-    values = generateNonSortedArray()
-    Array = createArray(values)
-    moves = []
-  }
+  initAnimation(animateSelectionSort)
 }
 
 const visualizeSelectionSort = () => {

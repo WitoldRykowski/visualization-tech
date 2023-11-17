@@ -11,13 +11,10 @@ let moves: Move[] = []
 let graph: Graph
 
 const initDijkstra = () => {
-  initAnimation(init, animateDijkstra)
+  moves = []
+  graph = createGraph(values)
 
-  function init() {
-    moves = []
-
-    graph = createGraph(values)
-  }
+  initAnimation(animateDijkstra)
 }
 
 const visualizeDijkstra = () => {

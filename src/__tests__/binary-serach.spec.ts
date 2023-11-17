@@ -22,7 +22,7 @@ describe('Binary Search', () => {
     expect(columns.length).toBe(values.length)
     expect(isArraySortedAscending(values)).toBe(true)
     expect(initAnimation).toHaveBeenCalledTimes(1)
-    expect(initAnimation).toHaveBeenCalledWith(expect.anything(), animateBinarySearch)
+    expect(initAnimation).toHaveBeenCalledWith(animateBinarySearch)
   })
 
   test('should start visualizing algorithm', () => {

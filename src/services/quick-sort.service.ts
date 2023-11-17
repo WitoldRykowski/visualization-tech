@@ -12,13 +12,11 @@ let values: number[] = []
 let Array: ArrayInstance | undefined = undefined
 
 const initQuickSort = () => {
-  initAnimation(init, animateQuickSort)
+  values = generateNonSortedArray()
+  Array = createArray(values)
+  moves = []
 
-  function init() {
-    values = generateNonSortedArray()
-    Array = createArray(values)
-    moves = []
-  }
+  initAnimation(animateQuickSort)
 }
 
 const visualizeQuickSort = () => {

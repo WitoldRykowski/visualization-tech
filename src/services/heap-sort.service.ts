@@ -27,7 +27,7 @@ const initHeapSort = () => {
   heap = Heap(values)
 
   // TODO refactor
-  initAnimation(() => {}, animateHeapSort)
+  initAnimation(animateHeapSort)
 }
 
 const visualizeHeapSort = () => {

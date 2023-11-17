@@ -9,13 +9,11 @@ let values: number[] = []
 let Array: ArrayInstance | undefined = undefined
 
 const initBubbleSort = () => {
-  initAnimation(init, animateBubbleSort)
+  values = generateNonSortedArray()
+  Array = createArray(values)
+  moves = []
 
-  function init() {
-    values = generateNonSortedArray()
-    Array = createArray(values)
-    moves = []
-  }
+  initAnimation(animateBubbleSort)
 }
 
 const visualizeBubbleSort = () => {

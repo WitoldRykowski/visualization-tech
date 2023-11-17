@@ -11,13 +11,11 @@ let values: number[] = []
 let Array: ArrayInstance | undefined = undefined
 
 const initGnomeSort = () => {
-  initAnimation(init, animateGnomeSort)
+  values = generateNonSortedArray()
+  Array = createArray(values)
+  moves = []
 
-  function init() {
-    values = generateNonSortedArray()
-    Array = createArray(values)
-    moves = []
-  }
+  initAnimation(animateGnomeSort)
 }
 
 const visualizeGnomeSort = () => {

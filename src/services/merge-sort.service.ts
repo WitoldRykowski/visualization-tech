@@ -9,13 +9,11 @@ let values: number[] = []
 let Array: ArrayInstance | undefined = undefined
 
 const initMergeSort = () => {
-  initAnimation(init, animateMergeSort)
+  values = generateNonSortedArray()
+  Array = createArray(values)
+  moves = []
 
-  function init() {
-    values = generateNonSortedArray()
-    Array = createArray(values)
-    moves = []
-  }
+  initAnimation(animateMergeSort)
 }
 
 const visualizeMergeSort = () => {

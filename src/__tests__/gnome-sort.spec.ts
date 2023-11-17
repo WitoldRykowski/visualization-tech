@@ -15,7 +15,7 @@ describe('Gnome Sort', () => {
     expect(columns.length).toBe(values.length)
     expect(isNotSorted(values)).toBe(true)
     expect(initAnimation).toHaveBeenCalledTimes(1)
-    expect(initAnimation).toHaveBeenCalledWith(expect.anything(), animateGnomeSort)
+    expect(initAnimation).toHaveBeenCalledWith(animateGnomeSort)
   })
 
   test('should start visualizing algorithm', () => {

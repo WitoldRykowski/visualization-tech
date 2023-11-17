@@ -11,13 +11,10 @@ let moves: Move[] = []
 let graph: Graph | undefined = undefined
 
 const initBfs = () => {
-  initAnimation(init, animateBfs)
+  moves = []
+  graph = createGraph(values)
 
-  function init() {
-    moves = []
-
-    graph = createGraph(values)
-  }
+  initAnimation(animateBfs)
 }
 
 const visualizeBFS = () => {
