@@ -6,25 +6,28 @@ import type { MoveAnimation } from '@/services/Animation/animation.service'
 import { Connection } from '@/services/Sandbox/elements/Connection'
 import { Array as createArray, type ArrayInstance } from '@/services/Sandbox/elements/Array'
 
+let lateMoves: ArrayMove[] = []
 let moves: Move[] = []
 let values: number[] = []
 let heap: HeapInstance | undefined = undefined
 let Array: ArrayInstance | undefined = undefined
 let finished = false
-const SAFE_ARRAY_SIZE = 30
+let view: View = 'graph'
+const SAFE_ARRAY_SIZE = 10
 
 const initHeapSort = () => {
-  heap = Heap(values)
+  view = 'graph'
   Array = undefined
+  moves = []
+  lateMoves = []
+  values = generateNonSortedArray(SAFE_ARRAY_SIZE).map((value) => {
+    return Math.floor(value * 50)
+  })
 
-  initAnimation(init, animateHeapSort)
+  heap = Heap(values)
 
-  function init() {
-    moves = []
-    values = generateNonSortedArray(SAFE_ARRAY_SIZE).map((value) => {
-      return Math.floor(value * 50)
-    })
-  }
+  // TODO refactor
+  initAnimation(() => {}, animateHeapSort)
 }
 
 const visualizeHeapSort = () => {
@@ -42,7 +45,7 @@ function heapSort() {
   for (let i = values.length - 1; i > 0; i--) {
     ;[values[i], values[0]] = [values[0], values[i]]
 
-    moves.push({
+    lateMoves.push({
       animation: 'swap',
       indexes: [i, 0]
     })
@@ -85,7 +88,7 @@ function heapSort() {
           }
         })
       } else {
-        moves.push({
+        lateMoves.push({
           animation: 'swap',
           indexes: [i, largest]
         })
@@ -96,22 +99,17 @@ function heapSort() {
   }
 }
 
-let view = 'graph'
-
 function animateHeapSort() {
-  const isArrayView =
-    (finished &&
-      moves.every((move) => {
-        return !('originalCoordinates' in move)
-      })) ||
-    view === 'array'
+  const isArrayView = finished && moves.length === 0 && lateMoves.length > 0
 
   if (isArrayView) {
-    view = 'array'
-    //   TODO add delay here 300ms
+    setTimeout(() => {
+      moves = lateMoves
+      view = 'array'
+    }, 1000)
   }
 
-  const draw = isArrayView ? Array!.draw : heap!.draw
+  const draw = view === 'array' ? Array!.draw : heap!.draw
 
   const isChanged = draw()
 
@@ -123,6 +121,9 @@ function animateHeapSort() {
     const {
       indexes: [i, j]
     } = move
+
+    Array.columns[i].jump()
+    Array.columns[j].jump()
 
     Array.columns[i].moveTo(Array.columns[j])
     Array.columns[j].moveTo(Array.columns[i], { yOffset: -1 })
@@ -207,3 +208,5 @@ type ArrayMove = {
   animation: MoveAnimation
   indexes: [number, number]
 }
+
+type View = 'graph' | 'array'

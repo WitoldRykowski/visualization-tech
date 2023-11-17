@@ -40,14 +40,10 @@ export const drawColumns = (columns: Column[]) => {
 
 export const stopAnimation = () => {
   cancelAnimationFrame(_animationFrameId)
-
   _animationFrameId = -1
 }
 
-export const initAnimation = (callback: Noop, animation: Noop) => {
-  callback()
-  stopAnimation()
-
+export const startAnimation = (animation: Noop) => {
   const animate = () => {
     const context = getContext()
     const { width, height } = getSandboxSize()
@@ -59,6 +55,12 @@ export const initAnimation = (callback: Noop, animation: Noop) => {
   }
 
   animate()
+}
+
+export const initAnimation = (callback: Noop, animation: Noop) => {
+  callback()
+  stopAnimation()
+  startAnimation(animation)
 }
 
 export const POSSIBLE_TAGS = ['sorting', 'searching', 'graph', 'shortest-path', 'heap'] as const
