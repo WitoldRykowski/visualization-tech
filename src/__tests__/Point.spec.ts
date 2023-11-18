@@ -3,14 +3,12 @@ import { getContext } from '../services/Sandbox/sandbox.service'
 
 const POINT_SIZE = 10
 
-const createPoint = () => Point({ x: 10, y: 10, id: 1, value: 20 })
-
 type Config = {
   isPulsing: boolean
 }
 
 const setup = ({ isPulsing }: Config) => {
-  const point = createPoint()
+  const point = Point({ x: 10, y: 10, id: 1, value: 20 })
   const context = getContext()
 
   point.isPulsing = isPulsing

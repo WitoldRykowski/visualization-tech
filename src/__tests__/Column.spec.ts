@@ -1,65 +1,76 @@
-import { Column } from '../services/Sandbox/elements/Column'
+import { COLLAPSED_COLUMN_HEIGHT, Column } from '../services/Sandbox/elements/Column'
+import { getContext } from '../services/Sandbox/sandbox.service'
 
 // ATTENTION!
 // The "Column" in each test description is important
 // because of a condition in Jest's setup file that is based on the test name
 
-const generateColumn = () => Column({ x: 0, y: 0, width: 10, height: 100 })
+const setup = () => {
+  const column = Column({ x: 0, y: 0, width: 10, height: 100 })
+  const context = getContext()
+
+  return { column, context }
+}
 
 describe('Column', () => {
-  test('should make Column jump', () => {
-    const column = generateColumn()
-
-    column.jump()
-
-    const moves = column.queue.filter((move) => {
-      const keys = Object.keys(move)
-      return keys.includes('x') || keys.includes('y')
-    })
-
-    expect(moves.some(({ y }) => y === -10)).toBe(true)
-    expect(moves.at(-1)).toEqual(
-      expect.objectContaining({
-        x: 0,
-        y: 0
-      })
-    )
-  })
-
-  test('should collapse Column', () => {
-    const column = generateColumn()
-
-    column.collapse()
-
-    expect(column.queue.at(-1)).toEqual({ height: 2 })
-  })
-
   test('should draw Column', () => {
-    const column = generateColumn()
+    const { context } = setup()
+
+    expect(context.beginPath).toHaveBeenCalledTimes(1)
+    expect(context.moveTo).toHaveBeenCalledTimes(1)
+    expect(context.moveTo).toHaveBeenCalledWith(-5, -100)
+    expect(context.lineTo).toHaveBeenCalledTimes(2)
+    expect(context.lineTo).toHaveBeenNthCalledWith(1, ...[-5, 0])
+    expect(context.lineTo).toHaveBeenNthCalledWith(2, ...[5, -100])
+    expect(context.ellipse).toHaveBeenCalledTimes(2)
+    expect(context.fill).toHaveBeenCalledTimes(1)
+    expect(context.stroke).toHaveBeenCalledTimes(1)
+  })
+
+  test('should fill queue with frames for Point', () => {
+    const { column } = setup()
 
     column.moveTo({ x: 20, y: 20 })
 
-    // Draw all color moves
-    while (Object.keys(column.queue[0]).includes('color')) {
-      expect(column.draw()).toBe(true)
-    }
+    expect(column.queue).toHaveLength(23)
+    expect(column.queue).toContainEqual({ x: 20, y: 20 })
+  })
 
-    // Draw move which contains starting position
-    expect(column.draw()).toBe(true)
+  test('should fill queue with frames for Point', () => {
+    const { column } = setup()
 
-    const queueLength = column.queue.length
-    const move = column.queue[0]
+    column.changeColor({ r: 255, b: 0, g: 0 })
+    expect(column.queue).toHaveLength(6)
+    expect(column.queue).toContainEqual({ color: { r: 255, g: 0, b: 0 } })
+  })
 
-    expect(column.draw()).toBe(true)
-    expect(column.queue.length).toBe(queueLength - 1)
-    expect(column.x).toBe(move.x)
-    expect(column.y).toBe(move.y)
+  test('should fill queue with frames for Point', () => {
+    const { column } = setup()
 
-    // Draw all queued moves
-    while (column.queue.length) {
+    column.collapse()
+
+    expect(column.queue).toHaveLength(11)
+    expect(column.queue).toContainEqual({ height: COLLAPSED_COLUMN_HEIGHT })
+  })
+
+  test('should fill queue with frames for Point', () => {
+    const { column } = setup()
+
+    column.jump()
+
+    expect(column.queue).toHaveLength(23)
+    expect(column.queue).toContainEqual({ x: 0, y: -10 })
+  })
+
+  test('should update column on frame dequeue', () => {
+    const { column } = setup()
+
+    column.jump()
+
+    while (column.queue[0]?.y !== -10) {
       column.draw()
     }
 
-    expect(column.draw()).toBe(false)
+    expect(column.queue).toHaveLength(12)
   })
 })
