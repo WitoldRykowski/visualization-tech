@@ -78,7 +78,7 @@ export const Point = ({ x, y, color, value, id }: PointConfig): Point => {
     }
   }
 
-  function moveTo(location: Pick<Point, 'x' | 'y'>, frameCount = 30) {
+  function moveTo(location: Pick<Point, 'x' | 'y'>, frameCount = 10) {
     for (let i = 0; i <= frameCount; i++) {
       const tickRate = i / frameCount
 
@@ -113,7 +113,7 @@ export const Point = ({ x, y, color, value, id }: PointConfig): Point => {
     if (point.value !== null) {
       context.fillStyle = colors.rgbToHex(RGBColors.grey)
       context.textAlign = 'center'
-      context.font = '14px Arial'
+      context.font = `15px Arial`
       context.fillText(`${point.value}`, point.x, point.y + 5)
     }
 
@@ -150,3 +150,5 @@ export type Point = {
   moveTo: (location: Pick<Point, 'x' | 'y'>, frameCount?: number) => void
   validatePoint: (payload: Pick<Point, 'x' | 'y'>) => boolean
 }
+
+export type MoveAnimation = 'swap' | 'changeColor' | 'move' | 'touch'

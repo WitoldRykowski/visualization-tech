@@ -3,16 +3,16 @@ import { initAnimation } from '@/services/Sandbox/sandbox.service'
 import { RGBColors } from '@/utils'
 import { DEFAULT_COLOR } from '@/services/Sandbox/elements/Column'
 import type { VariantSetup } from '@/services/Sandbox/types'
-import type { MoveAnimation } from '@/services/Animation/animation.service'
-import { Array as createArray, type ArrayInstance } from '@/services/Sandbox/elements/Array'
+import type { MoveAnimation } from '@/services/Sandbox/elements/Column'
+import { Row, type RowInstance } from '@/services/Sandbox/elements/Row'
 
 let moves: Move[] = []
 let values: number[] = []
-let Array: ArrayInstance | undefined = undefined
+let row: RowInstance | undefined = undefined
 
 const initSelectionSort = () => {
   values = generateNonSortedArray()
-  Array = createArray(values)
+  row = Row(values)
   moves = []
 
   initAnimation(animateSelectionSort)
@@ -64,9 +64,9 @@ function selectionSort(values: number[]) {
 }
 
 function animateSelectionSort() {
-  if (!Array) return
+  if (!row) return
 
-  const isChanged = Array.draw()
+  const isChanged = row.draw()
 
   if (isChanged || !moves.length) return
 
@@ -78,34 +78,34 @@ function animateSelectionSort() {
   } else if (animation === 'changeColor') {
     handleChangeColor()
   } else if (j !== -1) {
-    Array.columns[j].jump()
+    row.columns[j].jump()
   }
 
   function handleSwap() {
-    if (!Array) return
+    if (!row) return
 
     const frameCount = 40
 
-    Array.columns[minIndex].jump()
-    Array.columns[i].jump()
+    row.columns[minIndex].jump()
+    row.columns[i].jump()
 
-    Array.columns[minIndex].moveTo(Array.columns[i], { frameCount })
-    Array.columns[i].moveTo(Array.columns[minIndex], { yOffset: -1, frameCount })
-    ;[Array.columns[minIndex], Array.columns[i]] = [Array.columns[i], Array.columns[minIndex]]
+    row.columns[minIndex].moveTo(row.columns[i], { frameCount })
+    row.columns[i].moveTo(row.columns[minIndex], { yOffset: -1, frameCount })
+    ;[row.columns[minIndex], row.columns[i]] = [row.columns[i], row.columns[minIndex]]
   }
 
   function handleChangeColor() {
-    if (!Array) return
+    if (!row) return
 
     if (lastMinIndex !== minIndex) {
       if (lastMinIndex === i && j !== -1) {
-        Array.columns[i].changeColor(RGBColors.warning)
+        row.columns[i].changeColor(RGBColors.warning)
       } else {
-        Array.columns[lastMinIndex].changeColor(DEFAULT_COLOR)
+        row.columns[lastMinIndex].changeColor(DEFAULT_COLOR)
       }
     }
 
-    Array.columns[minIndex].changeColor(RGBColors.info)
+    row.columns[minIndex].changeColor(RGBColors.info)
   }
 }
 
@@ -115,7 +115,7 @@ export const SelectionSort: VariantSetup = {
 }
 
 export const __testing = () => ({
-  getState: () => ({ values, columns: Array?.columns ?? [], moves }),
+  getState: () => ({ values, columns: row?.columns ?? [], moves }),
   initSelectionSort,
   visualizeSelectionSort,
   animateSelectionSort

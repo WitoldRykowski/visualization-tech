@@ -1,16 +1,16 @@
 import { generateNonSortedArray } from '@/services/Array/array.service'
 import { drawColumns, initAnimation } from '@/services/Sandbox/sandbox.service'
 import type { VariantSetup } from '@/services/Sandbox/types'
-import type { MoveAnimation } from '@/services/Animation/animation.service'
-import { Array as createArray, type ArrayInstance } from '@/services/Sandbox/elements/Array'
+import type { MoveAnimation } from '@/services/Sandbox/elements/Column'
+import { Row, type RowInstance } from '@/services/Sandbox/elements/Row'
 
 let moves: Move[] = []
 let values: number[] = []
-let Array: ArrayInstance | undefined = undefined
+let row: RowInstance | undefined = undefined
 
 const initInsertionSort = () => {
   values = generateNonSortedArray()
-  Array = createArray(values)
+  row = Row(values)
   moves = []
 
   initAnimation(animateInsertionSort)
@@ -40,8 +40,8 @@ function insertionSort(values: number[]) {
 }
 
 function animateInsertionSort() {
-  if (!Array) return
-  const isChanged = drawColumns(Array.columns)
+  if (!row) return
+  const isChanged = drawColumns(row.columns)
 
   if (isChanged || !moves.length) return
 
@@ -49,12 +49,12 @@ function animateInsertionSort() {
   const [i, j] = indexes
 
   if (animation === 'swap') {
-    Array.columns[i].jump()
-    Array.columns[j].jump()
+    row.columns[i].jump()
+    row.columns[j].jump()
 
-    Array.columns[i].moveTo(Array.columns[j])
-    Array.columns[j].moveTo(Array.columns[i], { yOffset: -1 })
-    ;[Array.columns[i], Array.columns[j]] = [Array.columns[j], Array.columns[i]]
+    row.columns[i].moveTo(row.columns[j])
+    row.columns[j].moveTo(row.columns[i], { yOffset: -1 })
+    ;[row.columns[i], row.columns[j]] = [row.columns[j], row.columns[i]]
   }
 }
 
@@ -64,7 +64,7 @@ export const InsertionSort: VariantSetup = {
 }
 
 export const __testing = () => ({
-  getState: () => ({ moves, columns: Array?.columns ?? [], values }),
+  getState: () => ({ moves, columns: row?.columns ?? [], values }),
   animateInsertionSort,
   initInsertionSort,
   visualizeInsertionSort

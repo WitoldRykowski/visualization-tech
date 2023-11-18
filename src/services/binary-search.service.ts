@@ -3,26 +3,24 @@ import { generateSortedArray } from '@/services/Array/array.service'
 import { initAnimation } from '@/services/Sandbox/sandbox.service'
 import type { VariantSetup } from '@/services/Sandbox/types'
 import { RGBColors } from '@/utils'
-import type { MoveAnimation } from '@/services/Animation/animation.service'
-import { type ArrayInstance, Array as createArray } from '@/services/Sandbox/elements/Array'
+import type { MoveAnimation } from '@/services/Sandbox/elements/Column'
+import { type RowInstance, Row } from '@/services/Sandbox/elements/Row'
 
 export const COLLAPSE_DELAY = 20
 
 let moves: Move[] = []
 let values: number[] = []
-let Array: ArrayInstance | undefined = undefined
+let row: RowInstance | undefined = undefined
 
 const initBinarySearch = () => {
   values = generateSortedArray()
-  Array = createArray(values)
+  row = Row(values)
   moves = []
 
   initAnimation(animateBinarySearch)
 }
 
 const visualizeBinarySearch = () => {
-  createArray(values)
-
   binarySearch(values)
 }
 
@@ -72,9 +70,9 @@ const binarySearch = (values: number[]) => {
 }
 
 const animateBinarySearch = () => {
-  if (!Array) return
+  if (!row) return
 
-  const isChanged = Array.draw()
+  const isChanged = row.draw()
 
   if (isChanged || !moves.length) return
 
@@ -82,27 +80,27 @@ const animateBinarySearch = () => {
   const { guess, target, animation, min, max } = move
 
   if (animation === 'jump') {
-    Array.columns[guess].jump({ keepColor: true })
+    row.columns[guess].jump({ keepColor: true })
 
     if (values[guess] === target) {
-      Array.columns[guess].changeColor(RGBColors.positive)
+      row.columns[guess].changeColor(RGBColors.positive)
     }
   } else if (animation === 'collapse') {
     for (let i = 0; i < min; i++) {
-      if (Array.columns[i].height > COLLAPSED_COLUMN_HEIGHT) {
-        Array.columns[i].collapse({ frameCount: COLLAPSE_DELAY })
+      if (row.columns[i].height > COLLAPSED_COLUMN_HEIGHT) {
+        row.columns[i].collapse({ frameCount: COLLAPSE_DELAY })
       }
     }
 
-    for (let i = max + 1; i < Array.columns.length; i++) {
-      if (Array.columns[i].height > COLLAPSED_COLUMN_HEIGHT) {
-        Array.columns[i].collapse({ frameCount: COLLAPSE_DELAY })
+    for (let i = max + 1; i < row.columns.length; i++) {
+      if (row.columns[i].height > COLLAPSED_COLUMN_HEIGHT) {
+        row.columns[i].collapse({ frameCount: COLLAPSE_DELAY })
       }
     }
   }
 
   if (values[guess] !== target) {
-    Array.columns[guess].changeColor(DEFAULT_COLOR)
+    row.columns[guess].changeColor(DEFAULT_COLOR)
   }
 }
 
@@ -112,7 +110,7 @@ export const BinarySearch: VariantSetup = {
 }
 
 export const __testing = () => ({
-  getState: () => ({ values, moves, columns: Array?.columns ?? [] }),
+  getState: () => ({ values, moves, columns: row?.columns ?? [] }),
   animateBinarySearch,
   visualizeBinarySearch,
   initBinarySearch

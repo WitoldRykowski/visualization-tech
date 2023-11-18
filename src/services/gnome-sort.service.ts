@@ -3,16 +3,16 @@ import { generateNonSortedArray } from '@/services/Array/array.service'
 import { initAnimation } from '@/services/Sandbox/sandbox.service'
 import { RGBColors } from '@/utils'
 import type { VariantSetup } from '@/services/Sandbox/types'
-import type { MoveAnimation } from '@/services/Animation/animation.service'
-import { Array as createArray, type ArrayInstance } from '@/services/Sandbox/elements/Array'
+import type { MoveAnimation } from '@/services/Sandbox/elements/Column'
+import { Row, type RowInstance } from '@/services/Sandbox/elements/Row'
 
 let moves: Move[] = []
 let values: number[] = []
-let Array: ArrayInstance | undefined = undefined
+let row: RowInstance | undefined = undefined
 
 const initGnomeSort = () => {
   values = generateNonSortedArray()
-  Array = createArray(values)
+  row = Row(values)
   moves = []
 
   initAnimation(animateGnomeSort)
@@ -53,9 +53,9 @@ function gnomeSort(values: number[]) {
 }
 
 function animateGnomeSort() {
-  if (!Array) return
+  if (!row) return
 
-  const isChanged = Array.draw()
+  const isChanged = row.draw()
 
   if (isChanged || !moves.length) return
 
@@ -64,19 +64,19 @@ function animateGnomeSort() {
   if (animation === 'touch') {
     const color = RGBColors.lightBlue
     if (left !== -1) {
-      Array.columns[left].changeColor(color)
+      row.columns[left].changeColor(color)
     }
 
-    Array.columns[right].changeColor(color)
+    row.columns[right].changeColor(color)
   } else if (animation === 'swap') {
-    Array.columns[left].moveTo(Array.columns[right])
-    Array.columns[right].moveTo(Array.columns[left], { yOffset: -1 })
-    ;[Array.columns[left], Array.columns[right]] = [Array.columns[right], Array.columns[left]]
+    row.columns[left].moveTo(row.columns[right])
+    row.columns[right].moveTo(row.columns[left], { yOffset: -1 })
+    ;[row.columns[left], row.columns[right]] = [row.columns[right], row.columns[left]]
   } else if (animation === 'jump') {
-    Array.columns[right].jump()
+    row.columns[right].jump()
   } else {
-    for (let i = Array.columns.length - 1; i >= 0; i--) {
-      Array.columns[i].changeColor(DEFAULT_COLOR)
+    for (let i = row.columns.length - 1; i >= 0; i--) {
+      row.columns[i].changeColor(DEFAULT_COLOR)
     }
   }
 }
@@ -90,7 +90,7 @@ export const __testing = () => ({
   animateGnomeSort,
   initGnomeSort,
   visualizeGnomeSort,
-  getState: () => ({ moves, values, columns: Array?.columns ?? [] })
+  getState: () => ({ moves, values, columns: row?.columns ?? [] })
 })
 
 type Move = {

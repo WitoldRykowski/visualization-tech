@@ -1,12 +1,7 @@
 import { lerp, RGBColors } from '@/utils'
 import { getContext } from '@/services/Sandbox/sandbox.service'
-import type { MoveToAnimationConfig, AnimationConfig } from '@/services/Animation/animation.service'
 import type { ColorRGBA } from '@/types'
 import { colors } from 'quasar'
-import {
-  getAnimationConfig,
-  getMoveToAnimationConfig
-} from '@/services/Animation/animation.service'
 
 export const DEFAULT_COLOR = RGBColors.pink
 export const COLLAPSED_COLUMN_HEIGHT = 2
@@ -135,6 +130,33 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     return isChanged
   }
 }
+
+export function getAnimationConfig(config?: Partial<AnimationConfig>): AnimationConfig {
+  const DEFAULT_FRAME_COUNT = 10
+
+  return {
+    keepColor: !!config?.keepColor,
+    frameCount: config?.frameCount ?? DEFAULT_FRAME_COUNT
+  }
+}
+
+export function getMoveToAnimationConfig(
+  config?: Partial<MoveToAnimationConfig>
+): MoveToAnimationConfig {
+  return {
+    ...getAnimationConfig(config),
+    yOffset: config?.yOffset ?? 1
+  }
+}
+
+export type AnimationConfig = {
+  keepColor: boolean
+  frameCount: number
+}
+
+export type MoveToAnimationConfig = AnimationConfig & { yOffset: number }
+
+export type MoveAnimation = 'swap' | 'jump' | 'collapse' | 'changeColor' | 'move' | 'touch'
 
 export type Column = {
   x: number

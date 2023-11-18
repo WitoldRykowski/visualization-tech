@@ -4,7 +4,7 @@ import { generateFilledArray } from '@/services/Array/array.service'
 import type { VariantSetup } from '@/services/Sandbox/types'
 import type { Point } from '@/services/Sandbox/elements/Point'
 import { getPointInGraphExcludingPoint, getRandomPointInGraph, RGBColors } from '@/utils'
-import type { MoveAnimation } from '@/services/Animation/animation.service'
+import type { MoveAnimation } from '@/services/Sandbox/elements/Point'
 
 const values = generateFilledArray()
 let moves: Move[] = []

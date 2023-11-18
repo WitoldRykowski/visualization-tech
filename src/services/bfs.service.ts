@@ -3,7 +3,7 @@ import { initAnimation } from '@/services/Sandbox/sandbox.service'
 import { generateFilledArray } from '@/services/Array/array.service'
 import { type Graph, Graph as createGraph } from '@/services/Sandbox/elements/Graph'
 import type { Point } from '@/services/Sandbox/elements/Point'
-import type { MoveAnimation } from '@/services/Animation/animation.service'
+import type { MoveAnimation } from '@/services/Sandbox/elements/Point'
 import { getPointInGraphExcludingPoint, getRandomPointInGraph, RGBColors } from '@/utils'
 
 const values = generateFilledArray()

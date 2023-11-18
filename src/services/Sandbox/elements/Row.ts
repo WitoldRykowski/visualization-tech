@@ -1,8 +1,8 @@
 import { getSandboxSize } from '@/services/Sandbox/sandbox.service'
 import { Column } from '@/services/Sandbox/elements/Column'
 
-export const Array = (values: number[]): ArrayInstance => {
-  const array: ArrayInstance = {
+export const Row = (values: number[]): RowInstance => {
+  const array: RowInstance = {
     columns: [],
     draw
   }
@@ -40,7 +40,7 @@ export const Array = (values: number[]): ArrayInstance => {
   }
 }
 
-export type ArrayInstance = {
+export type RowInstance = {
   columns: Column[]
   draw: () => boolean
 }

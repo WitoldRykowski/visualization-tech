@@ -73,4 +73,13 @@ onBeforeUnmount(stopAnimation)
 #generate-button {
   min-width: 300px;
 }
+
+#sandbox {
+  transition: 0.4s;
+  opacity: 1;
+}
+
+#sandbox.invisible {
+  opacity: 0.5;
+}
 </style>
