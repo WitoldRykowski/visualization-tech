@@ -50,4 +50,47 @@ describe('Point', () => {
 
     expect(point.pulseRadius).toBe(0.1)
   })
+
+  test('should ensure Point render with spacing', () => {
+    const { point } = setup({ isPulsing: false })
+
+    expect(point.validatePoint({ x: 0, y: 0 })).toBe(false)
+    expect(point.validatePoint({ x: 5, y: 20 })).toBe(false)
+    expect(point.validatePoint({ x: 20, y: 5 })).toBe(false)
+    expect(point.validatePoint({ x: 50, y: 50 })).toBe(true)
+  })
+
+  test('should fill queue with frames for Point', () => {
+    const { point } = setup({ isPulsing: false })
+
+    point.changeColor({ r: 255, g: 0, b: 0 })
+
+    expect(point.queue).toContainEqual({ color: { r: 255, g: 0, b: 0 } })
+    expect(point.queue).toHaveLength(2)
+  })
+
+  test('should fill queue with frames for Point', () => {
+    const { point } = setup({ isPulsing: false })
+
+    point.moveTo({ x: 20, y: 20 })
+
+    expect(point.queue).toHaveLength(11)
+
+    point.queue.forEach((frame, index) => {
+      expect(frame.x).toBe(10 + index)
+      expect(frame.y).toBe(10 + index)
+    })
+  })
+
+  test('should update point on frame dequeue', () => {
+    const { point } = setup({ isPulsing: false })
+    point.moveTo({ x: 20, y: 20 })
+
+    expect(point.draw(POINT_SIZE)).toBe(true)
+    point.draw(POINT_SIZE)
+
+    expect(point.queue).toHaveLength(9)
+    expect(point.x).toBe(11)
+    expect(point.y).toBe(11)
+  })
 })
