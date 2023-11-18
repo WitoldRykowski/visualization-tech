@@ -113,7 +113,7 @@ export const Point = ({ x, y, color, value, id }: PointConfig): Point => {
     if (point.value !== null) {
       context.fillStyle = colors.rgbToHex(RGBColors.grey)
       context.textAlign = 'center'
-      context.font = `15px Arial`
+      context.font = '15px Arial'
       context.fillText(`${point.value}`, point.x, point.y + 5)
     }
 

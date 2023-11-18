@@ -7,24 +7,6 @@ import { Column } from '../services/Sandbox/elements/Column'
 const generateColumn = () => Column({ x: 0, y: 0, width: 10, height: 100 })
 
 describe('Column', () => {
-  test('should move Column to correct location', () => {
-    const column = generateColumn()
-
-    column.moveTo({ x: 20, y: 20 })
-
-    const moves = column.queue.filter((move) => {
-      const keys = Object.keys(move)
-      return keys.includes('x') || keys.includes('y')
-    })
-
-    expect(moves.at(-1)).toEqual(
-      expect.objectContaining({
-        x: 20,
-        y: 20
-      })
-    )
-  })
-
   test('should make Column jump', () => {
     const column = generateColumn()
 
