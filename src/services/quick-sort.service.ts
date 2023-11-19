@@ -123,9 +123,7 @@ function animateQuickSort() {
     row.columns[i].jump()
     row.columns[j].jump()
 
-    row.columns[i].moveTo(row.columns[j], config)
-    row.columns[j].moveTo(row.columns[i], { ...config, yOffset: -1 })
-    ;[row.columns[i], row.columns[j]] = [row.columns[j], row.columns[i]]
+    row.swapColumns([i, j], config)
 
     if (i === pivotIndex || j === pivotIndex) {
       row.columns[pivotIndex].changeColor(RGBColors.info)

@@ -89,9 +89,7 @@ function animateSelectionSort() {
     row.columns[minIndex].jump()
     row.columns[i].jump()
 
-    row.columns[minIndex].moveTo(row.columns[i], { frameCount })
-    row.columns[i].moveTo(row.columns[minIndex], { yOffset: -1, frameCount })
-    ;[row.columns[minIndex], row.columns[i]] = [row.columns[i], row.columns[minIndex]]
+    row.swapColumns([i, minIndex], { frameCount })
   }
 
   function handleChangeColor() {

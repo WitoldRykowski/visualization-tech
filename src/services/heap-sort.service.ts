@@ -1,4 +1,4 @@
-import { getCanvas, initAnimation } from '@/services/Sandbox/sandbox.service'
+import { initAnimation, SANDBOX_TRANSITION } from '@/services/Sandbox/sandbox.service'
 import { generateNonSortedArray } from '@/services/Array/array.service'
 import type { VariantSetup } from '@/services/Sandbox/types'
 import { Heap, type HeapInstance } from '@/services/Sandbox/elements/Heap'
@@ -100,26 +100,24 @@ function heapSort() {
 }
 
 function animateHeapSort() {
+  const draw = view === 'array' ? row!.draw : heap!.draw
+  const isChanged = draw()
   const isArrayView = moves.length === 0 && lateMoves.length > 0
 
-  if (isArrayView) {
-    const canvas = getCanvas()
+  if (isArrayView && !isChanged) {
+    const sandboxContainer = document.getElementById('sandbox-container')!
 
-    canvas.classList.add('invisible')
+    if (sandboxContainer.classList.contains('invisible')) return
 
-    setTimeout(() => {
-      canvas.classList.remove('invisible')
-    }, 400)
+    sandboxContainer.classList.add('invisible')
 
     setTimeout(() => {
       moves = lateMoves
       view = 'array'
-    }, 400)
+
+      sandboxContainer.classList.remove('invisible')
+    }, SANDBOX_TRANSITION)
   }
-
-  const draw = view === 'array' ? row!.draw : heap!.draw
-
-  const isChanged = draw()
 
   if (isChanged || !moves.length) return
 
@@ -133,9 +131,7 @@ function animateHeapSort() {
     row.columns[i].jump()
     row.columns[j].jump()
 
-    row.columns[i].moveTo(row.columns[j])
-    row.columns[j].moveTo(row.columns[i], { yOffset: -1 })
-    ;[row.columns[i], row.columns[j]] = [row.columns[j], row.columns[i]]
+    row.swapColumns([i, j])
   } else {
     moveNode(move as GraphMove)
   }

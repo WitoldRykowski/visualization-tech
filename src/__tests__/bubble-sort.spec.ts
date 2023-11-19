@@ -57,7 +57,7 @@ describe('Bubble Sort', () => {
         expect(columns[i].moveTo).toHaveBeenCalledTimes(1)
         expect(columns[j].moveTo).toHaveBeenCalledTimes(1)
         expect(columns[i].moveTo).toHaveBeenCalledWith(columns[j], { yOffset: -1 })
-        expect(columns[j].moveTo).toHaveBeenCalledWith(columns[i])
+        expect(columns[j].moveTo).toHaveBeenCalledWith(columns[i], {})
       }
 
       jest.clearAllMocks()

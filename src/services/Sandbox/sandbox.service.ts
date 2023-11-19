@@ -3,6 +3,8 @@ import type { Column } from '@/services/Sandbox/elements/Column'
 
 let _animationFrameId = -1
 
+export const SANDBOX_TRANSITION = 500
+
 export const initSandbox = () => {
   const mainContainer = document.getElementById('main-container')!
   const canvas = getCanvas()

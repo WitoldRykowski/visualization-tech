@@ -51,7 +51,10 @@ onBeforeUnmount(stopAnimation)
 </script>
 
 <template>
-  <canvas id="sandbox" />
+  <div id="sandbox-container">
+    <canvas id="sandbox" />
+  </div>
+
   <Teleport to="#app-toolbar-actions">
     <AppButton
       @click="visualize"
@@ -71,15 +74,15 @@ onBeforeUnmount(stopAnimation)
 
 #visualize-button,
 #generate-button {
-  min-width: 300px;
+  min-width: clamp(200px, 300px, 300px);
 }
 
-#sandbox {
-  transition: 0.4s;
+#sandbox-container {
   opacity: 1;
+  transition: opacity 0.5s ease;
 }
 
-#sandbox.invisible {
-  opacity: 0.5;
+#sandbox-container.invisible {
+  opacity: 0;
 }
 </style>

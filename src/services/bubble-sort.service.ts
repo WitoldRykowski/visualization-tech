@@ -63,9 +63,7 @@ function animateBubbleSort() {
   } = moves.shift()!
 
   if (animation === 'swap') {
-    row.columns[i].moveTo(row.columns[j])
-    row.columns[j].moveTo(row.columns[i], { yOffset: -1 })
-    ;[row.columns[i], row.columns[j]] = [row.columns[j], row.columns[i]]
+    row.swapColumns([i, j])
   } else {
     row.columns[i].jump()
     row.columns[j].jump()

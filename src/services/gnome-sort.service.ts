@@ -69,9 +69,7 @@ function animateGnomeSort() {
 
     row.columns[right].changeColor(color)
   } else if (animation === 'swap') {
-    row.columns[left].moveTo(row.columns[right])
-    row.columns[right].moveTo(row.columns[left], { yOffset: -1 })
-    ;[row.columns[left], row.columns[right]] = [row.columns[right], row.columns[left]]
+    row.swapColumns([left, right])
   } else if (animation === 'jump') {
     row.columns[right].jump()
   } else {
