@@ -1,11 +1,9 @@
 import * as SandboxService from '../services/Sandbox/sandbox.service'
 import * as Column from '../services/Sandbox/elements/Column'
 import { Noop } from '../types'
-import clearAllMocks = jest.clearAllMocks
-
-jest.mock('delaunator')
 
 beforeEach(() => {
+  jest.mock('delaunator')
   const initAnimation = jest.spyOn(SandboxService, 'initAnimation')
 
   initAnimation.mockImplementationOnce((animation: Noop) => {
@@ -46,5 +44,5 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  clearAllMocks()
+  jest.clearAllMocks()
 })

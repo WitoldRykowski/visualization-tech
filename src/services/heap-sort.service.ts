@@ -201,6 +201,13 @@ export const HeapSort: VariantSetup = {
   visualize: visualizeHeapSort
 }
 
+export const __testing = () => ({
+  animateHeapSort,
+  initHeapSort,
+  visualizeHeapSort,
+  getState: () => ({ moves, values, columns: row?.columns ?? [], heap })
+})
+
 export type Move = GraphMove | ArrayMove
 
 type GraphMove = {
