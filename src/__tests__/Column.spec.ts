@@ -62,7 +62,7 @@ describe('Column', () => {
     expect(column.queue).toContainEqual({ x: 0, y: -10 })
   })
 
-  test('should update column on frame dequeue', () => {
+  test('should update Point on frame dequeue', () => {
     const { column } = setup()
 
     column.jump()
