@@ -116,14 +116,12 @@ function animateQuickSort() {
   function swapColumns() {
     if (i === j || !row) return
 
-    const config = {
-      frameCount: 40
-    }
-
     row.columns[i].jump()
     row.columns[j].jump()
 
-    row.swapColumns([i, j], config)
+    row.swapColumns([i, j], {
+      frameCount: 40
+    })
 
     if (i === pivotIndex || j === pivotIndex) {
       row.columns[pivotIndex].changeColor(RGBColors.info)
@@ -172,6 +170,13 @@ export const QuickSort: VariantSetup = {
   init: initQuickSort,
   visualize: visualizeQuickSort
 }
+
+export const __testing = () => ({
+  getState: () => ({ values, columns: row?.columns ?? [], moves }),
+  initQuickSort,
+  visualizeQuickSort,
+  animateQuickSort
+})
 
 type Move = {
   left: number
