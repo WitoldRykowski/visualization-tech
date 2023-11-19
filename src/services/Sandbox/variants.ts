@@ -11,10 +11,12 @@ import { DFS as DepthFirstSearch } from '@/services/dfs.service'
 import { Dijkstra } from '@/services/dijkstra.service'
 import { MergeSort } from '@/services/merge-sort.service'
 import { HeapSort } from '@/services/heap-sort.service'
+import { SentinelSearch } from '@/services/sentinal-search.service'
 
 export const Variants: Record<NonNullable<VariantName>, VariantSetup> = {
   BubbleSort,
   BinarySearch,
+  SentinelSearch,
   GnomeSort,
   InsertionSort,
   SelectionSort,

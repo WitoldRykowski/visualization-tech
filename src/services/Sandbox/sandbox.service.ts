@@ -84,6 +84,7 @@ export const ALGORITHMS: readonly Variant[] = [
   { name: 'InsertionSort', tags: ['sorting'] },
   // { name: 'MergeSort', tags: ['sorting'] }, TODO Think how to visualize
   { name: 'SelectionSort', tags: ['sorting'] },
+  { name: 'SentinelSearch', tags: ['searching'] },
   { name: 'QuickSort', tags: ['sorting'] }
 ]
 
