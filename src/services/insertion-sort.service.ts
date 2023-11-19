@@ -2,15 +2,15 @@ import { generateNonSortedArray } from '@/services/Array/array.service'
 import { drawColumns, initAnimation } from '@/services/Sandbox/sandbox.service'
 import type { VariantSetup } from '@/services/Sandbox/types'
 import type { MoveAnimation } from '@/services/Sandbox/elements/Column'
-import { Row, type RowInstance } from '@/services/Sandbox/elements/Row'
+import { Row } from '@/services/Sandbox/elements/Row'
 
 let moves: Move[] = []
 let values: number[] = []
-let row: RowInstance | undefined = undefined
+const row = Row()
 
 const initInsertionSort = () => {
   values = generateNonSortedArray()
-  row = Row(values)
+  row.createColumns(values)
   moves = []
 
   initAnimation(animateInsertionSort)
@@ -40,7 +40,6 @@ function insertionSort(values: number[]) {
 }
 
 function animateInsertionSort() {
-  if (!row) return
   const isChanged = drawColumns(row.columns)
 
   if (isChanged || !moves.length) return

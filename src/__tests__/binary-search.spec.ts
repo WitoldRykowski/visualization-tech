@@ -1,4 +1,4 @@
-import { __testing, COLLAPSE_DELAY } from '../services/binary-search.service'
+import { __testing } from '../services/binary-search.service'
 import { isArraySortedAscending } from '../utils/testUtils'
 import { initAnimation } from '../services/Sandbox/sandbox.service'
 import { COLLAPSED_COLUMN_HEIGHT } from '../services/Sandbox/elements/Column'
@@ -58,14 +58,12 @@ describe('Binary Search', () => {
         for (let i = 0; i < min; i++) {
           if (columns[i].height > COLLAPSED_COLUMN_HEIGHT) {
             expect(columns[i].collapse).toHaveBeenCalledTimes(1)
-            expect(columns[i].collapse).toHaveBeenCalledWith({ frameCount: COLLAPSE_DELAY })
           }
         }
 
         for (let i = max + 1; i < columns.length; i++) {
           if (columns[i].height > COLLAPSED_COLUMN_HEIGHT) {
             expect(columns[i].collapse).toHaveBeenCalledTimes(1)
-            expect(columns[i].collapse).toHaveBeenCalledWith({ frameCount: COLLAPSE_DELAY })
           }
         }
 

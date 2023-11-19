@@ -5,15 +5,15 @@ import type { ColorRGBA } from '@/types'
 import type { VariantSetup } from '@/services/Sandbox/types'
 import { RGBColors } from '@/utils'
 import type { MoveAnimation } from '@/services/Sandbox/elements/Column'
-import { Row, type RowInstance } from '@/services/Sandbox/elements/Row'
+import { Row } from '@/services/Sandbox/elements/Row'
 
 let moves: Move[] = []
 let values: number[] = []
-let row: RowInstance | undefined = undefined
+const row = Row()
 
 const initQuickSort = () => {
   values = generateNonSortedArray()
-  row = Row(values)
+  row.createColumns(values)
   moves = []
 
   initAnimation(animateQuickSort)
@@ -90,8 +90,6 @@ function quickSort(values: number[], left: number, right: number) {
 }
 
 function animateQuickSort() {
-  if (!row) return
-
   const isChanged = row.draw()
 
   if (isChanged || !moves.length) return
@@ -129,8 +127,6 @@ function animateQuickSort() {
   }
 
   function touch() {
-    if (!row) return
-
     changeColor(row.columns[i], RGBColors.warning)
 
     if (i > 0) {
@@ -151,8 +147,6 @@ function animateQuickSort() {
   }
 
   function changeColumnColor() {
-    if (!row) return
-
     for (let i = 0; i < row.columns.length; i++) {
       const isInRange = i >= left && i <= right
       const color = isInRange ? RGBColors.primary : RGBColors.grey

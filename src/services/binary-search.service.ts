@@ -4,17 +4,15 @@ import { initAnimation } from '@/services/Sandbox/sandbox.service'
 import type { VariantSetup } from '@/services/Sandbox/types'
 import { RGBColors } from '@/utils'
 import type { MoveAnimation } from '@/services/Sandbox/elements/Column'
-import { type RowInstance, Row } from '@/services/Sandbox/elements/Row'
-
-export const COLLAPSE_DELAY = 20
+import { Row } from '@/services/Sandbox/elements/Row'
 
 let moves: Move[] = []
 let values: number[] = []
-let row: RowInstance | undefined = undefined
+const row = Row()
 
 const initBinarySearch = () => {
   values = generateSortedArray()
-  row = Row(values)
+  row.createColumns(values)
   moves = []
 
   initAnimation(animateBinarySearch)
@@ -70,8 +68,6 @@ const binarySearch = (values: number[]) => {
 }
 
 const animateBinarySearch = () => {
-  if (!row) return
-
   const isChanged = row.draw()
 
   if (isChanged || !moves.length) return
@@ -88,13 +84,13 @@ const animateBinarySearch = () => {
   } else if (animation === 'collapse') {
     for (let i = 0; i < min; i++) {
       if (row.columns[i].height > COLLAPSED_COLUMN_HEIGHT) {
-        row.columns[i].collapse({ frameCount: COLLAPSE_DELAY })
+        row.columns[i].collapse()
       }
     }
 
     for (let i = max + 1; i < row.columns.length; i++) {
       if (row.columns[i].height > COLLAPSED_COLUMN_HEIGHT) {
-        row.columns[i].collapse({ frameCount: COLLAPSE_DELAY })
+        row.columns[i].collapse()
       }
     }
   }

@@ -2,15 +2,15 @@ import { initAnimation } from '@/services/Sandbox/sandbox.service'
 import { generateNonSortedArray } from '@/services/Array/array.service'
 import type { VariantSetup } from '@/services/Sandbox/types'
 import type { MoveAnimation } from '@/services/Sandbox/elements/Column'
-import { Row, type RowInstance } from '@/services/Sandbox/elements/Row'
+import { Row } from '@/services/Sandbox/elements/Row'
 
 let moves: Move[] = []
 let values: number[] = []
-let row: RowInstance | undefined = undefined
+const row = Row()
 
 const initMergeSort = () => {
   values = generateNonSortedArray()
-  row = Row(values)
+  row.createColumns(values)
   moves = []
 
   initAnimation(animateMergeSort)
@@ -52,8 +52,6 @@ function merge(left: number[], right: number[]): number[] {
 }
 
 function animateMergeSort() {
-  if (!row) return
-
   const isChanged = row.draw()
 
   if (isChanged || !moves.length) return

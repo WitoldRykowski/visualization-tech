@@ -5,7 +5,7 @@ import { Heap, type HeapInstance } from '@/services/Sandbox/elements/Heap'
 import type { MoveAnimation as ColumnMoveAnimation } from '@/services/Sandbox/elements/Column'
 import type { MoveAnimation } from '@/services/Sandbox/elements/Point'
 import { Connection } from '@/services/Sandbox/elements/Connection'
-import { Row, type RowInstance } from '@/services/Sandbox/elements/Row'
+import { Row } from '@/services/Sandbox/elements/Row'
 import { RGBColors } from '@/utils'
 import { DEFAULT_COLOR } from '@/services/Sandbox/elements/Point'
 
@@ -13,13 +13,12 @@ let lateMoves: ArrayMove[] = []
 let moves: Move[] = []
 let values: number[] = []
 let heap: HeapInstance | undefined = undefined
-let row: RowInstance | undefined = undefined
+const row = Row()
 let view: View = 'graph'
 const SAFE_ARRAY_SIZE = 30
 
 const initHeapSort = () => {
   view = 'graph'
-  row = undefined
   moves = []
   lateMoves = []
   values = generateNonSortedArray(SAFE_ARRAY_SIZE).map((value) => {
@@ -40,7 +39,7 @@ function heapSort() {
     heapify(values.length, i)
   }
 
-  row = Row(values.map((value) => value / 50))
+  row.createColumns(values.map((value) => value / 50))
 
   for (let i = values.length - 1; i > 0; i--) {
     ;[values[i], values[0]] = [values[0], values[i]]
@@ -69,7 +68,7 @@ function heapSort() {
     if (largest !== i) {
       ;[values[i], values[largest]] = [values[largest], values[i]]
 
-      if (!row) {
+      if (!row.columns.length) {
         moves.push({
           animation: 'move',
           indexes: [i, largest],

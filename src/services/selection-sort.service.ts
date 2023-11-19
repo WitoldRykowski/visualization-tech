@@ -4,15 +4,15 @@ import { RGBColors } from '@/utils'
 import { DEFAULT_COLOR } from '@/services/Sandbox/elements/Column'
 import type { VariantSetup } from '@/services/Sandbox/types'
 import type { MoveAnimation } from '@/services/Sandbox/elements/Column'
-import { Row, type RowInstance } from '@/services/Sandbox/elements/Row'
+import { Row } from '@/services/Sandbox/elements/Row'
 
 let moves: Move[] = []
 let values: number[] = []
-let row: RowInstance | undefined = undefined
+const row = Row()
 
 const initSelectionSort = () => {
   values = generateNonSortedArray()
-  row = Row(values)
+  row.createColumns(values)
   moves = []
 
   initAnimation(animateSelectionSort)
@@ -64,8 +64,6 @@ function selectionSort(values: number[]) {
 }
 
 function animateSelectionSort() {
-  if (!row) return
-
   const isChanged = row.draw()
 
   if (isChanged || !moves.length) return
@@ -93,8 +91,6 @@ function animateSelectionSort() {
   }
 
   function handleChangeColor() {
-    if (!row) return
-
     if (lastMinIndex !== minIndex) {
       if (lastMinIndex === i && j !== -1) {
         row.columns[i].changeColor(RGBColors.warning)

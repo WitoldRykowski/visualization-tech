@@ -83,7 +83,7 @@ export const Column = (columnConfig: ColumnConfig): Column => {
   }
 
   function collapse(config?: Partial<AnimationConfig>) {
-    const { frameCount } = getAnimationConfig(config)
+    const { frameCount } = getAnimationConfig({ frameCount: 20, ...config })
 
     for (let i = 0; i <= frameCount; i++) {
       const tickRate = i / frameCount

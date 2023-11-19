@@ -49,7 +49,7 @@ describe('Column', () => {
 
     column.collapse()
 
-    expect(column.queue).toHaveLength(11)
+    expect(column.queue).toHaveLength(21)
     expect(column.queue).toContainEqual({ height: COLLAPSED_COLUMN_HEIGHT })
   })
 

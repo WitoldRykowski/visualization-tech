@@ -2,15 +2,15 @@ import { generateNonSortedArray } from '@/services/Array/array.service'
 import { initAnimation } from '@/services/Sandbox/sandbox.service'
 import type { VariantSetup } from '@/services/Sandbox/types'
 import type { MoveAnimation } from '@/services/Sandbox/elements/Column'
-import { Row, type RowInstance } from '@/services/Sandbox/elements/Row'
+import { Row } from '@/services/Sandbox/elements/Row'
 
 let moves: Move[] = []
 let values: number[] = []
-let row: RowInstance | undefined = undefined
+const row = Row()
 
 const initBubbleSort = () => {
   values = generateNonSortedArray()
-  row = Row(values)
+  row.createColumns(values)
   moves = []
 
   initAnimation(animateBubbleSort)
@@ -51,8 +51,6 @@ function bubbleSort(values: number[]) {
 }
 
 function animateBubbleSort() {
-  if (!row) return
-
   const isChanged = row.draw()
 
   if (isChanged || !moves.length) return
