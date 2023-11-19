@@ -1,4 +1,4 @@
-import { Graph as createGraph, Graph } from '@/services/Sandbox/elements/Graph'
+import { Graph } from '@/services/Sandbox/elements/Graph'
 import { initAnimation } from '@/services/Sandbox/sandbox.service'
 import { generateFilledArray } from '@/services/Array/array.service'
 import type { VariantSetup } from '@/services/Sandbox/types'
@@ -8,11 +8,11 @@ import type { MoveAnimation } from '@/services/Sandbox/elements/Point'
 
 const values = generateFilledArray()
 let moves: Move[] = []
-let graph: Graph
+const graph = Graph()
 
 const initDijkstra = () => {
   moves = []
-  graph = createGraph(values)
+  graph.createGraph(values)
 
   initAnimation(animateDijkstra)
 }

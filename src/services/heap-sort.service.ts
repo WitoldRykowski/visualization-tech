@@ -1,7 +1,7 @@
 import { initAnimation, SANDBOX_TRANSITION } from '@/services/Sandbox/sandbox.service'
 import { generateNonSortedArray } from '@/services/Array/array.service'
 import type { VariantSetup } from '@/services/Sandbox/types'
-import { Heap, type HeapInstance } from '@/services/Sandbox/elements/Heap'
+import { Heap } from '@/services/Sandbox/elements/Heap'
 import type { MoveAnimation as ColumnMoveAnimation } from '@/services/Sandbox/elements/Column'
 import type { MoveAnimation } from '@/services/Sandbox/elements/Point'
 import { Connection } from '@/services/Sandbox/elements/Connection'
@@ -12,7 +12,7 @@ import { DEFAULT_COLOR } from '@/services/Sandbox/elements/Point'
 let lateMoves: ArrayMove[] = []
 let moves: Move[] = []
 let values: number[] = []
-let heap: HeapInstance | undefined = undefined
+const heap = Heap()
 const row = Row()
 let view: View = 'graph'
 const SAFE_ARRAY_SIZE = 30
@@ -25,7 +25,7 @@ const initHeapSort = () => {
     return Math.floor(value * 50)
   })
 
-  heap = Heap(values)
+  heap.createHeap(values)
 
   initAnimation(animateHeapSort)
 }

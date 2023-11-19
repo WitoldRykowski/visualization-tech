@@ -5,44 +5,17 @@ import { Point as createPoint } from '@/services/Sandbox/elements/Point'
 import { createEdges } from '@/utils/delaunayTriangulation'
 import { Connection as createConnection } from '@/services/Sandbox/elements/Connection'
 
-export const Graph = (values: number[]): Graph => {
+export const Graph = (): Graph => {
   const graph: Graph = {
     points: [],
     connections: [],
     draw,
     getPointConnections,
-    getConnectionsBetweenPoints
+    getConnectionsBetweenPoints,
+    createGraph
   }
-
-  const { width, height } = getSandboxSize()
-
-  for (let i = 0; i < values.length; i++) {
-    let x = generateRandomX()
-    let y = generateRandomY()
-
-    while (!validatePoint({ x, y })) {
-      x = generateRandomX()
-      y = generateRandomY()
-    }
-
-    graph.points.push(createPoint({ x, y, id: i + 1 }))
-  }
-
-  const edges = createEdges(graph.points)
-
-  // Graph always will be non directed so every connection
-  // connect point A to point B and point B to point A (two-way binding)
-  edges.forEach(([startAt, finishAt]) => {
-    const connection = createConnection({ startAt, finishAt })
-    graph.connections.push(connection)
-
-    const reverseConnection = createConnection({ startAt: finishAt, finishAt: startAt })
-    graph.connections.push(reverseConnection)
-  })
 
   return graph
-
-  draw()
 
   function getPointConnections(point: Point) {
     return graph.connections.filter(({ startAt }) => startAt.id === point.id)
@@ -71,11 +44,42 @@ export const Graph = (values: number[]): Graph => {
     return isChanged
   }
 
+  function createGraph(values: number[]) {
+    for (let i = 0; i < values.length; i++) {
+      let x = generateRandomX()
+      let y = generateRandomY()
+
+      while (!validatePoint({ x, y })) {
+        x = generateRandomX()
+        y = generateRandomY()
+      }
+
+      graph.points.push(createPoint({ x, y, id: i + 1 }))
+    }
+
+    const edges = createEdges(graph.points)
+
+    // Graph always will be non directed so every connection
+    // connect point A to point B and point B to point A (two-way binding)
+    edges.forEach(([startAt, finishAt]) => {
+      const connection = createConnection({ startAt, finishAt })
+      graph.connections.push(connection)
+
+      const reverseConnection = createConnection({ startAt: finishAt, finishAt: startAt })
+      graph.connections.push(reverseConnection)
+    })
+
+    draw()
+  }
+
   function generateRandomX() {
+    const { width } = getSandboxSize()
+
     return Math.random() * width
   }
 
   function generateRandomY() {
+    const { height } = getSandboxSize()
     return Math.random() * height
   }
 
@@ -89,5 +93,6 @@ export type Graph = {
   connections: Connection[]
   getPointConnections: (point: Point) => Connection[]
   getConnectionsBetweenPoints: (start: Point, destination: Point) => Connection[]
+  createGraph: (values: number[]) => void
   draw: () => boolean
 }

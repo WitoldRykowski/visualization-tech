@@ -3,7 +3,8 @@ import { generateNonSortedArray } from '../services/Array/array.service'
 
 const setup = () => {
   const values = generateNonSortedArray(10)
-  const heap = Heap(values)
+  const heap = Heap()
+  heap.createHeap(values)
 
   return { heap, values }
 }

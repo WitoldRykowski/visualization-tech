@@ -52,7 +52,7 @@ export const Row = (): RowInstance => {
   }
 }
 
-export type RowInstance = {
+type RowInstance = {
   columns: Column[]
   draw: () => boolean
   swapColumns: (indexes: [number, number], config?: Partial<AnimationConfig>) => void

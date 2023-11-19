@@ -1,18 +1,18 @@
 import type { VariantSetup } from '@/services/Sandbox/types'
 import { initAnimation } from '@/services/Sandbox/sandbox.service'
 import { generateFilledArray } from '@/services/Array/array.service'
-import { type Graph, Graph as createGraph } from '@/services/Sandbox/elements/Graph'
+import { Graph } from '@/services/Sandbox/elements/Graph'
 import type { Point } from '@/services/Sandbox/elements/Point'
 import type { MoveAnimation } from '@/services/Sandbox/elements/Point'
 import { getPointInGraphExcludingPoint, getRandomPointInGraph, RGBColors } from '@/utils'
 
 const values = generateFilledArray()
 let moves: Move[] = []
-let graph: Graph | undefined = undefined
+const graph = Graph()
 
 const initBfs = () => {
   moves = []
-  graph = createGraph(values)
+  graph.createGraph(values)
 
   initAnimation(animateBfs)
 }
@@ -24,8 +24,6 @@ const visualizeBFS = () => {
 type QueueItem = { node: Point; distance: number }
 
 function breadthFirstSearch() {
-  if (!graph) return
-
   const startNode = getRandomPointInGraph(graph.points)
   const endNode = getPointInGraphExcludingPoint(graph.points, startNode)
   const visited: Set<Point> = new Set()
@@ -87,8 +85,6 @@ function breadthFirstSearch() {
 }
 
 function animateBfs() {
-  if (!graph) return
-
   const isChanged = graph.draw()
 
   if (isChanged || !moves.length) return

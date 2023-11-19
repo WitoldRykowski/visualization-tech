@@ -1,4 +1,4 @@
-import { Graph as createGraph, type Graph } from '@/services/Sandbox/elements/Graph'
+import { Graph } from '@/services/Sandbox/elements/Graph'
 import { initAnimation } from '@/services/Sandbox/sandbox.service'
 import { generateFilledArray } from '@/services/Array/array.service'
 import { type VariantSetup } from '@/services/Sandbox/types'
@@ -8,11 +8,11 @@ import type { MoveAnimation } from '@/services/Sandbox/elements/Point'
 
 const values = generateFilledArray()
 let moves: Move[] = []
-let graph: Graph | undefined = undefined
+const graph = Graph()
 
 const initDfs = () => {
   moves = []
-  graph = createGraph(values)
+  graph.createGraph(values)
 
   initAnimation(animateDfs)
 }
@@ -40,10 +40,6 @@ function runDFS() {
   }
 
   function depthFirstSearch(node: Point, visited: Set<Point> = new Set()): Point[] {
-    if (!graph) {
-      throw Error('Graph is undefined!')
-    }
-
     if (node === destination) {
       return [node]
     }
@@ -75,8 +71,6 @@ function runDFS() {
 }
 
 function animateDfs() {
-  if (!graph) return
-
   const isChanged = graph.draw()
 
   if (isChanged || !moves.length) return
