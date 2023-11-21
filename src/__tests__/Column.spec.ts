@@ -44,16 +44,20 @@ describe('Column', () => {
     expect(column.queue).toContainEqual({ color: { r: 255, g: 0, b: 0 } })
   })
 
-  test('should fill queue with frames for Point', () => {
+  test('should fill queue with height changes frames for Point', () => {
     const { column } = setup()
 
-    column.collapse()
+    column.changeHeight(COLLAPSED_COLUMN_HEIGHT)
 
     expect(column.queue).toHaveLength(21)
-    expect(column.queue).toContainEqual({ height: COLLAPSED_COLUMN_HEIGHT })
+    expect(column.queue[column.queue.length - 1]).toEqual({ height: COLLAPSED_COLUMN_HEIGHT })
+
+    column.changeHeight(100)
+    expect(column.queue).toHaveLength(42)
+    expect(column.queue[column.queue.length - 1]).toEqual({ height: 100 })
   })
 
-  test('should fill queue with frames for Point', () => {
+  test('should fill queue with jump frames for Point', () => {
     const { column } = setup()
 
     column.jump()

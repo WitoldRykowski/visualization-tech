@@ -17,6 +17,12 @@ export const getRandomValueFromGivenArray = <T>(values: T[]) => {
   return values[index]
 }
 
+export const getRandomIndexGreaterThan = (min: number, lastIndex: number) => {
+  const index = Math.floor(Math.random() * (lastIndex - min))
+
+  return index + min
+}
+
 export const getRandomPointInGraph = (points: Point[]) => {
   return getRandomValueFromGivenArray(points)
 }

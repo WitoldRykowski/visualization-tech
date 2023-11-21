@@ -14,7 +14,7 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     draw,
     moveTo,
     jump,
-    collapse,
+    changeHeight,
     changeColor
   }
 
@@ -36,11 +36,19 @@ export const Column = (columnConfig: ColumnConfig): Column => {
 
       column.queue.push({
         x: lerp(column.x, location.x, tickRate),
-        y: lerp(column.y, location.y, tickRate) + ((u * column.width) / 2) * yOffset
+        y: calculateY(tickRate, u)
       })
     }
 
     if (!keepColor) changeColor(DEFAULT_COLOR)
+
+    function calculateY(tickRate: number, u: number) {
+      const isYEqualLocationY = column.y === location.y
+
+      if (isYEqualLocationY) return column.y
+
+      return lerp(column.y, location.y, tickRate) + ((u * column.width) / 2) * yOffset
+    }
   }
 
   function jump(config?: Partial<AnimationConfig>) {
@@ -82,17 +90,21 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     }
   }
 
-  function collapse(config?: Partial<AnimationConfig>) {
+  function changeHeight(height: number, config?: Partial<AnimationConfig>) {
     const { frameCount } = getAnimationConfig({ frameCount: 20, ...config })
 
     for (let i = 0; i <= frameCount; i++) {
       const tickRate = i / frameCount
-      const u = column.height - column.height * tickRate
-      const height = u > COLLAPSED_COLUMN_HEIGHT ? u : COLLAPSED_COLUMN_HEIGHT
 
       column.queue.push({
-        height
+        height: getHeight(tickRate)
       })
+    }
+
+    function getHeight(tickRate: number) {
+      if (height > column.height) return column.height + (height - column.height) * tickRate
+
+      return column.height - (column.height - height) * tickRate
     }
   }
 
@@ -166,7 +178,7 @@ export type Column = {
   draw: () => boolean
   moveTo: (location: Pick<Column, 'x' | 'y'>, config?: Partial<MoveToAnimationConfig>) => void
   jump: (config?: Partial<AnimationConfig>) => void
-  collapse: (config?: Partial<AnimationConfig>) => void
+  changeHeight: (height: number, config?: Partial<AnimationConfig>) => void
   changeColor: (color: ColorRGBA, frameCount?: number) => void
 }
 

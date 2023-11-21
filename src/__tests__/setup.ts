@@ -25,7 +25,7 @@ beforeEach(() => {
         queue: [],
         moveTo: jest.fn(),
         jump: jest.fn(),
-        collapse: jest.fn(),
+        changeHeight: jest.fn(),
         changeColor: jest.fn()
       }
     })

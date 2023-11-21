@@ -84,13 +84,13 @@ const animateBinarySearch = () => {
   } else if (animation === 'collapse') {
     for (let i = 0; i < min; i++) {
       if (row.columns[i].height > COLLAPSED_COLUMN_HEIGHT) {
-        row.columns[i].collapse()
+        row.columns[i].changeHeight(COLLAPSED_COLUMN_HEIGHT)
       }
     }
 
     for (let i = max + 1; i < row.columns.length; i++) {
       if (row.columns[i].height > COLLAPSED_COLUMN_HEIGHT) {
-        row.columns[i].collapse()
+        row.columns[i].changeHeight(COLLAPSED_COLUMN_HEIGHT)
       }
     }
   }

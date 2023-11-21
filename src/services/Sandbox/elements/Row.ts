@@ -1,6 +1,8 @@
 import { getSandboxSize } from '@/services/Sandbox/sandbox.service'
 import { Column, type AnimationConfig } from '@/services/Sandbox/elements/Column'
 
+export const COLUMN_HEIGHT_MULTIPLIER = 0.75
+
 export const Row = (): RowInstance => {
   const row: RowInstance = {
     columns: [],
@@ -28,7 +30,7 @@ export const Row = (): RowInstance => {
     for (let i = 0; i < valuesSize; i++) {
       const xAxis = i * spacing + spacing / 2 + MARGIN
       const yAxis = height - MARGIN - i * 3
-      const columnHeight = height * 0.75 * values[i]
+      const columnHeight = height * COLUMN_HEIGHT_MULTIPLIER * values[i]
 
       row.columns[i] = Column({
         x: xAxis,

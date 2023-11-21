@@ -57,13 +57,13 @@ describe('Binary Search', () => {
       } else if (animation === 'collapse') {
         for (let i = 0; i < min; i++) {
           if (columns[i].height > COLLAPSED_COLUMN_HEIGHT) {
-            expect(columns[i].collapse).toHaveBeenCalledTimes(1)
+            expect(columns[i].changeHeight).toHaveBeenCalledTimes(1)
           }
         }
 
         for (let i = max + 1; i < columns.length; i++) {
           if (columns[i].height > COLLAPSED_COLUMN_HEIGHT) {
-            expect(columns[i].collapse).toHaveBeenCalledTimes(1)
+            expect(columns[i].changeHeight).toHaveBeenCalledTimes(1)
           }
         }
 
