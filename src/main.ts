@@ -14,5 +14,4 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(Quasar, quasarConfiguration)
 app.use(router)
-
 app.mount('#app')

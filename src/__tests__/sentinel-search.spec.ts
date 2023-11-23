@@ -1,8 +1,6 @@
 import { __testing } from '../services/sentinel-search.service'
 import { getSandboxSize, initAnimation } from '../services/Sandbox/sandbox.service'
 import { isArraySortedAscending } from '../utils/testUtils'
-import { RGBColors } from '../utils'
-import { COLUMN_HEIGHT_MULTIPLIER } from '../services/Sandbox/elements/Row'
 
 describe('Sentinel Search', () => {
   test('should initialize algorithm sandbox', () => {
