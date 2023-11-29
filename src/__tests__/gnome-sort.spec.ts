@@ -15,7 +15,7 @@ describe('Gnome Sort', () => {
     expect(columns.length).toBe(values.length)
     expect(isNotSorted(values)).toBe(true)
     expect(initAnimation).toHaveBeenCalledTimes(1)
-    expect(initAnimation).toHaveBeenCalledWith(expect.anything(), animateGnomeSort)
+    expect(initAnimation).toHaveBeenCalledWith(animateGnomeSort)
   })
 
   test('should start visualizing algorithm', () => {
@@ -56,7 +56,7 @@ describe('Gnome Sort', () => {
         expect(columns[left].moveTo).toHaveBeenCalledTimes(1)
         expect(columns[right].moveTo).toHaveBeenCalledTimes(1)
         expect(columns[left].moveTo).toHaveBeenCalledWith(columns[right], { yOffset: -1 })
-        expect(columns[right].moveTo).toHaveBeenCalledWith(columns[left])
+        expect(columns[right].moveTo).toHaveBeenCalledWith(columns[left], {})
       } else if (animation === 'jump') {
         expect(columns[right].jump).toHaveBeenCalledTimes(1)
       } else {

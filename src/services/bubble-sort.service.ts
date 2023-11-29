@@ -1,22 +1,19 @@
 import { generateNonSortedArray } from '@/services/Array/array.service'
-import { getColumns } from '@/services/Sandbox/Creator'
-import type { Column } from '@/services/Sandbox/elements/Column'
-import { drawColumns, initAnimation } from '@/services/Sandbox/sandbox.service'
+import { initAnimation } from '@/services/Sandbox/sandbox.service'
 import type { VariantSetup } from '@/services/Sandbox/types'
-import type { MoveAnimation } from '@/services/Animation/animation.service'
+import type { MoveAnimation } from '@/services/Sandbox/elements/Column'
+import { Row } from '@/services/Sandbox/elements/Row'
 
 let moves: Move[] = []
 let values: number[] = []
-let columns: Column[] = []
+const row = Row()
 
 const initBubbleSort = () => {
-  initAnimation(init, animateBubbleSort)
+  values = generateNonSortedArray()
+  row.createColumns(values)
+  moves = []
 
-  function init() {
-    values = generateNonSortedArray()
-    columns = getColumns(values)
-    moves = []
-  }
+  initAnimation(animateBubbleSort)
 }
 
 const visualizeBubbleSort = () => {
@@ -54,7 +51,7 @@ function bubbleSort(values: number[]) {
 }
 
 function animateBubbleSort() {
-  const isChanged = drawColumns(columns)
+  const isChanged = row.draw()
 
   if (isChanged || !moves.length) return
 
@@ -64,12 +61,10 @@ function animateBubbleSort() {
   } = moves.shift()!
 
   if (animation === 'swap') {
-    columns[i].moveTo(columns[j])
-    columns[j].moveTo(columns[i], { yOffset: -1 })
-    ;[columns[i], columns[j]] = [columns[j], columns[i]]
+    row.swapColumns([i, j])
   } else {
-    columns[i].jump()
-    columns[j].jump()
+    row.columns[i].jump()
+    row.columns[j].jump()
   }
 }
 
@@ -82,7 +77,7 @@ export const __testing = {
   animateBubbleSort,
   initBubbleSort,
   visualizeBubbleSort,
-  getState: () => ({ values, columns, moves })
+  getState: () => ({ values, columns: row?.columns ?? [], moves })
 }
 
 type Move = {

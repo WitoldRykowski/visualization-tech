@@ -17,6 +17,12 @@ export const getRandomValueFromGivenArray = <T>(values: T[]) => {
   return values[index]
 }
 
+export const getRandomIndexGreaterThan = (min: number, lastIndex: number) => {
+  const index = Math.floor(Math.random() * (lastIndex - min))
+
+  return index + min
+}
+
 export const getRandomPointInGraph = (points: Point[]) => {
   return getRandomValueFromGivenArray(points)
 }
@@ -45,5 +51,6 @@ export const RGBColors = {
   green: convertNamedColorToRGB('green-13'),
   warning: convertNamedColorToRGB('warning'),
   grey: convertNamedColorToRGB('grey-1'),
-  grey4: convertNamedColorToRGB('grey-4')
+  grey4: convertNamedColorToRGB('grey-4'),
+  dark: convertNamedColorToRGB('dark')
 }

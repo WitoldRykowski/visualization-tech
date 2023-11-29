@@ -1,12 +1,7 @@
 import { lerp, RGBColors } from '@/utils'
 import { getContext } from '@/services/Sandbox/sandbox.service'
-import type { MoveToAnimationConfig, AnimationConfig } from '@/services/Animation/animation.service'
 import type { ColorRGBA } from '@/types'
 import { colors } from 'quasar'
-import {
-  getAnimationConfig,
-  getMoveToAnimationConfig
-} from '@/services/Animation/animation.service'
 
 export const DEFAULT_COLOR = RGBColors.pink
 export const COLLAPSED_COLUMN_HEIGHT = 2
@@ -19,7 +14,7 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     draw,
     moveTo,
     jump,
-    collapse,
+    changeHeight,
     changeColor
   }
 
@@ -41,11 +36,19 @@ export const Column = (columnConfig: ColumnConfig): Column => {
 
       column.queue.push({
         x: lerp(column.x, location.x, tickRate),
-        y: lerp(column.y, location.y, tickRate) + ((u * column.width) / 2) * yOffset
+        y: calculateY(tickRate, u)
       })
     }
 
     if (!keepColor) changeColor(DEFAULT_COLOR)
+
+    function calculateY(tickRate: number, u: number) {
+      const isYEqualLocationY = column.y === location.y
+
+      if (isYEqualLocationY) return column.y
+
+      return lerp(column.y, location.y, tickRate) + ((u * column.width) / 2) * yOffset
+    }
   }
 
   function jump(config?: Partial<AnimationConfig>) {
@@ -87,17 +90,21 @@ export const Column = (columnConfig: ColumnConfig): Column => {
     }
   }
 
-  function collapse(config?: Partial<AnimationConfig>) {
-    const { frameCount } = getAnimationConfig(config)
+  function changeHeight(height: number, config?: Partial<AnimationConfig>) {
+    const { frameCount } = getAnimationConfig({ frameCount: 20, ...config })
 
     for (let i = 0; i <= frameCount; i++) {
       const tickRate = i / frameCount
-      const u = column.height - column.height * tickRate
-      const height = u > COLLAPSED_COLUMN_HEIGHT ? u : COLLAPSED_COLUMN_HEIGHT
 
       column.queue.push({
-        height
+        height: getHeight(tickRate)
       })
+    }
+
+    function getHeight(tickRate: number) {
+      if (height > column.height) return column.height + (height - column.height) * tickRate
+
+      return column.height - (column.height - height) * tickRate
     }
   }
 
@@ -123,6 +130,7 @@ export const Column = (columnConfig: ColumnConfig): Column => {
 
     context.beginPath()
     context.fillStyle = colors.rgbToHex(color)
+    context.strokeStyle = colors.rgbToHex(RGBColors.dark)
     context.moveTo(left, top)
     context.lineTo(left, y)
     context.ellipse(x, y, width / 2, width / 4, 0, Math.PI, Math.PI * 2, true)
@@ -135,6 +143,31 @@ export const Column = (columnConfig: ColumnConfig): Column => {
   }
 }
 
+function getAnimationConfig(config?: Partial<AnimationConfig>): AnimationConfig {
+  const DEFAULT_FRAME_COUNT = 10
+
+  return {
+    keepColor: !!config?.keepColor,
+    frameCount: config?.frameCount ?? DEFAULT_FRAME_COUNT
+  }
+}
+
+function getMoveToAnimationConfig(config?: Partial<MoveToAnimationConfig>): MoveToAnimationConfig {
+  return {
+    ...getAnimationConfig(config),
+    yOffset: config?.yOffset ?? 1
+  }
+}
+
+export type AnimationConfig = {
+  keepColor: boolean
+  frameCount: number
+}
+
+type MoveToAnimationConfig = AnimationConfig & { yOffset: number }
+
+export type MoveAnimation = 'swap' | 'jump' | 'collapse' | 'changeColor' | 'move' | 'touch'
+
 export type Column = {
   x: number
   y: number
@@ -145,7 +178,7 @@ export type Column = {
   draw: () => boolean
   moveTo: (location: Pick<Column, 'x' | 'y'>, config?: Partial<MoveToAnimationConfig>) => void
   jump: (config?: Partial<AnimationConfig>) => void
-  collapse: (config?: Partial<AnimationConfig>) => void
+  changeHeight: (height: number, config?: Partial<AnimationConfig>) => void
   changeColor: (color: ColorRGBA, frameCount?: number) => void
 }
 

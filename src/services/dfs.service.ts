@@ -1,23 +1,20 @@
-import { Graph as createGraph, type Graph } from '@/services/Sandbox/elements/Graph'
+import { Graph } from '@/services/Sandbox/elements/Graph'
 import { initAnimation } from '@/services/Sandbox/sandbox.service'
 import { generateFilledArray } from '@/services/Array/array.service'
 import { type VariantSetup } from '@/services/Sandbox/types'
 import type { Point } from '@/services/Sandbox/elements/Point'
 import { getPointInGraphExcludingPoint, getRandomPointInGraph, RGBColors } from '@/utils'
-import type { MoveAnimation } from '@/services/Animation/animation.service'
+import type { MoveAnimation } from '@/services/Sandbox/elements/Point'
 
 const values = generateFilledArray()
 let moves: Move[] = []
-let graph: Graph | undefined = undefined
+const graph = Graph()
 
 const initDfs = () => {
-  initAnimation(init, animateDfs)
+  moves = []
+  graph.createGraph(values)
 
-  function init() {
-    moves = []
-
-    graph = createGraph(values)
-  }
+  initAnimation(animateDfs)
 }
 
 const visualizeDfs = () => {
@@ -49,7 +46,7 @@ function runDFS() {
 
     visited.add(node)
 
-    for (const connection of node.connections) {
+    for (const connection of graph.getPointConnections(node)) {
       moves.push({
         animation: 'changeColor',
         destination,
@@ -74,8 +71,6 @@ function runDFS() {
 }
 
 function animateDfs() {
-  if (!graph) return
-
   const isChanged = graph.draw()
 
   if (isChanged || !moves.length) return
@@ -94,7 +89,7 @@ function animateDfs() {
     current.changeColor(color)
   }
 
-  const connections = current.matchTwoWayConnection(finishAt)
+  const connections = graph.getConnectionsBetweenPoints(current, finishAt)
   connections.forEach((connection) => connection.changeColor(color))
 
   if (!moves.length) {

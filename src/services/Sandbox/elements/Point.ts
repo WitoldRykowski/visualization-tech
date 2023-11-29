@@ -1,16 +1,14 @@
 import { getContext, getSandboxSize } from '@/services/Sandbox/sandbox.service'
 import type { ColorRGBA } from '@/types'
 import { colors } from 'quasar'
-import {
-  type Connection,
-  DEFAULT_COLOR as connectionColor
-} from '@/services/Sandbox/elements/Connection'
-import { RGBColors } from '@/utils'
+import { DEFAULT_COLOR as connectionColor } from '@/services/Sandbox/elements/Connection'
+import { lerp, RGBColors } from '@/utils'
 
 export const DEFAULT_COLOR = connectionColor
 
-export const Point = ({ x, y, color, value }: PointConfig): Point => {
+export const Point = ({ x, y, color, value, id }: PointConfig): Point => {
   const point: Point = {
+    id,
     x,
     y,
     value: value ?? null,
@@ -19,12 +17,10 @@ export const Point = ({ x, y, color, value }: PointConfig): Point => {
     isPulsing: false,
     color: color ?? DEFAULT_COLOR,
     queue: [],
-    connections: [],
     draw,
+    moveTo,
     changeColor,
-    validatePoint,
-    matchConnection,
-    matchTwoWayConnection
+    validatePoint
   }
 
   return point
@@ -82,19 +78,15 @@ export const Point = ({ x, y, color, value }: PointConfig): Point => {
     }
   }
 
-  function matchConnection(destination: Point) {
-    return point.connections.find((connection) => {
-      const isXMatched = connection.finishAt.x === destination.x && connection.startAt.x === point.x
-      const isYMatched = connection.finishAt.y === destination.y && connection.startAt.y === point.y
+  function moveTo(location: Pick<Point, 'x' | 'y'>, frameCount = 10) {
+    for (let i = 0; i <= frameCount; i++) {
+      const tickRate = i / frameCount
 
-      return isXMatched && isYMatched
-    })
-  }
-
-  function matchTwoWayConnection(destination: Point): Connection[] {
-    const result = [matchConnection(destination), destination.matchConnection(point)]
-
-    return result.filter((connection) => !!connection) as Connection[]
+      point.queue.push({
+        x: lerp(point.x, location.x, tickRate),
+        y: lerp(point.y, location.y, tickRate)
+      })
+    }
   }
 
   function draw(size = point.size) {
@@ -102,8 +94,10 @@ export const Point = ({ x, y, color, value }: PointConfig): Point => {
     point.size = size
 
     if (point.queue.length > 0) {
-      const { color } = point.queue.shift()!
+      const { color, x, y } = point.queue.shift()!
       point.color = color ?? point.color
+      point.x = x ?? point.x
+      point.y = y ?? point.y
 
       isChanged = true
     }
@@ -112,15 +106,15 @@ export const Point = ({ x, y, color, value }: PointConfig): Point => {
     const radius = point.size / 2
     context.beginPath()
     context.fillStyle = colors.rgbToHex(point.color)
-    context.arc(x, y, radius, 0, Math.PI * 2)
+    context.arc(point.x, point.y, radius, 0, Math.PI * 2)
     context.fill()
     context.closePath()
 
     if (point.value !== null) {
       context.fillStyle = colors.rgbToHex(RGBColors.grey)
       context.textAlign = 'center'
-      context.font = '14px Arial'
-      context.fillText(`${point.value}`, x, y + 5)
+      context.font = '15px Arial'
+      context.fillText(`${point.value}`, point.x, point.y + 5)
     }
 
     if (point.isPulsing) {
@@ -128,7 +122,7 @@ export const Point = ({ x, y, color, value }: PointConfig): Point => {
 
       context.beginPath()
       context.strokeStyle = colors.rgbToHex(point.color)
-      context.arc(x, y, radius + point.pulseRadius, 0, Math.PI * 2)
+      context.arc(point.x, point.y, radius + point.pulseRadius, 0, Math.PI * 2)
       context.stroke()
     }
 
@@ -136,12 +130,13 @@ export const Point = ({ x, y, color, value }: PointConfig): Point => {
   }
 }
 
-type PointConfig = Pick<Point, 'x' | 'y'> & {
+type PointConfig = Pick<Point, 'x' | 'y' | 'id'> & {
   color?: ColorRGBA
   value?: number
 }
 
 export type Point = {
+  id: number
   x: number
   y: number
   queue: Partial<PointConfig & { pulseRadius: number }>[]
@@ -150,10 +145,10 @@ export type Point = {
   value: number | null
   size: number
   isPulsing: boolean
-  connections: Connection[]
   draw: (size?: number) => boolean
   changeColor: (color: ColorRGBA, frameCount?: number) => void
+  moveTo: (location: Pick<Point, 'x' | 'y'>, frameCount?: number) => void
   validatePoint: (payload: Pick<Point, 'x' | 'y'>) => boolean
-  matchConnection: (destination: Point) => Connection | undefined
-  matchTwoWayConnection: (destination: Point) => Connection[]
 }
+
+export type MoveAnimation = 'swap' | 'changeColor' | 'move' | 'touch'

@@ -1,24 +1,22 @@
 import type { Column } from '@/services/Sandbox/elements/Column'
 import { generateNonSortedArray } from '@/services/Array/array.service'
-import { getColumns } from '@/services/Sandbox/Creator'
-import { drawColumns, initAnimation } from '@/services/Sandbox/sandbox.service'
+import { initAnimation } from '@/services/Sandbox/sandbox.service'
 import type { ColorRGBA } from '@/types'
 import type { VariantSetup } from '@/services/Sandbox/types'
 import { RGBColors } from '@/utils'
-import type { MoveAnimation } from '@/services/Animation/animation.service'
+import type { MoveAnimation } from '@/services/Sandbox/elements/Column'
+import { Row } from '@/services/Sandbox/elements/Row'
 
 let moves: Move[] = []
 let values: number[] = []
-let columns: Column[] = []
+const row = Row()
 
 const initQuickSort = () => {
-  initAnimation(init, animateQuickSort)
+  values = generateNonSortedArray()
+  row.createColumns(values)
+  moves = []
 
-  function init() {
-    values = generateNonSortedArray()
-    columns = getColumns(values)
-    moves = []
-  }
+  initAnimation(animateQuickSort)
 }
 
 const visualizeQuickSort = () => {
@@ -92,7 +90,7 @@ function quickSort(values: number[], left: number, right: number) {
 }
 
 function animateQuickSort() {
-  const isChanged = drawColumns(columns)
+  const isChanged = row.draw()
 
   if (isChanged || !moves.length) return
 
@@ -108,43 +106,39 @@ function animateQuickSort() {
   }
 
   if (!moves.length) {
-    for (let i = 0; i < columns.length; i++) {
-      columns[i].changeColor(RGBColors.primary)
+    for (let i = 0; i < row.columns.length; i++) {
+      row.columns[i].changeColor(RGBColors.primary)
     }
   }
 
   function swapColumns() {
-    if (i === j) return
+    if (i === j || !row) return
 
-    const config = {
+    row.columns[i].jump()
+    row.columns[j].jump()
+
+    row.swapColumns([i, j], {
       frameCount: 40
-    }
-
-    columns[i].jump()
-    columns[j].jump()
-
-    columns[i].moveTo(columns[j], config)
-    columns[j].moveTo(columns[i], { ...config, yOffset: -1 })
-    ;[columns[i], columns[j]] = [columns[j], columns[i]]
+    })
 
     if (i === pivotIndex || j === pivotIndex) {
-      columns[pivotIndex].changeColor(RGBColors.negative)
+      row.columns[pivotIndex].changeColor(RGBColors.info)
     }
   }
 
   function touch() {
-    changeColor(columns[i], RGBColors.warning)
+    changeColor(row.columns[i], RGBColors.warning)
 
     if (i > 0) {
-      changeColor(columns[i - 1], RGBColors.primary)
+      changeColor(row.columns[i - 1], RGBColors.primary)
     }
 
     if (!animation.endsWith('j')) return
 
-    changeColor(columns[j], RGBColors.warning)
+    changeColor(row.columns[j], RGBColors.warning)
 
     if (j < values.length - 1) {
-      changeColor(columns[j + 1], RGBColors.primary)
+      changeColor(row.columns[j + 1], RGBColors.primary)
     }
 
     function changeColor(column: Column, RGBColor: ColorRGBA) {
@@ -153,15 +147,15 @@ function animateQuickSort() {
   }
 
   function changeColumnColor() {
-    for (let i = 0; i < columns.length; i++) {
+    for (let i = 0; i < row.columns.length; i++) {
       const isInRange = i >= left && i <= right
       const color = isInRange ? RGBColors.primary : RGBColors.grey
 
-      columns[i].changeColor(color)
+      row.columns[i].changeColor(color)
     }
 
     if (moves.length) {
-      columns[pivotIndex].changeColor(RGBColors.info)
+      row.columns[pivotIndex].changeColor(RGBColors.info)
     }
   }
 }
@@ -170,6 +164,13 @@ export const QuickSort: VariantSetup = {
   init: initQuickSort,
   visualize: visualizeQuickSort
 }
+
+export const __testing = () => ({
+  getState: () => ({ values, columns: row?.columns ?? [], moves }),
+  initQuickSort,
+  visualizeQuickSort,
+  animateQuickSort
+})
 
 type Move = {
   left: number

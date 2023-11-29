@@ -1,9 +1,9 @@
-import type { ComputedRef, InjectionKey } from 'vue'
 import type { Noop } from '@/types'
 import type { Column } from '@/services/Sandbox/elements/Column'
-import { MergeSort } from '@/services/merge-sort.service'
 
 let _animationFrameId = -1
+
+export const SANDBOX_TRANSITION = 500
 
 export const initSandbox = () => {
   const mainContainer = document.getElementById('main-container')!
@@ -40,14 +40,10 @@ export const drawColumns = (columns: Column[]) => {
 
 export const stopAnimation = () => {
   cancelAnimationFrame(_animationFrameId)
-
   _animationFrameId = -1
 }
 
-export const initAnimation = (callback: Noop, animation: Noop) => {
-  callback()
-  stopAnimation()
-
+export const startAnimation = (animation: Noop) => {
   const animate = () => {
     const context = getContext()
     const { width, height } = getSandboxSize()
@@ -59,6 +55,11 @@ export const initAnimation = (callback: Noop, animation: Noop) => {
   }
 
   animate()
+}
+
+export const initAnimation = (animation: Noop) => {
+  stopAnimation()
+  startAnimation(animation)
 }
 
 export const POSSIBLE_TAGS = ['sorting', 'searching', 'graph', 'shortest-path', 'heap'] as const
@@ -83,6 +84,7 @@ export const ALGORITHMS: readonly Variant[] = [
   { name: 'InsertionSort', tags: ['sorting'] },
   // { name: 'MergeSort', tags: ['sorting'] }, TODO Think how to visualize
   { name: 'SelectionSort', tags: ['sorting'] },
+  { name: 'SentinelSearch', tags: ['searching'] },
   { name: 'QuickSort', tags: ['sorting'] }
 ]
 

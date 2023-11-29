@@ -1,23 +1,20 @@
-import { Graph as createGraph, Graph } from '@/services/Sandbox/elements/Graph'
+import { Graph } from '@/services/Sandbox/elements/Graph'
 import { initAnimation } from '@/services/Sandbox/sandbox.service'
 import { generateFilledArray } from '@/services/Array/array.service'
 import type { VariantSetup } from '@/services/Sandbox/types'
 import type { Point } from '@/services/Sandbox/elements/Point'
 import { getPointInGraphExcludingPoint, getRandomPointInGraph, RGBColors } from '@/utils'
-import type { MoveAnimation } from '@/services/Animation/animation.service'
+import type { MoveAnimation } from '@/services/Sandbox/elements/Point'
 
 const values = generateFilledArray()
 let moves: Move[] = []
-let graph: Graph
+const graph = Graph()
 
 const initDijkstra = () => {
-  initAnimation(init, animateDijkstra)
+  moves = []
+  graph.createGraph(values)
 
-  function init() {
-    moves = []
-
-    graph = createGraph(values)
-  }
+  initAnimation(animateDijkstra)
 }
 
 const visualizeDijkstra = () => {
@@ -55,17 +52,17 @@ function dijkstra() {
 
     const key = generatePointKey(currentPoint)
 
-    for (const connection of currentPoint.connections) {
+    for (const connection of graph.getPointConnections(currentPoint)) {
+      const neighbor = connection.finishAt
+      const neighborKey = generatePointKey(neighbor)
+
       moves.push({
         animation: 'changeColor',
         destination: end,
         start,
         current: currentPoint,
-        finishAt: connection.finishAt
+        finishAt: neighbor
       })
-
-      const neighbor = connection.finishAt
-      const neighborKey = generatePointKey(neighbor)
 
       const potentialDistance = distances[key] + connection.weight
       if (potentialDistance < distances[neighborKey]) {
@@ -115,7 +112,7 @@ function animateDijkstra() {
   }
 
   if (finishAt) {
-    const connections = current.matchTwoWayConnection(finishAt)
+    const connections = graph.getConnectionsBetweenPoints(current, finishAt)
 
     connections.forEach((connection) => connection.changeColor(color))
   }

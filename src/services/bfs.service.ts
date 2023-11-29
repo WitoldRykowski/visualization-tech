@@ -1,23 +1,20 @@
 import type { VariantSetup } from '@/services/Sandbox/types'
 import { initAnimation } from '@/services/Sandbox/sandbox.service'
 import { generateFilledArray } from '@/services/Array/array.service'
-import { type Graph, Graph as createGraph } from '@/services/Sandbox/elements/Graph'
+import { Graph } from '@/services/Sandbox/elements/Graph'
 import type { Point } from '@/services/Sandbox/elements/Point'
-import type { MoveAnimation } from '@/services/Animation/animation.service'
+import type { MoveAnimation } from '@/services/Sandbox/elements/Point'
 import { getPointInGraphExcludingPoint, getRandomPointInGraph, RGBColors } from '@/utils'
 
 const values = generateFilledArray()
 let moves: Move[] = []
-let graph: Graph | undefined = undefined
+const graph = Graph()
 
 const initBfs = () => {
-  initAnimation(init, animateBfs)
+  moves = []
+  graph.createGraph(values)
 
-  function init() {
-    moves = []
-
-    graph = createGraph(values)
-  }
+  initAnimation(animateBfs)
 }
 
 const visualizeBFS = () => {
@@ -27,8 +24,8 @@ const visualizeBFS = () => {
 type QueueItem = { node: Point; distance: number }
 
 function breadthFirstSearch() {
-  const startNode = getRandomPointInGraph(graph!.points)
-  const endNode = getPointInGraphExcludingPoint(graph!.points, startNode)
+  const startNode = getRandomPointInGraph(graph.points)
+  const endNode = getPointInGraphExcludingPoint(graph.points, startNode)
   const visited: Set<Point> = new Set()
   const parents: Map<Point, Point | null> = new Map()
   const queue: QueueItem[] = []
@@ -46,7 +43,7 @@ function breadthFirstSearch() {
       return
     }
 
-    for (const connection of node.connections) {
+    for (const connection of graph.getPointConnections(node)) {
       const neighbor = connection.finishAt
       const weight = connection.weight
 
@@ -88,8 +85,6 @@ function breadthFirstSearch() {
 }
 
 function animateBfs() {
-  if (!graph) return
-
   const isChanged = graph.draw()
 
   if (isChanged || !moves.length) return
@@ -110,8 +105,7 @@ function animateBfs() {
     current.changeColor(color)
   }
 
-  const connections = current.matchTwoWayConnection(finishAt)
-
+  const connections = graph.getConnectionsBetweenPoints(current, finishAt)
   connections.forEach((connection) => connection.changeColor(color))
 
   if (!moves.length) {

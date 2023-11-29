@@ -21,7 +21,7 @@ describe('Bubble Sort', () => {
     expect(columns.length).toBe(values.length)
     expect(isNotSorted(values)).toBe(true)
     expect(initAnimation).toHaveBeenCalledTimes(1)
-    expect(initAnimation).toHaveBeenCalledWith(expect.anything(), animateBubbleSort)
+    expect(initAnimation).toHaveBeenCalledWith(animateBubbleSort)
   })
 
   test('should start visualizing algorithm', () => {
@@ -57,7 +57,7 @@ describe('Bubble Sort', () => {
         expect(columns[i].moveTo).toHaveBeenCalledTimes(1)
         expect(columns[j].moveTo).toHaveBeenCalledTimes(1)
         expect(columns[i].moveTo).toHaveBeenCalledWith(columns[j], { yOffset: -1 })
-        expect(columns[j].moveTo).toHaveBeenCalledWith(columns[i])
+        expect(columns[j].moveTo).toHaveBeenCalledWith(columns[i], {})
       }
 
       jest.clearAllMocks()

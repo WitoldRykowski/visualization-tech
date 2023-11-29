@@ -1,4 +1,4 @@
-import { __testing, COLLAPSE_DELAY } from '../services/binary-search.service'
+import { __testing } from '../services/binary-search.service'
 import { isArraySortedAscending } from '../utils/testUtils'
 import { initAnimation } from '../services/Sandbox/sandbox.service'
 import { COLLAPSED_COLUMN_HEIGHT } from '../services/Sandbox/elements/Column'
@@ -22,7 +22,7 @@ describe('Binary Search', () => {
     expect(columns.length).toBe(values.length)
     expect(isArraySortedAscending(values)).toBe(true)
     expect(initAnimation).toHaveBeenCalledTimes(1)
-    expect(initAnimation).toHaveBeenCalledWith(expect.anything(), animateBinarySearch)
+    expect(initAnimation).toHaveBeenCalledWith(animateBinarySearch)
   })
 
   test('should start visualizing algorithm', () => {
@@ -57,15 +57,13 @@ describe('Binary Search', () => {
       } else if (animation === 'collapse') {
         for (let i = 0; i < min; i++) {
           if (columns[i].height > COLLAPSED_COLUMN_HEIGHT) {
-            expect(columns[i].collapse).toHaveBeenCalledTimes(1)
-            expect(columns[i].collapse).toHaveBeenCalledWith({ frameCount: COLLAPSE_DELAY })
+            expect(columns[i].changeHeight).toHaveBeenCalledTimes(1)
           }
         }
 
         for (let i = max + 1; i < columns.length; i++) {
           if (columns[i].height > COLLAPSED_COLUMN_HEIGHT) {
-            expect(columns[i].collapse).toHaveBeenCalledTimes(1)
-            expect(columns[i].collapse).toHaveBeenCalledWith({ frameCount: COLLAPSE_DELAY })
+            expect(columns[i].changeHeight).toHaveBeenCalledTimes(1)
           }
         }
 

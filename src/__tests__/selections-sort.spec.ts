@@ -13,7 +13,7 @@ describe('', () => {
     expect(columns.length).toBe(values.length)
     expect(isNotSorted(values)).toBe(true)
     expect(initAnimation).toHaveBeenCalledTimes(1)
-    expect(initAnimation).toHaveBeenCalledWith(expect.anything(), animateSelectionSort)
+    expect(initAnimation).toHaveBeenCalledWith(animateSelectionSort)
   })
 
   test('should start visualizing sandbox', () => {
@@ -52,10 +52,12 @@ describe('', () => {
         expect(columns[minIndex].moveTo).toHaveBeenCalledTimes(1)
         expect(columns[i].moveTo).toHaveBeenCalledTimes(1)
         expect(columns[minIndex].moveTo).toHaveBeenCalledWith(columns[i], {
-          yOffset: -1,
           frameCount: 40
         })
-        expect(columns[i].moveTo).toHaveBeenCalledWith(columns[minIndex], { frameCount: 40 })
+        expect(columns[i].moveTo).toHaveBeenCalledWith(columns[minIndex], {
+          frameCount: 40,
+          yOffset: -1
+        })
       } else if (animation === 'changeColor') {
         if (lastMinIndex !== minIndex) {
           if (lastMinIndex === i && j !== -1) {

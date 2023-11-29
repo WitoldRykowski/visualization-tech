@@ -1,22 +1,19 @@
-import type { Column } from '@/services/Sandbox/elements/Column'
-import { drawColumns, initAnimation } from '@/services/Sandbox/sandbox.service'
+import { initAnimation } from '@/services/Sandbox/sandbox.service'
 import { generateNonSortedArray } from '@/services/Array/array.service'
-import { getColumns } from '@/services/Sandbox/Creator'
 import type { VariantSetup } from '@/services/Sandbox/types'
-import type { MoveAnimation } from '@/services/Animation/animation.service'
+import type { MoveAnimation } from '@/services/Sandbox/elements/Column'
+import { Row } from '@/services/Sandbox/elements/Row'
 
 let moves: Move[] = []
 let values: number[] = []
-let columns: Column[] = []
+const row = Row()
 
 const initMergeSort = () => {
-  initAnimation(init, animateMergeSort)
+  values = generateNonSortedArray()
+  row.createColumns(values)
+  moves = []
 
-  function init() {
-    values = generateNonSortedArray()
-    columns = getColumns(values)
-    moves = []
-  }
+  initAnimation(animateMergeSort)
 }
 
 const visualizeMergeSort = () => {
@@ -55,7 +52,7 @@ function merge(left: number[], right: number[]): number[] {
 }
 
 function animateMergeSort() {
-  const isChanged = drawColumns(columns)
+  const isChanged = row.draw()
 
   if (isChanged || !moves.length) return
 }
